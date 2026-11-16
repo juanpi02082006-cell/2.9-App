@@ -292,8 +292,12 @@ public final class Cuenta {
 
     // ===== Cerrar sesión =====
 
-    /** Sale de Firebase y olvida la cuenta de Google escogida, para poder cambiar de cuenta. */
+    /**
+     * Sale de Firebase, borra de la memoria los datos de la cuenta y olvida la cuenta de
+     * Google escogida, para poder cambiar de cuenta.
+     */
     public static void cerrarSesion(Context contexto) {
+        Repositorio.get().cerrar();
         auth().signOut();
         CredentialManager.create(contexto).clearCredentialStateAsync(
                 new ClearCredentialStateRequest(), new CancellationSignal(),
@@ -348,6 +352,8 @@ public final class Cuenta {
      * {@code true} si el perfil todavía no existe (cuenta nueva de Google).
      */
     private static Task<Boolean> cargarPerfil(FirebaseUser yo) {
+        // Desde aquí el repositorio escucha las materias y notas de esta cuenta
+        Repositorio.get().abrir(yo.getUid());
         return db().collection(USUARIOS).document(yo.getUid()).get()
                 .onSuccessTask(doc -> {
                     if (!doc.exists()) {

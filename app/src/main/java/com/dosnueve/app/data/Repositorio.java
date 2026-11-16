@@ -14,70 +14,101 @@ import com.dosnueve.app.data.modelo.Materia;
 import com.dosnueve.app.data.modelo.Nota;
 import com.dosnueve.app.data.modelo.Semestre;
 import com.dosnueve.app.domain.CalculadoraNotas;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.MetadataChanges;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.firestore.WriteBatch;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
- * Dónde viven los datos de 2.9 mientras llega Firebase (Fase 3): un archivo JSON en el
- * almacenamiento interno de la app, así que lo registrado sigue ahí al cerrarla.
+ * Dónde viven los datos de 2.9: Cloud Firestore, bajo {@code usuarios/{uid}} (doc 05).
  *
- * <p>Las pantallas solo hablan con esta clase. Al pasar a Firestore se cambia esta y nada
- * más. Lo que se calcula no se guarda (RN-12): aquí hay materias, notas, la forma de
- * calificar, los semestres terminados, las fechas del semestre y la cuenta.
+ * <p>Las pantallas solo hablan con esta clase y no saben de Firestore. Aquí se guarda una
+ * copia en memoria de todo lo de la cuenta: las pantallas la leen al instante y cada cambio
+ * se escribe en Firestore. Firestore tiene su propia caché en el celular, así que sin
+ * Internet se sigue viendo y registrando, y se sube cuando vuelve la conexión.
  *
- * <p>Cada cambio se guarda en el archivo y se avisa por {@link #cambios()}, para que la
- * pantalla que esté a la vista se vuelva a pintar (por ejemplo, al tocar "Deshacer").
+ * <p>Lo que llega de Firestore (otro celular, o la carga al entrar) se pasa a la memoria y
+ * se avisa por {@link #cambios()} solo si de verdad cambió algo: así lo que escribe este
+ * mismo celular no repinta dos veces la pantalla (ni le quita el foco a un campo).
+ *
+ * <p>Lo que se calcula no se guarda (RN-12).
  */
 public final class Repositorio {
 
-    private static final String ARCHIVO = "datos.json";
     private static final String ETIQUETA = "Repositorio";
+    /** Donde se guardaba todo antes de Firebase. Se borra: la nube arranca vacía. */
+    private static final String ARCHIVO_VIEJO = "datos.json";
     /** Semanas de un semestre mientras no se pongan las fechas (doc 02 · 1). */
     private static final int SEMANAS_POR_DEFECTO = 16;
     /** Forma de calificar predeterminada: tres cortes de 33, 33 y 34 % (doc 02 · 1). */
     private static final double[] CORTES_POR_DEFECTO = {33, 33, 34};
+    /** El semestre en curso tiene siempre este id: así dos celulares no crean dos. */
+    private static final String SEMESTRE_ACTUAL = "actual";
+    private static final String EN_CURSO = "en_curso";
+    private static final String TERMINADO = "terminado";
+
+    /** Ids en orden de creación: los más cortos primero y, si miden igual, por texto. */
+    private static final Comparator<String> POR_ID = (a, b) ->
+            a.length() != b.length() ? Integer.compare(a.length(), b.length()) : a.compareTo(b);
 
     private static Repositorio instancia;
 
-    private final File archivo;
     private final MutableLiveData<Integer> cambios = new MutableLiveData<>(0);
 
-    private String nombre = "";
-    private String correo = "";
-    private String universidad = "";
+    /** De quién son los datos que hay en memoria; {@code null} si no hay sesión. */
+    @Nullable
+    private String uid;
+    private final List<ListenerRegistration> escuchas = new ArrayList<>();
+    private final Map<String, ListenerRegistration> escuchasDeNotas = new HashMap<>();
+    private final Map<String, ListenerRegistration> escuchasDeAnteriores = new HashMap<>();
+
+    private String nombre;
+    private String correo;
+    private String universidad;
     private boolean recordarNotas;
     private boolean avisarRiesgo;
     private LocalDate inicioSemestre;
     private LocalDate finSemestre;
-    private List<Corte> formaDeCalificar = formaPorDefecto(CORTES_POR_DEFECTO);
-    private double notaParaPasar = 3.0;
+    private List<Corte> formaDeCalificar;
+    private double notaParaPasar;
     private final List<Materia> materias = new ArrayList<>();
     private final Map<String, List<Nota>> notas = new HashMap<>();
     private final List<Semestre> anteriores = new ArrayList<>();
-    private long siguienteId = 1;
+    private long ultimoId;
 
-    /** Se llama una vez, al arrancar la app. */
+    /** Se llama una vez, al arrancar la app. Si ya había sesión, empieza a cargar. */
     public static void iniciar(Context contexto) {
-        if (instancia == null) {
-            instancia = new Repositorio(contexto.getApplicationContext());
+        if (instancia != null) {
+            return;
+        }
+        instancia = new Repositorio();
+        borrarArchivoViejo(contexto);
+        FirebaseUser yo = FirebaseAuth.getInstance().getCurrentUser();
+        if (yo != null && Cuenta.haySesion()) {
+            instancia.abrir(yo.getUid());
         }
     }
 
@@ -88,20 +119,84 @@ public final class Repositorio {
         return instancia;
     }
 
-    private Repositorio(Context contexto) {
-        archivo = new File(contexto.getFilesDir(), ARCHIVO);
-        cargar();
-        if (inicioSemestre == null || finSemestre == null) {
-            // Se fijan una sola vez: si se calcularan cada día, la semana nunca avanzaría
-            inicioSemestre = LocalDate.now().minusWeeks(6);
-            finSemestre = inicioSemestre.plusWeeks(SEMANAS_POR_DEFECTO);
-            guardar();
-        }
+    private Repositorio() {
+        limpiar();
     }
 
-    /** Cambia cada vez que algo se guarda. Las pantallas lo observan para repintarse. */
+    /** Cambia cada vez que algo cambia. Las pantallas lo observan para repintarse. */
     public LiveData<Integer> cambios() {
         return cambios;
+    }
+
+    // ===== Sesión =====
+
+    /** Empieza a escuchar los datos de esa cuenta. Lo llama {@link Cuenta} al entrar. */
+    void abrir(String suUid) {
+        if (suUid.equals(uid)) {
+            return;
+        }
+        cerrar();
+        uid = suUid;
+
+        escuchas.add(refYo().addSnapshotListener((doc, error) -> {
+            if (doc != null) {
+                alCambiarPerfil(doc);
+            } else {
+                registrar("el perfil", error);
+            }
+        }));
+        // Con los metadatos se sabe si "no existe" lo dijo el servidor o solo la caché
+        escuchas.add(refSemestre(SEMESTRE_ACTUAL).addSnapshotListener(MetadataChanges.INCLUDE,
+                (doc, error) -> {
+                    if (doc != null) {
+                        alCambiarSemestreActual(doc);
+                    } else {
+                        registrar("el semestre", error);
+                    }
+                }));
+        escuchas.add(refMaterias(SEMESTRE_ACTUAL).addSnapshotListener((consulta, error) -> {
+            if (consulta != null) {
+                alCambiarMaterias(consulta);
+            } else {
+                registrar("las materias", error);
+            }
+        }));
+        escuchas.add(refYo().collection("semestres").whereEqualTo("estado", TERMINADO)
+                .addSnapshotListener((consulta, error) -> {
+                    if (consulta != null) {
+                        alCambiarAnteriores(consulta);
+                    } else {
+                        registrar("los semestres", error);
+                    }
+                }));
+    }
+
+    /** Deja de escuchar y olvida todo lo de la cuenta. Lo llama {@link Cuenta} al salir. */
+    void cerrar() {
+        for (ListenerRegistration escucha : escuchas) {
+            escucha.remove();
+        }
+        escuchas.clear();
+        quitarTodas(escuchasDeNotas);
+        quitarTodas(escuchasDeAnteriores);
+        uid = null;
+        limpiar();
+        avisar();
+    }
+
+    private void limpiar() {
+        nombre = "";
+        correo = "";
+        universidad = "";
+        recordarNotas = false;
+        avisarRiesgo = false;
+        inicioSemestre = LocalDate.now().minusWeeks(6);
+        finSemestre = inicioSemestre.plusWeeks(SEMANAS_POR_DEFECTO);
+        formaDeCalificar = formaPorDefecto(CORTES_POR_DEFECTO);
+        notaParaPasar = 3.0;
+        materias.clear();
+        notas.clear();
+        anteriores.clear();
     }
 
     // ===== Cuenta =====
@@ -119,13 +214,13 @@ public final class Repositorio {
     }
 
     /**
-     * Nombre y correo de la cuenta, que vienen de Firebase al entrar (ver {@link Cuenta}).
-     * La sesión ya no se guarda aquí: la lleva Firebase Auth.
+     * Nombre y correo para saludar mientras llega el perfil (por ejemplo, entre crear la
+     * cuenta y confirmar el correo). Ya están guardados en {@code usuarios/{uid}}.
      */
     public void guardarCuenta(String suNombre, String suCorreo) {
         nombre = suNombre.trim();
         correo = suCorreo.trim();
-        guardarYAvisar();
+        avisar();
     }
 
     /** ¿Dónde estudias? → Listo: su forma de calificar pasa a ser la plantilla (RF-03). */
@@ -133,12 +228,16 @@ public final class Repositorio {
         universidad = suNombre;
         formaDeCalificar = formaPorDefecto(cortes);
         notaParaPasar = paraPasar;
-        guardarYAvisar();
+        Map<String, Object> cambio = new HashMap<>();
+        cambio.put("universidad", suNombre);
+        cambio.put("plantilla", plantillaAMapa(formaDeCalificar, notaParaPasar));
+        escribirPerfil(cambio);
+        avisar();
     }
 
     /** ¿Dónde estudias? → Saltar por ahora: queda la forma de calificar que haya. */
     public void empezarSinUniversidad() {
-        guardarYAvisar();
+        avisar();
     }
 
     public boolean recordarNotas() {
@@ -152,7 +251,10 @@ public final class Repositorio {
     public void guardarAvisos(boolean recordar, boolean riesgo) {
         recordarNotas = recordar;
         avisarRiesgo = riesgo;
-        guardar();
+        Map<String, Object> cambio = new HashMap<>();
+        cambio.put("recordarNotas", recordar);
+        cambio.put("alertaRiesgo", riesgo);
+        escribirPerfil(cambio);
     }
 
     // ===== Fechas del semestre (RF-27) =====
@@ -168,7 +270,11 @@ public final class Repositorio {
     public void guardarFechas(LocalDate inicio, LocalDate fin) {
         inicioSemestre = inicio;
         finSemestre = fin;
-        guardarYAvisar();
+        if (uid != null) {
+            guardarEnLaNube(refSemestre(SEMESTRE_ACTUAL)
+                    .set(semestreActualAMapa(), SetOptions.merge()), "las fechas");
+        }
+        avisar();
     }
 
     public int semanasTotales() {
@@ -204,7 +310,9 @@ public final class Repositorio {
     public void guardarFormaDeCalificar(List<Corte> cortes, double paraPasar) {
         formaDeCalificar = copiar(cortes);
         notaParaPasar = paraPasar;
-        guardarYAvisar();
+        escribirPerfil(Collections.<String, Object>singletonMap("plantilla",
+                plantillaAMapa(formaDeCalificar, notaParaPasar)));
+        avisar();
     }
 
     /** Parcial 60, Trabajos y quices 30 y Autoevaluación 10 en cada corte (doc 02 · 1). */
@@ -258,8 +366,15 @@ public final class Repositorio {
         materia.notaParaPasar = notaParaPasar;
         materia.cortes = copiar(formaDeCalificar);
         materias.add(materia);
+        materias.sort((a, b) -> POR_ID.compare(a.id, b.id));
         notas.put(materia.id, new ArrayList<>());
-        guardarYAvisar();
+
+        if (uid != null) {
+            Map<String, Object> datos = materiaAMapa(materia);
+            datos.put("creadaEn", FieldValue.serverTimestamp());
+            guardarEnLaNube(refMateria(SEMESTRE_ACTUAL, materia.id).set(datos), "la materia");
+        }
+        avisar();
         return materia;
     }
 
@@ -271,7 +386,12 @@ public final class Repositorio {
         materia.nombre = suNombre;
         materia.profesor = profesor;
         materia.creditos = creditos;
-        guardarYAvisar();
+        Map<String, Object> cambio = new HashMap<>();
+        cambio.put("nombre", suNombre);
+        cambio.put("profesor", profesor);
+        cambio.put("creditos", creditos);
+        actualizarMateria(id, cambio);
+        avisar();
     }
 
     /** Cambia la forma de calificar de una sola materia, sin tocar la plantilla. */
@@ -282,18 +402,36 @@ public final class Repositorio {
         }
         materia.cortes = copiar(cortes);
         materia.notaParaPasar = paraPasar;
-        guardarYAvisar();
+        Map<String, Object> cambio = new HashMap<>();
+        cambio.put("cortes", cortesAMapas(materia.cortes));
+        cambio.put("notaParaPasar", paraPasar);
+        actualizarMateria(id, cambio);
+        avisar();
     }
 
-    /** Se borran también sus notas (RF-12). */
+    /** Se borran también sus notas (RF-12): Firestore no las borra solo. */
     public void borrarMateria(String id) {
+        List<Nota> susNotas = new ArrayList<>(notas(id));
         for (int i = materias.size() - 1; i >= 0; i--) {
             if (materias.get(i).id.equals(id)) {
                 materias.remove(i);
             }
         }
         notas.remove(id);
-        guardarYAvisar();
+        ListenerRegistration escucha = escuchasDeNotas.remove(id);
+        if (escucha != null) {
+            escucha.remove();
+        }
+
+        if (uid != null) {
+            WriteBatch lote = db().batch();
+            for (Nota nota : susNotas) {
+                lote.delete(refNota(id, nota.id));
+            }
+            lote.delete(refMateria(SEMESTRE_ACTUAL, id));
+            guardarEnLaNube(lote.commit(), "el borrado de la materia");
+        }
+        avisar();
     }
 
     // ===== Notas =====
@@ -315,8 +453,8 @@ public final class Repositorio {
 
     public Nota agregarNota(String materiaId, Nota nota) {
         nota.id = nuevoId();
-        listaDe(materiaId).add(nota);
-        guardarYAvisar();
+        ponerNota(materiaId, nota);
+        avisar();
         return nota;
     }
 
@@ -328,7 +466,10 @@ public final class Repositorio {
                 lista.set(i, cambiada);
             }
         }
-        guardarYAvisar();
+        if (uid != null) {
+            guardarEnLaNube(refNota(materiaId, cambiada.id).set(notaAMapa(cambiada)), "la nota");
+        }
+        avisar();
     }
 
     /** @return la nota borrada, para poder deshacer con {@link #restaurarNota}. */
@@ -338,7 +479,10 @@ public final class Repositorio {
         for (int i = 0; i < lista.size(); i++) {
             if (lista.get(i).id.equals(notaId)) {
                 Nota borrada = lista.remove(i);
-                guardarYAvisar();
+                if (uid != null) {
+                    guardarEnLaNube(refNota(materiaId, notaId).delete(), "el borrado de la nota");
+                }
+                avisar();
                 return borrada;
             }
         }
@@ -350,8 +494,8 @@ public final class Repositorio {
         if (materia(materiaId) == null) {
             return;
         }
-        listaDe(materiaId).add(nota);
-        guardarYAvisar();
+        ponerNota(materiaId, nota);
+        avisar();
     }
 
     /**
@@ -362,16 +506,21 @@ public final class Repositorio {
         Nota nota = nota(materiaId, notaId);
         if (nota != null) {
             nota.peso = peso;
-            guardar();
+            if (uid != null) {
+                guardarEnLaNube(refNota(materiaId, notaId).update("peso", peso), "el porcentaje");
+            }
         }
     }
 
     /** "Todas valen igual" ↔ "Con porcentajes" de un componente (RF-17). */
     public void cambiarModo(String materiaId, int numeroCorte, String componenteId, boolean promedioIgual) {
-        Componente componente = componente(materia(materiaId), numeroCorte, componenteId);
-        if (componente != null) {
+        Materia materia = materia(materiaId);
+        Componente componente = componente(materia, numeroCorte, componenteId);
+        if (materia != null && componente != null) {
             componente.promedioIgual = promedioIgual;
-            guardarYAvisar();
+            actualizarMateria(materiaId,
+                    Collections.<String, Object>singletonMap("cortes", cortesAMapas(materia.cortes)));
+            avisar();
         }
     }
 
@@ -402,6 +551,15 @@ public final class Repositorio {
         return null;
     }
 
+    private void ponerNota(String materiaId, Nota nota) {
+        List<Nota> lista = listaDe(materiaId);
+        lista.add(nota);
+        lista.sort((a, b) -> POR_ID.compare(a.id, b.id));
+        if (uid != null) {
+            guardarEnLaNube(refNota(materiaId, nota.id).set(notaAMapa(nota)), "la nota");
+        }
+    }
+
     private List<Nota> listaDe(String materiaId) {
         List<Nota> lista = notas.get(materiaId);
         if (lista == null) {
@@ -430,29 +588,243 @@ public final class Repositorio {
         return null;
     }
 
-    /** Crea el semestre si no tiene id; si lo tiene, lo reemplaza. */
+    /** Crea el semestre si no tiene id; si lo tiene, lo reemplaza con sus materias. */
     public void guardarAnterior(Semestre semestre) {
+        Semestre previo = semestre.id == null ? null : anterior(semestre.id);
         if (semestre.id == null) {
             semestre.id = nuevoId();
+        }
+        Set<String> quedan = new HashSet<>();
+        for (Materia materia : semestre.materias) {
+            if (materia.id == null) {
+                materia.id = nuevoId();
+            }
+            quedan.add(materia.id);
+        }
+
+        if (previo == null) {
             anteriores.add(semestre);
         } else {
-            for (int i = 0; i < anteriores.size(); i++) {
-                if (anteriores.get(i).id.equals(semestre.id)) {
-                    anteriores.set(i, semestre);
+            anteriores.set(anteriores.indexOf(previo), semestre);
+        }
+
+        if (uid != null) {
+            WriteBatch lote = db().batch();
+            Map<String, Object> datos = new HashMap<>();
+            datos.put("periodo", semestre.periodo);
+            datos.put("estado", TERMINADO);
+            lote.set(refSemestre(semestre.id), datos, SetOptions.merge());
+            if (previo != null) {
+                for (Materia vieja : previo.materias) {
+                    if (vieja.id != null && !quedan.contains(vieja.id)) {
+                        lote.delete(refMateria(semestre.id, vieja.id));
+                    }
                 }
             }
+            for (Materia materia : semestre.materias) {
+                Map<String, Object> suMateria = materiaAMapa(materia);
+                suMateria.put("creadaEn", FieldValue.serverTimestamp());
+                lote.set(refMateria(semestre.id, materia.id), suMateria);
+            }
+            guardarEnLaNube(lote.commit(), "el semestre");
         }
-        guardarYAvisar();
+        avisar();
     }
 
-    // ===== Archivo =====
+    // ===== Lo que llega de Firestore =====
 
-    private String nuevoId() {
-        return String.valueOf(siguienteId++);
+    private void alCambiarPerfil(DocumentSnapshot doc) {
+        if (!doc.exists()) {
+            return;
+        }
+        Object antes = firmaPerfil();
+        nombre = texto(doc.getString("nombre"));
+        correo = texto(doc.getString("correo"));
+        universidad = texto(doc.getString("universidad"));
+        recordarNotas = Boolean.TRUE.equals(doc.getBoolean("recordarNotas"));
+        avisarRiesgo = Boolean.TRUE.equals(doc.getBoolean("alertaRiesgo"));
+        Object plantilla = doc.get("plantilla");
+        if (plantilla instanceof Map) {
+            Map<?, ?> suPlantilla = (Map<?, ?>) plantilla;
+            notaParaPasar = numero(suPlantilla.get("notaParaPasar"), 3.0);
+            List<Corte> cortes = cortesDe(suPlantilla.get("cortes"));
+            if (!cortes.isEmpty()) {
+                formaDeCalificar = cortes;
+            }
+        }
+        avisarSiCambio(antes, firmaPerfil());
     }
 
-    private void guardarYAvisar() {
-        guardar();
+    private void alCambiarSemestreActual(DocumentSnapshot doc) {
+        if (!doc.exists()) {
+            // Solo se crea si el servidor confirma que no está (la caché puede estar vacía)
+            if (!doc.getMetadata().isFromCache() && uid != null) {
+                guardarEnLaNube(refSemestre(SEMESTRE_ACTUAL).set(semestreActualAMapa()),
+                        "el semestre en curso");
+            }
+            return;
+        }
+        Object antes = firmaFechas();
+        LocalDate inicio = fecha(doc.getString("fechaInicio"));
+        LocalDate fin = fecha(doc.getString("fechaFin"));
+        if (inicio != null && fin != null) {
+            inicioSemestre = inicio;
+            finSemestre = fin;
+        }
+        avisarSiCambio(antes, firmaFechas());
+    }
+
+    private void alCambiarMaterias(QuerySnapshot consulta) {
+        Object antes = firmaMaterias(materias);
+        Set<String> vigentes = new HashSet<>();
+        materias.clear();
+        for (DocumentSnapshot doc : consulta.getDocuments()) {
+            Materia materia = materiaDe(doc);
+            materias.add(materia);
+            vigentes.add(materia.id);
+            if (!notas.containsKey(materia.id)) {
+                notas.put(materia.id, new ArrayList<>());
+            }
+            if (!escuchasDeNotas.containsKey(materia.id)) {
+                escucharNotas(materia.id);
+            }
+        }
+        materias.sort((a, b) -> POR_ID.compare(a.id, b.id));
+
+        // Las borradas (aquí o en otro celular) dejan de escucharse
+        Iterator<Map.Entry<String, ListenerRegistration>> escucha = escuchasDeNotas.entrySet().iterator();
+        while (escucha.hasNext()) {
+            Map.Entry<String, ListenerRegistration> una = escucha.next();
+            if (!vigentes.contains(una.getKey())) {
+                una.getValue().remove();
+                notas.remove(una.getKey());
+                escucha.remove();
+            }
+        }
+        avisarSiCambio(antes, firmaMaterias(materias));
+    }
+
+    private void escucharNotas(String materiaId) {
+        escuchasDeNotas.put(materiaId, refNotas(materiaId).addSnapshotListener((consulta, error) -> {
+            if (consulta == null) {
+                registrar("las notas", error);
+                return;
+            }
+            if (!escuchasDeNotas.containsKey(materiaId)) {
+                return;
+            }
+            Object antes = firmaNotas(notas(materiaId));
+            List<Nota> lista = new ArrayList<>();
+            for (DocumentSnapshot doc : consulta.getDocuments()) {
+                lista.add(notaDe(doc));
+            }
+            lista.sort((a, b) -> POR_ID.compare(a.id, b.id));
+            notas.put(materiaId, lista);
+            avisarSiCambio(antes, firmaNotas(lista));
+        }));
+    }
+
+    private void alCambiarAnteriores(QuerySnapshot consulta) {
+        Object antes = firmaAnteriores();
+        Map<String, Semestre> previos = new HashMap<>();
+        for (Semestre semestre : anteriores) {
+            previos.put(semestre.id, semestre);
+        }
+        Set<String> vigentes = new HashSet<>();
+        anteriores.clear();
+        for (DocumentSnapshot doc : consulta.getDocuments()) {
+            Semestre semestre = new Semestre();
+            semestre.id = doc.getId();
+            semestre.periodo = texto(doc.getString("periodo"));
+            Semestre previo = previos.get(semestre.id);
+            if (previo != null) {
+                semestre.materias = previo.materias;
+            }
+            anteriores.add(semestre);
+            vigentes.add(semestre.id);
+            if (!escuchasDeAnteriores.containsKey(semestre.id)) {
+                escucharMateriasDe(semestre.id);
+            }
+        }
+        Iterator<Map.Entry<String, ListenerRegistration>> escucha =
+                escuchasDeAnteriores.entrySet().iterator();
+        while (escucha.hasNext()) {
+            Map.Entry<String, ListenerRegistration> una = escucha.next();
+            if (!vigentes.contains(una.getKey())) {
+                una.getValue().remove();
+                escucha.remove();
+            }
+        }
+        avisarSiCambio(antes, firmaAnteriores());
+    }
+
+    private void escucharMateriasDe(String semestreId) {
+        escuchasDeAnteriores.put(semestreId, refMaterias(semestreId).addSnapshotListener((consulta, error) -> {
+            if (consulta == null) {
+                registrar("un semestre anterior", error);
+                return;
+            }
+            Semestre semestre = anterior(semestreId);
+            if (semestre == null) {
+                return;
+            }
+            Object antes = firmaAnteriores();
+            List<Materia> suyas = new ArrayList<>();
+            for (DocumentSnapshot doc : consulta.getDocuments()) {
+                suyas.add(materiaDe(doc));
+            }
+            suyas.sort((a, b) -> POR_ID.compare(a.id, b.id));
+            semestre.materias = suyas;
+            avisarSiCambio(antes, firmaAnteriores());
+        }));
+    }
+
+    // ===== Firmas: para saber si lo que llegó cambia algo =====
+
+    private Object firmaPerfil() {
+        return Arrays.asList(nombre, correo, universidad, recordarNotas, avisarRiesgo,
+                plantillaAMapa(formaDeCalificar, notaParaPasar));
+    }
+
+    private Object firmaFechas() {
+        return Arrays.asList(inicioSemestre, finSemestre);
+    }
+
+    private static Object firmaMaterias(List<Materia> lista) {
+        List<Object> firma = new ArrayList<>();
+        for (Materia materia : lista) {
+            Map<String, Object> datos = materiaAMapa(materia);
+            datos.put("id", materia.id);
+            firma.add(datos);
+        }
+        return firma;
+    }
+
+    private static Object firmaNotas(List<Nota> lista) {
+        List<Object> firma = new ArrayList<>();
+        for (Nota nota : lista) {
+            Map<String, Object> datos = notaAMapa(nota);
+            datos.put("id", nota.id);
+            firma.add(datos);
+        }
+        return firma;
+    }
+
+    private Object firmaAnteriores() {
+        List<Object> firma = new ArrayList<>();
+        for (Semestre semestre : anteriores) {
+            firma.add(Arrays.asList(semestre.id, semestre.periodo, firmaMaterias(semestre.materias)));
+        }
+        return firma;
+    }
+
+    private void avisarSiCambio(Object antes, Object despues) {
+        if (!antes.equals(despues)) {
+            avisar();
+        }
+    }
+
+    private void avisar() {
         Integer actual = cambios.getValue();
         int siguiente = actual == null ? 1 : actual + 1;
         if (Looper.myLooper() == Looper.getMainLooper()) {
@@ -462,235 +834,218 @@ public final class Repositorio {
         }
     }
 
-    /** Se escribe en un archivo aparte y se renombra: si la app se cierra a mitad, no se pierde nada. */
-    private void guardar() {
-        File temporal = new File(archivo.getPath() + ".tmp");
-        try (FileOutputStream salida = new FileOutputStream(temporal)) {
-            salida.write(aJson().toString().getBytes(StandardCharsets.UTF_8));
-        } catch (IOException | JSONException error) {
-            Log.e(ETIQUETA, "No se pudieron guardar los datos", error);
-            return;
-        }
-        if (!temporal.renameTo(archivo)) {
-            Log.e(ETIQUETA, "No se pudo reemplazar " + archivo);
+    // ===== Escribir en Firestore =====
+
+    private void escribirPerfil(Map<String, Object> cambio) {
+        if (uid != null) {
+            guardarEnLaNube(refYo().set(cambio, SetOptions.merge()), "el perfil");
         }
     }
 
-    private void cargar() {
-        if (!archivo.exists()) {
-            return;
-        }
-        try (InputStream entrada = new FileInputStream(archivo)) {
-            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            byte[] bloque = new byte[8192];
-            int leidos;
-            while ((leidos = entrada.read(bloque)) != -1) {
-                bytes.write(bloque, 0, leidos);
-            }
-            deJson(new JSONObject(bytes.toString(StandardCharsets.UTF_8.name())));
-        } catch (IOException | JSONException error) {
-            // Un archivo dañado no debe tumbar la app: arranca vacía
-            Log.e(ETIQUETA, "No se pudieron leer los datos", error);
+    private void actualizarMateria(String id, Map<String, Object> cambio) {
+        if (uid != null) {
+            guardarEnLaNube(refMateria(SEMESTRE_ACTUAL, id).update(cambio), "la materia");
         }
     }
 
-    private JSONObject aJson() throws JSONException {
-        JSONObject raiz = new JSONObject();
-        raiz.put("version", 1);
-        raiz.put("siguienteId", siguienteId);
-
-        JSONObject cuenta = new JSONObject();
-        cuenta.put("nombre", nombre);
-        cuenta.put("correo", correo);
-        cuenta.put("universidad", universidad);
-        cuenta.put("recordarNotas", recordarNotas);
-        cuenta.put("avisarRiesgo", avisarRiesgo);
-        raiz.put("cuenta", cuenta);
-
-        if (inicioSemestre != null && finSemestre != null) {
-            raiz.put("inicioSemestre", inicioSemestre.toString());
-            raiz.put("finSemestre", finSemestre.toString());
-        }
-        raiz.put("notaParaPasar", notaParaPasar);
-        raiz.put("formaDeCalificar", cortesAJson(formaDeCalificar));
-
-        JSONArray lasMaterias = new JSONArray();
-        for (Materia materia : materias) {
-            JSONObject json = materiaAJson(materia);
-            JSONArray susNotas = new JSONArray();
-            for (Nota nota : notas(materia.id)) {
-                susNotas.put(notaAJson(nota));
-            }
-            json.put("notas", susNotas);
-            lasMaterias.put(json);
-        }
-        raiz.put("materias", lasMaterias);
-
-        JSONArray losSemestres = new JSONArray();
-        for (Semestre semestre : anteriores) {
-            JSONObject json = new JSONObject();
-            json.put("id", semestre.id);
-            json.put("periodo", semestre.periodo);
-            JSONArray susMaterias = new JSONArray();
-            for (Materia materia : semestre.materias) {
-                susMaterias.put(materiaAJson(materia));
-            }
-            json.put("materias", susMaterias);
-            losSemestres.put(json);
-        }
-        raiz.put("semestresAnteriores", losSemestres);
-        return raiz;
+    /**
+     * No se espera a que termine: sin Internet la tarea queda pendiente hasta que vuelva la
+     * conexión, pero lo escrito ya está en la caché y las pantallas lo ven.
+     */
+    private static void guardarEnLaNube(Task<Void> escritura, String que) {
+        escritura.addOnFailureListener(error -> Log.e(ETIQUETA, "No se pudo guardar " + que, error));
     }
 
-    private void deJson(JSONObject raiz) throws JSONException {
-        siguienteId = raiz.optLong("siguienteId", 1);
+    private static void registrar(String que, @Nullable Exception error) {
+        Log.e(ETIQUETA, "No se pudo leer " + que, error);
+    }
 
-        JSONObject cuenta = raiz.optJSONObject("cuenta");
-        if (cuenta != null) {
-            nombre = cuenta.optString("nombre", "");
-            correo = cuenta.optString("correo", "");
-            universidad = cuenta.optString("universidad", "");
-            recordarNotas = cuenta.optBoolean("recordarNotas", false);
-            avisarRiesgo = cuenta.optBoolean("avisarRiesgo", false);
-        }
+    /**
+     * Ids en número (la navegación los pasa como long) y en orden de creación: la hora en
+     * milisegundos, y uno más si se piden dos en el mismo milisegundo.
+     */
+    private String nuevoId() {
+        ultimoId = Math.max(System.currentTimeMillis(), ultimoId + 1);
+        return String.valueOf(ultimoId);
+    }
 
-        if (raiz.has("inicioSemestre") && raiz.has("finSemestre")) {
-            inicioSemestre = LocalDate.parse(raiz.getString("inicioSemestre"));
-            finSemestre = LocalDate.parse(raiz.getString("finSemestre"));
+    private static void quitarTodas(Map<String, ListenerRegistration> escuchas) {
+        for (ListenerRegistration escucha : escuchas.values()) {
+            escucha.remove();
         }
-        notaParaPasar = raiz.optDouble("notaParaPasar", 3.0);
-        JSONArray forma = raiz.optJSONArray("formaDeCalificar");
-        if (forma != null && forma.length() > 0) {
-            formaDeCalificar = cortesDeJson(forma);
-        }
+        escuchas.clear();
+    }
 
-        JSONArray lasMaterias = raiz.optJSONArray("materias");
-        if (lasMaterias != null) {
-            for (int i = 0; i < lasMaterias.length(); i++) {
-                JSONObject json = lasMaterias.getJSONObject(i);
-                Materia materia = materiaDeJson(json);
-                materias.add(materia);
-                List<Nota> susNotas = new ArrayList<>();
-                JSONArray lista = json.optJSONArray("notas");
-                if (lista != null) {
-                    for (int j = 0; j < lista.length(); j++) {
-                        susNotas.add(notaDeJson(lista.getJSONObject(j)));
-                    }
-                }
-                notas.put(materia.id, susNotas);
-            }
-        }
-
-        JSONArray losSemestres = raiz.optJSONArray("semestresAnteriores");
-        if (losSemestres != null) {
-            for (int i = 0; i < losSemestres.length(); i++) {
-                JSONObject json = losSemestres.getJSONObject(i);
-                Semestre semestre = new Semestre();
-                semestre.id = json.getString("id");
-                semestre.periodo = json.getString("periodo");
-                JSONArray susMaterias = json.optJSONArray("materias");
-                if (susMaterias != null) {
-                    for (int j = 0; j < susMaterias.length(); j++) {
-                        semestre.materias.add(materiaDeJson(susMaterias.getJSONObject(j)));
-                    }
-                }
-                anteriores.add(semestre);
-            }
+    private static void borrarArchivoViejo(Context contexto) {
+        File viejo = new File(contexto.getFilesDir(), ARCHIVO_VIEJO);
+        File temporal = new File(contexto.getFilesDir(), ARCHIVO_VIEJO + ".tmp");
+        if ((viejo.exists() && !viejo.delete()) || (temporal.exists() && !temporal.delete())) {
+            Log.w(ETIQUETA, "No se pudo borrar " + ARCHIVO_VIEJO);
         }
     }
 
-    private static JSONObject materiaAJson(Materia materia) throws JSONException {
-        JSONObject json = new JSONObject();
-        json.put("id", materia.id);
-        json.put("nombre", materia.nombre);
-        if (materia.profesor != null) {
-            json.put("profesor", materia.profesor);
-        }
-        json.put("creditos", materia.creditos);
-        json.put("notaParaPasar", materia.notaParaPasar);
-        if (materia.notaFinal != null) {
-            json.put("notaFinal", materia.notaFinal);
-        }
-        json.put("cortes", cortesAJson(materia.cortes));
-        return json;
+    // ===== Rutas (doc 05 · 2) =====
+
+    private static FirebaseFirestore db() {
+        return FirebaseFirestore.getInstance();
     }
 
-    private static Materia materiaDeJson(JSONObject json) throws JSONException {
+    private DocumentReference refYo() {
+        if (uid == null) {
+            throw new IllegalStateException("Sin sesión");
+        }
+        return db().collection("usuarios").document(uid);
+    }
+
+    private DocumentReference refSemestre(String semestreId) {
+        return refYo().collection("semestres").document(semestreId);
+    }
+
+    private CollectionReference refMaterias(String semestreId) {
+        return refSemestre(semestreId).collection("materias");
+    }
+
+    private DocumentReference refMateria(String semestreId, String materiaId) {
+        return refMaterias(semestreId).document(materiaId);
+    }
+
+    private CollectionReference refNotas(String materiaId) {
+        return refMateria(SEMESTRE_ACTUAL, materiaId).collection("notas");
+    }
+
+    private DocumentReference refNota(String materiaId, String notaId) {
+        return refNotas(materiaId).document(notaId);
+    }
+
+    // ===== De objetos a Firestore y de vuelta (doc 05 · 3) =====
+
+    private Map<String, Object> semestreActualAMapa() {
+        Map<String, Object> datos = new HashMap<>();
+        datos.put("periodo", periodoActual());
+        datos.put("fechaInicio", inicioSemestre.toString());
+        datos.put("fechaFin", finSemestre.toString());
+        datos.put("estado", EN_CURSO);
+        return datos;
+    }
+
+    private static Map<String, Object> plantillaAMapa(List<Corte> cortes, double paraPasar) {
+        Map<String, Object> plantilla = new HashMap<>();
+        plantilla.put("notaParaPasar", paraPasar);
+        plantilla.put("cortes", cortesAMapas(cortes));
+        return plantilla;
+    }
+
+    private static Map<String, Object> materiaAMapa(Materia materia) {
+        Map<String, Object> datos = new HashMap<>();
+        datos.put("nombre", materia.nombre);
+        datos.put("profesor", materia.profesor);
+        datos.put("creditos", materia.creditos);
+        datos.put("notaParaPasar", materia.notaParaPasar);
+        datos.put("notaFinal", materia.notaFinal);
+        datos.put("cortes", cortesAMapas(materia.cortes));
+        return datos;
+    }
+
+    private static Materia materiaDe(DocumentSnapshot doc) {
         Materia materia = new Materia();
-        materia.id = json.optString("id", "");
-        materia.nombre = json.optString("nombre", "");
-        materia.profesor = json.has("profesor") ? json.getString("profesor") : null;
-        materia.creditos = json.optInt("creditos", 0);
-        materia.notaParaPasar = json.optDouble("notaParaPasar", 3.0);
-        materia.notaFinal = json.has("notaFinal") ? json.getDouble("notaFinal") : null;
-        JSONArray cortes = json.optJSONArray("cortes");
-        materia.cortes = cortes == null ? new ArrayList<>() : cortesDeJson(cortes);
+        materia.id = doc.getId();
+        materia.nombre = texto(doc.getString("nombre"));
+        materia.profesor = doc.getString("profesor");
+        materia.creditos = (int) numero(doc.get("creditos"), 0);
+        materia.notaParaPasar = numero(doc.get("notaParaPasar"), 3.0);
+        materia.notaFinal = numeroONulo(doc.get("notaFinal"));
+        materia.cortes = cortesDe(doc.get("cortes"));
         return materia;
     }
 
-    private static JSONArray cortesAJson(List<Corte> cortes) throws JSONException {
-        JSONArray lista = new JSONArray();
+    private static List<Map<String, Object>> cortesAMapas(List<Corte> cortes) {
+        List<Map<String, Object>> lista = new ArrayList<>();
         for (Corte corte : cortes) {
-            JSONObject json = new JSONObject();
-            json.put("numero", corte.numero);
-            json.put("porcentaje", corte.porcentaje);
-            JSONArray componentes = new JSONArray();
+            List<Map<String, Object>> componentes = new ArrayList<>();
             for (Componente componente : corte.componentes) {
-                JSONObject c = new JSONObject();
+                Map<String, Object> c = new HashMap<>();
                 c.put("id", componente.id);
                 c.put("nombre", componente.nombre);
                 c.put("porcentaje", componente.porcentaje);
                 c.put("promedioIgual", componente.promedioIgual);
-                componentes.put(c);
+                componentes.add(c);
             }
-            json.put("componentes", componentes);
-            lista.put(json);
+            Map<String, Object> datos = new HashMap<>();
+            datos.put("numero", corte.numero);
+            datos.put("porcentaje", corte.porcentaje);
+            datos.put("componentes", componentes);
+            lista.add(datos);
         }
         return lista;
     }
 
-    private static List<Corte> cortesDeJson(JSONArray lista) throws JSONException {
+    private static List<Corte> cortesDe(@Nullable Object valor) {
         List<Corte> cortes = new ArrayList<>();
-        for (int i = 0; i < lista.length(); i++) {
-            JSONObject json = lista.getJSONObject(i);
+        if (!(valor instanceof List)) {
+            return cortes;
+        }
+        for (Object uno : (List<?>) valor) {
+            if (!(uno instanceof Map)) {
+                continue;
+            }
+            Map<?, ?> corte = (Map<?, ?>) uno;
             List<Componente> componentes = new ArrayList<>();
-            JSONArray susComponentes = json.optJSONArray("componentes");
-            if (susComponentes != null) {
-                for (int j = 0; j < susComponentes.length(); j++) {
-                    JSONObject c = susComponentes.getJSONObject(j);
-                    componentes.add(new Componente(c.getString("id"), c.optString("nombre", ""),
-                            c.optDouble("porcentaje", 0), c.optBoolean("promedioIgual", true)));
+            Object susComponentes = corte.get("componentes");
+            if (susComponentes instanceof List) {
+                for (Object otro : (List<?>) susComponentes) {
+                    if (otro instanceof Map) {
+                        Map<?, ?> c = (Map<?, ?>) otro;
+                        componentes.add(new Componente(texto(c.get("id")), texto(c.get("nombre")),
+                                numero(c.get("porcentaje"), 0),
+                                !Boolean.FALSE.equals(c.get("promedioIgual"))));
+                    }
                 }
             }
-            cortes.add(new Corte(json.getInt("numero"), json.optDouble("porcentaje", 0), componentes));
+            cortes.add(new Corte((int) numero(corte.get("numero"), 0),
+                    numero(corte.get("porcentaje"), 0), componentes));
         }
         return cortes;
     }
 
-    private static JSONObject notaAJson(Nota nota) throws JSONException {
-        JSONObject json = new JSONObject();
-        json.put("id", nota.id);
-        json.put("corte", nota.corte);
-        json.put("componenteId", nota.componenteId);
-        if (nota.nombre != null) {
-            json.put("nombre", nota.nombre);
-        }
-        json.put("valor", nota.valor);
-        if (nota.peso != null) {
-            json.put("peso", nota.peso);
-        }
-        if (nota.fecha != null) {
-            json.put("fecha", nota.fecha);
-        }
-        return json;
+    private static Map<String, Object> notaAMapa(Nota nota) {
+        Map<String, Object> datos = new HashMap<>();
+        datos.put("corte", nota.corte);
+        datos.put("componenteId", nota.componenteId);
+        datos.put("nombre", nota.nombre);
+        datos.put("valor", nota.valor);
+        datos.put("peso", nota.peso);
+        datos.put("fecha", nota.fecha);
+        return datos;
     }
 
-    private static Nota notaDeJson(JSONObject json) throws JSONException {
-        Nota nota = new Nota(json.getInt("corte"), json.getString("componenteId"), json.getDouble("valor"),
-                json.has("peso") ? json.getDouble("peso") : null);
-        nota.id = json.getString("id");
-        nota.nombre = json.has("nombre") ? json.getString("nombre") : null;
-        nota.fecha = json.has("fecha") ? json.getString("fecha") : null;
+    private static Nota notaDe(DocumentSnapshot doc) {
+        Nota nota = new Nota((int) numero(doc.get("corte"), 1), texto(doc.getString("componenteId")),
+                numero(doc.get("valor"), 0), numeroONulo(doc.get("peso")));
+        nota.id = doc.getId();
+        nota.nombre = doc.getString("nombre");
+        nota.fecha = doc.getString("fecha");
         return nota;
+    }
+
+    private static double numero(@Nullable Object valor, double siFalta) {
+        return valor instanceof Number ? ((Number) valor).doubleValue() : siFalta;
+    }
+
+    @Nullable
+    private static Double numeroONulo(@Nullable Object valor) {
+        return valor instanceof Number ? ((Number) valor).doubleValue() : null;
+    }
+
+    private static String texto(@Nullable Object valor) {
+        return valor instanceof String ? (String) valor : "";
+    }
+
+    @Nullable
+    private static LocalDate fecha(@Nullable String valor) {
+        try {
+            return valor == null ? null : LocalDate.parse(valor);
+        } catch (RuntimeException error) {
+            return null;
+        }
     }
 }
