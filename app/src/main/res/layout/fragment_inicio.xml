@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  03 Inicio · 18 Inicio vacío (doc 03).
+  Las dos pantallas son la misma: se muestra la planilla o el estado vacío
+  según si el usuario tiene materias (RF-20).
+-->
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:background="@color/fondo"
+    android:clipToPadding="false"
+    android:paddingBottom="@dimen/espacio_bajo_barra_nav">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/margen_pantalla"
+        android:paddingTop="@dimen/espacio_l"
+        android:paddingEnd="@dimen/margen_pantalla">
+
+        <!-- Semana del semestre + avatar que lleva al Perfil (12) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/semana"
+                style="@style/Texto.Etiqueta"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:letterSpacing="0.08"
+                android:textAllCaps="true"
+                tools:text="Semana 12 de 16" />
+
+            <FrameLayout
+                android:id="@+id/avatar"
+                android:layout_width="@dimen/area_tactil_min"
+                android:layout_height="@dimen/area_tactil_min"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/desc_mi_perfil"
+                android:focusable="true">
+
+                <!--
+                  Mientras no hay foto ni nombre, la silueta de persona: un círculo vacío no
+                  dice que ahí está el Perfil. Fase 2: con la foto de Google, centerCrop y sin tinte.
+                -->
+                <TextView
+                    android:id="@+id/avatarIniciales"
+                    style="@style/Texto.Etiqueta"
+                    android:layout_width="@dimen/tamano_avatar"
+                    android:layout_height="@dimen/tamano_avatar"
+                    android:layout_gravity="center"
+                    android:background="@drawable/fondo_avatar"
+                    android:gravity="center"
+                    android:textColor="@color/tinta"
+                    android:visibility="gone"
+                    tools:text="JM" />
+
+                <ImageView
+                    android:id="@+id/avatarFoto"
+                    android:layout_width="@dimen/tamano_avatar"
+                    android:layout_height="@dimen/tamano_avatar"
+                    android:layout_gravity="center"
+                    android:background="@drawable/fondo_avatar"
+                    android:importantForAccessibility="no"
+                    android:padding="@dimen/espacio_s"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_usuario_linea"
+                    app:tint="@color/acento_oscuro" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/saludo"
+            style="@style/Texto.Titulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/inicio_saludo" />
+
+        <!-- 20 Sin conexión: aviso arriba del Inicio (RF-31) -->
+        <LinearLayout
+            android:id="@+id/avisoSinConexion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espacio_m"
+            android:background="@drawable/fondo_aviso_sin_conexion"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/espacio_m"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_sin_conexion"
+                app:tint="@color/riesgo" />
+
+            <TextView
+                style="@style/Texto.Apoyo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/espacio_s"
+                android:layout_weight="1"
+                android:text="@string/inicio_sin_conexion"
+                android:textColor="@color/riesgo" />
+        </LinearLayout>
+
+        <!--
+          Promedio del semestre: tarjeta azul claro con sombra suave. La etiqueta va arriba
+          a todo lo ancho para que la frase y la etiqueta "en rojo" tengan espacio a la
+          derecha del número sin partirse en dos líneas.
+        -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espacio_l"
+            android:background="@drawable/fondo_tarjeta_destacada"
+            android:elevation="@dimen/elevacion_tarjeta"
+            android:orientation="vertical"
+            android:padding="@dimen/espacio_l">
+
+            <TextView
+                style="@style/Texto.Etiqueta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/inicio_promedio_etiqueta" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/promedio"
+                style="@style/Texto.NumeroGigante"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="3.7" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/espacio_l"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/promedioFrase"
+                    style="@style/Texto.Principal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Vas bien en 5 de 6 materias" />
+
+                <!-- Solo si alguna materia va en riesgo -->
+                <TextView
+                    android:id="@+id/promedioRiesgo"
+                    style="@style/Texto.Etiqueta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/espacio_s"
+                    android:background="@drawable/fondo_nota_riesgo"
+                    android:paddingStart="10dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="4dp"
+                    android:visibility="gone"
+                    android:textColor="@color/tinta"
+                    tools:text="Cálculo II en rojo"
+                    tools:visibility="visible" />
+            </LinearLayout>
+        </LinearLayout>
+        </LinearLayout>
+
+        <!--
+          ===== Planilla de materias (RF-19) =====
+          Tarjeta blanca plana con sombra suave (fondo_tarjeta.xml). Recorta su contenido
+          a las esquinas redondeadas.
+        -->
+        <FrameLayout
+            android:id="@+id/tarjetaPlanilla"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espacio_xl"
+            android:background="@drawable/fondo_tarjeta"
+            android:clipToOutline="true"
+            android:elevation="@dimen/elevacion_tarjeta">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/encabezado"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal"
+                    android:paddingStart="@dimen/planilla_sangria"
+                    android:paddingTop="@dimen/espacio_m"
+                    android:paddingEnd="@dimen/espacio_m"
+                    android:paddingBottom="@dimen/espacio_s"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        style="@style/Texto.EncabezadoPlanilla"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/planilla_materia" />
+
+                    <TextView
+                        style="@style/Texto.EncabezadoPlanilla"
+                        android:layout_width="@dimen/col_corte"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/planilla_c1" />
+
+                    <TextView
+                        style="@style/Texto.EncabezadoPlanilla"
+                        android:layout_width="@dimen/col_corte"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/planilla_c2" />
+
+                    <TextView
+                        style="@style/Texto.EncabezadoPlanilla"
+                        android:layout_width="@dimen/col_corte"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/planilla_c3" />
+
+                    <TextView
+                        style="@style/Texto.EncabezadoPlanilla"
+                        android:layout_width="@dimen/col_definitiva"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:text="@string/planilla_definitiva" />
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/divisorEncabezado"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/borde_fino"
+                    android:background="@color/borde_suave"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/encabezado" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/listaMaterias"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:clipChildren="false"
+                    android:nestedScrollingEnabled="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divisorEncabezado"
+                    tools:itemCount="3"
+                    tools:listitem="@layout/item_planilla" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </FrameLayout>
+
+        <!-- ===== 18 Inicio vacío (RF-20) ===== -->
+        <LinearLayout
+            android:id="@+id/estadoVacio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espacio_xl"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Estilo.Planilla"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingStart="@dimen/espacio_xl"
+                    android:paddingTop="40dp"
+                    android:paddingEnd="@dimen/espacio_xl"
+                    android:paddingBottom="40dp">
+
+                    <TextView
+                        style="@style/Texto.Principal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/inicio_vacio_titulo" />
+
+                    <TextView
+                        style="@style/Texto.Apoyo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/espacio_xs"
+                        android:gravity="center"
+                        android:text="@string/inicio_vacio_detalle" />
+
+                    <!-- Anotación con flecha: máximo una por pantalla (doc 04 · 4) -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/espacio_l"
+                        android:gravity="bottom"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/Texto.Anotacion"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/inicio_vacio_a_mano" />
+
+                        <ImageView
+                            android:layout_width="26dp"
+                            android:layout_height="22dp"
+                            android:layout_marginStart="@dimen/espacio_xs"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/ic_flecha_anotacion" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/botonPrimeraMateria"
+                style="@style/Estilo.Boton.Principal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_l"
+                android:text="@string/inicio_vacio_boton" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Mensaje de error (pantalla 21, validaciones) -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/reprobado_suave" />
+    <corners android:radius="@dimen/radio_campo" />
+</shape>

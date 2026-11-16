@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  04 Verifica tu correo (doc 03, RF-02).
+
+  Sale después de crear la cuenta con correo. "Ya lo confirmé" hace reload() del
+  usuario y revisa isEmailVerified(); si todavía no, se queda aquí avisando.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo"
+    android:paddingStart="@dimen/margen_pantalla"
+    android:paddingEnd="@dimen/margen_pantalla">
+
+    <!-- Sobre dentro de un círculo acento_suave -->
+    <FrameLayout
+        android:id="@+id/circuloSobre"
+        android:layout_width="@dimen/tamano_icono_grande"
+        android:layout_height="@dimen/tamano_icono_grande"
+        android:background="@drawable/fondo_circulo_suave"
+        app:layout_constraintBottom_toTopOf="@id/titulo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed">
+
+        <ImageView
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_gravity="center"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_sobre_grande"
+            app:tint="@color/acento_oscuro" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/titulo"
+        style="@style/Texto.Titulo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/espacio_xl"
+        android:gravity="center"
+        android:text="@string/verifica_titulo"
+        app:layout_constraintBottom_toTopOf="@id/detalle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/circuloSobre" />
+
+    <TextView
+        android:id="@+id/detalle"
+        style="@style/Texto.Apoyo.Grande"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/espacio_s"
+        android:gravity="center"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titulo"
+        tools:text="Te mandamos un enlace a juan.david@gmail.com pa' confirmar que es tuyo." />
+
+    <!-- Aviso de "todavía no aparece confirmado" / "te lo reenviamos" -->
+    <TextView
+        android:id="@+id/aviso"
+        style="@style/Texto.Apoyo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/espacio_l"
+        android:background="@drawable/fondo_error"
+        android:gravity="center"
+        android:padding="@dimen/espacio_m"
+        android:textColor="@color/reprobado"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/botonConfirme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="@string/verifica_sin_confirmar"
+        tools:visibility="visible" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/botonConfirme"
+        style="@style/Estilo.Boton.Principal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/verifica_confirme"
+        app:layout_constraintBottom_toTopOf="@id/botonReenviar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/cargando"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:indeterminateTint="@color/tinta"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/botonConfirme"
+        app:layout_constraintEnd_toEndOf="@id/botonConfirme"
+        app:layout_constraintStart_toStartOf="@id/botonConfirme"
+        app:layout_constraintTop_toTopOf="@id/botonConfirme" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/botonReenviar"
+        style="@style/Estilo.Boton.Enlace"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/espacio_xs"
+        android:text="@string/verifica_reenviar"
+        app:layout_constraintBottom_toTopOf="@id/spam"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/spam"
+        style="@style/Texto.Apoyo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/espacio_xl"
+        android:gravity="center"
+        android:text="@string/verifica_spam"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  11 Simular (doc 03, RF-23 y HU-05).
+  Arriba y fijos: la materia y el resultado simulado, para verlo mientras se mueven las
+  notas. Abajo, con scroll: una tarjeta por corte. Lo registrado va como fila con candado y
+  lo que falta con deslizador; cada cosa dice cuánto vale de la materia. No se guarda nada.
+-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo"
+    android:orientation="vertical">
+
+    <!--
+      ===== Cabecera fija =====
+      La raíz sí recorta a sus hijos: sin eso, la lista de cortes, al desplazarse, se
+      pintaba encima de esta cabecera y la tapaba
+    -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/margen_pantalla"
+        android:paddingTop="32dp"
+        android:paddingEnd="@dimen/margen_pantalla"
+        android:paddingBottom="@dimen/espacio_s">
+
+        <TextView
+            style="@style/Texto.Titulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/simular_titulo" />
+
+        <TextView
+            style="@style/Texto.Apoyo.Grande"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espacio_xs"
+            android:text="@string/simular_explicacion" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espacio_l"
+            android:clipToPadding="false"
+            android:scrollbars="none">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipsMateria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:selectionRequired="true"
+                app:singleLine="true"
+                app:singleSelection="true" />
+        </HorizontalScrollView>
+
+        <!-- ===== Resultado simulado ===== -->
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Estilo.TarjetaDestacada"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espacio_l">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/espacio_xl"
+                android:paddingTop="@dimen/espacio_l"
+                android:paddingEnd="@dimen/espacio_l"
+                android:paddingBottom="@dimen/espacio_l">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/Texto.Apoyo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/simular_definitiva" />
+
+                    <TextView
+                        android:id="@+id/definitivaSimulada"
+                        style="@style/Texto.NumeroGrande"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="3.1" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/veredicto"
+                        style="@style/Texto.ChipMeta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/fondo_nota_aprobada"
+                        android:paddingStart="@dimen/espacio_m"
+                        android:paddingTop="@dimen/espacio_s"
+                        android:paddingEnd="@dimen/espacio_m"
+                        android:paddingBottom="@dimen/espacio_s"
+                        android:text="@string/simular_pasarias"
+                        android:textColor="@color/tinta" />
+
+                    <!-- Aparece cuando se movió algo: vuelve todo a lo que necesitas -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/botonReiniciar"
+                        style="@style/Estilo.Boton.Enlace"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="0dp"
+                        android:paddingStart="@dimen/espacio_s"
+                        android:paddingEnd="0dp"
+                        android:text="@string/simular_reiniciar"
+                        android:visibility="invisible"
+                        tools:visibility="visible" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+
+    <!-- ===== Una tarjeta por corte ===== -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/margen_pantalla"
+        android:paddingTop="@dimen/espacio_m"
+        android:paddingEnd="@dimen/margen_pantalla"
+        android:paddingBottom="@dimen/espacio_bajo_barra_nav">
+
+        <LinearLayout
+            android:id="@+id/listaCortes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Fila de la pantalla 07: un corte o un tipo de nota con su porcentaje.
+  Se agrega a mano a listaCortes y listaTipos (no es un RecyclerView porque son pocas).
+
+  El "%" va FUERA del campo, no como suffixText: en un campo angosto Material lo
+  empuja contra el borde y lo recorta, y además deja un hueco entre el número y el
+  símbolo porque el número se centra en el ancho completo.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:minHeight="@dimen/area_tactil_min"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/espacio_l"
+    android:paddingTop="@dimen/espacio_xs"
+    android:paddingEnd="@dimen/espacio_s"
+    android:paddingBottom="@dimen/espacio_xs">
+
+    <TextView
+        android:id="@+id/nombre"
+        style="@style/Texto.Principal.Medio"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="1"
+        tools:text="Parcial" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/campoPorcentaje"
+        style="@style/Estilo.Campo.SobreBlanco"
+        android:layout_width="@dimen/ancho_campo_porcentaje"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/porcentaje"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="3"
+            android:maxLines="1"
+            android:paddingStart="@dimen/espacio_xs"
+            android:paddingEnd="@dimen/espacio_xs"
+            tools:text="60" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/simboloPorcentaje"
+        style="@style/Texto.Principal.Medio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:text="@string/simbolo_porcentaje"
+        android:textColor="@color/texto_secundario" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/botonQuitar"
+        style="@style/Estilo.BotonIcono"
+        android:layout_marginStart="@dimen/espacio_xs"
+        android:contentDescription="@string/general_borrar"
+        app:icon="@drawable/ic_cerrar"
+        app:iconSize="18dp"
+        app:iconTint="@color/texto_secundario" />
+</LinearLayout>

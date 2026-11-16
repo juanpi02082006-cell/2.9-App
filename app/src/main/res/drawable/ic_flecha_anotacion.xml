@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Flecha recta que acompaña una anotación (Texto.Anotacion). Apunta abajo a la derecha;
+  donde tiene que apuntar a la izquierda, la vista la voltea con scaleX="-1".
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="34dp"
+    android:height="30dp"
+    android:viewportWidth="40"
+    android:viewportHeight="36">
+    <path
+        android:pathData="M6,6L32,28M32,28L21,27.5M32,28L31,17"
+        android:strokeColor="@color/riesgo"
+        android:strokeWidth="2.4"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+</vector>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Campo Nombre / Correo o usuario (pantallas 02, 03) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:tint="?attr/colorControlNormal">
+    <path
+        android:pathData="M12,11.5a3.6,3.6 0 1,0 0,-7.2 3.6,3.6 0 1,0 0,7.2M4.8,20.2c0,-3.3 3.2,-5.3 7.2,-5.3s7.2,2 7.2,5.3"
+        android:strokeColor="@android:color/white"
+        android:strokeWidth="1.7"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+</vector>

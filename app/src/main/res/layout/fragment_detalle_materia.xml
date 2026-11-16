@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  08 Detalle de materia (doc 03, RF-21 y HU-01).
+  "Llevas 2.9", % evaluado, la tarjeta oscura con "necesitas 3.2 en el Corte 3"
+  y la lista de cortes con sus componentes.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/botonVolver"
+        style="@style/Estilo.BotonIcono"
+        android:layout_marginStart="@dimen/espacio_s"
+        android:layout_marginTop="@dimen/espacio_m"
+        android:contentDescription="@string/desc_volver"
+        app:icon="@drawable/ic_volver"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/botonEditar"
+        style="@style/Estilo.BotonIcono"
+        android:layout_marginTop="@dimen/espacio_m"
+        android:layout_marginEnd="@dimen/espacio_s"
+        android:contentDescription="@string/desc_editar_materia"
+        app:icon="@drawable/ic_lapiz"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:clipChildren="false"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/margen_pantalla"
+        android:paddingEnd="@dimen/margen_pantalla"
+        android:paddingBottom="@dimen/espacio_l"
+        app:layout_constraintBottom_toTopOf="@id/filaBotones"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/botonVolver">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/nombreMateria"
+                style="@style/Texto.Titulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Cálculo II" />
+
+            <TextView
+                android:id="@+id/subtituloMateria"
+                style="@style/Texto.Apoyo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="3 créditos · Prof. Ramírez" />
+
+            <!-- ===== Lo que lleva ===== -->
+            <TextView
+                style="@style/Texto.Apoyo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_xl"
+                android:text="@string/detalle_llevas" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/llevas"
+                    style="@style/Texto.NumeroGigante"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="2.9"
+                    tools:textColor="@color/riesgo" />
+
+                <!--
+                  Cuánto de la materia ya está evaluado (suma de los % de los cortes
+                  evaluados), en un anillo: es una parte de un todo. El número va
+                  adentro en tinta; el anillo solo lo acompaña.
+                -->
+                <LinearLayout
+                    android:id="@+id/bloqueEvaluado"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/espacio_l"
+                    android:layout_weight="1"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <FrameLayout
+                        android:layout_width="@dimen/tamano_anillo"
+                        android:layout_height="@dimen/tamano_anillo"
+                        android:importantForAccessibility="noHideDescendants">
+
+                        <com.google.android.material.progressindicator.CircularProgressIndicator
+                            android:id="@+id/anilloEvaluado"
+                            style="@style/Estilo.Anillo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            tools:progress="66" />
+
+                        <TextView
+                            android:id="@+id/porcentajeEvaluado"
+                            style="@style/Texto.Anillo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            tools:text="66 %" />
+                    </FrameLayout>
+
+                    <TextView
+                        style="@style/Texto.Apoyo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/espacio_s"
+                        android:importantForAccessibility="no"
+                        android:text="@string/detalle_evaluado_etiqueta" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- ===== Tarjeta oscura: cuánto necesita (doc 02 · 3.4) ===== -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Estilo.TarjetaDestacada"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_l">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/espacio_xl">
+
+                    <TextView
+                        android:id="@+id/etiquetaNecesitas"
+                        style="@style/Texto.Apoyo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/detalle_necesitas_etiqueta" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/necesitas"
+                            style="@style/Texto.NumeroGrande"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:text="3.2" />
+
+                        <TextView
+                            android:id="@+id/necesitasDonde"
+                            style="@style/Texto.Apoyo"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:layout_marginStart="@dimen/espacio_m"
+                            android:layout_marginBottom="@dimen/espacio_s"
+                            android:layout_weight="1"
+                            tools:text="en el Corte 3" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ===== Cortes ===== -->
+            <TextView
+                style="@style/Texto.EncabezadoPlanilla"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_xl"
+                android:text="@string/detalle_cortes" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/listaCortes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_s"
+                android:nestedScrollingEnabled="false"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_corte" />
+
+            <!-- La única nota a mano: el parcial que necesita en el corte en curso -->
+            <LinearLayout
+                android:id="@+id/notaAMano"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_l"
+                android:gravity="bottom"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <ImageView
+                    android:layout_width="26dp"
+                    android:layout_height="22dp"
+                    android:layout_marginEnd="@dimen/espacio_xs"
+                    android:importantForAccessibility="no"
+                    android:scaleX="-1"
+                    android:src="@drawable/ic_flecha_anotacion" />
+
+                <TextView
+                    android:id="@+id/textoAMano"
+                    style="@style/Texto.Anotacion"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    tools:text="necesitas 2.8 en el parcial" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:id="@+id/filaBotones"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margen_pantalla"
+        android:layout_marginEnd="@dimen/margen_pantalla"
+        android:layout_marginBottom="@dimen/espacio_xl"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/botonSimular"
+            style="@style/Estilo.Boton.Secundario"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/espacio_m"
+            android:layout_weight="1"
+            android:text="@string/detalle_simular" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/botonRegistrarNota"
+            style="@style/Estilo.Boton.Principal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/detalle_registrar_nota" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

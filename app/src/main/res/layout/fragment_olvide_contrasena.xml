@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  05 Olvidaste tu contraseña (doc 03, RF-05).
+
+  Solo manda el enlace con sendPasswordResetEmail(); la página para cambiarla la
+  pone Firebase. Al enviar se vuelve a 02 Entrar con el aviso.
+-->
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:background="@color/fondo"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:paddingStart="@dimen/margen_pantalla"
+        android:paddingEnd="@dimen/margen_pantalla"
+        android:paddingBottom="@dimen/espacio_xl">
+
+        <ImageView
+            android:id="@+id/botonVolver"
+            style="@style/Estilo.BotonCircular"
+            android:layout_marginTop="@dimen/espacio_xl"
+            android:contentDescription="@string/desc_volver"
+            android:src="@drawable/ic_chevron_izquierda"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/tinta" />
+
+        <TextView
+            android:id="@+id/titulo"
+            style="@style/Texto.Titulo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="@string/olvide_titulo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/botonVolver" />
+
+        <TextView
+            android:id="@+id/detalle"
+            style="@style/Texto.Apoyo.Grande"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espacio_s"
+            android:text="@string/olvide_detalle"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titulo" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/campoCorreo"
+            style="@style/Estilo.Campo.ConIcono"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/detalle"
+            app:startIconDrawable="@drawable/ic_correo">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/correo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="emailAddress"
+                android:hint="@string/crear_correo"
+                android:imeOptions="actionDone"
+                android:inputType="textEmailAddress"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/botonEnviar"
+            style="@style/Estilo.Boton.Principal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espacio_m"
+            android:text="@string/olvide_boton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/campoCorreo" />
+
+        <ProgressBar
+            android:id="@+id/cargando"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:indeterminateTint="@color/tinta"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/botonEnviar"
+            app:layout_constraintEnd_toEndOf="@id/botonEnviar"
+            app:layout_constraintStart_toStartOf="@id/botonEnviar"
+            app:layout_constraintTop_toTopOf="@id/botonEnviar" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

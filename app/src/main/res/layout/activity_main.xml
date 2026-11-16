@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Una sola Activity con NavHostFragment (doc 06 · 2).
+  La barra inferior flota encima del contenido y se oculta en las pantallas
+  que no la llevan (doc 03 · Barra de navegación).
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/raiz"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/contenedorNav"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/nav_graph" />
+
+    <include
+        android:id="@+id/barraNavegacion"
+        layout="@layout/barra_navegacion"
+        android:layout_width="0dp"
+        android:layout_height="92dp"
+        android:layout_marginStart="@dimen/separacion_barra_nav_lados"
+        android:layout_marginEnd="@dimen/separacion_barra_nav_lados"
+        android:layout_marginBottom="@dimen/separacion_barra_nav_abajo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

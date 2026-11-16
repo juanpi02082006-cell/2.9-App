@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Una nota ya registrada dentro de la tarjeta de su corte (pantalla 11). No se simula: va
+  como fila simple con candado, para que no parezca un deslizador que se puede mover.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:minHeight="@dimen/area_tactil_min"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/nombre"
+        style="@style/Texto.Principal.Medio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Trabajos y quices" />
+
+    <TextView
+        android:id="@+id/peso"
+        style="@style/Texto.Apoyo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/espacio_s"
+        android:layout_weight="1"
+        tools:text="10 %" />
+
+    <ImageView
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginEnd="@dimen/espacio_s"
+        android:contentDescription="@string/desc_nota_bloqueada"
+        android:src="@drawable/ic_candado"
+        app:tint="@color/texto_secundario" />
+
+    <TextView
+        android:id="@+id/valor"
+        style="@style/Texto.NotaMediana"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="3.6" />
+</LinearLayout>

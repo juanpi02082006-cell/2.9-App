@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Casilla de la definitiva que va bien, un poco más angosta que su columna -->
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/fondo_nota_aprobada"
+    android:insetLeft="8dp"
+    android:insetRight="8dp" />

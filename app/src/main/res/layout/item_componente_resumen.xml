@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Renglón de un componente dentro de la tarjeta de un corte (pantalla 08) -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingTop="@dimen/espacio_xs"
+    android:paddingBottom="@dimen/espacio_xs">
+
+    <TextView
+        android:id="@+id/nombre"
+        style="@style/Texto.Apoyo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="1"
+        tools:text="Parcial · 60 %" />
+
+    <TextView
+        android:id="@+id/nota"
+        style="@style/Texto.Principal.Medio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="2.0" />
+</LinearLayout>

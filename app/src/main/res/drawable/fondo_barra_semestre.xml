@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Barra de la gráfica por semestre (pantalla 14). Va en el acento: en negro
+     competía con la tarjeta oscura que tiene al lado. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/acento" />
+    <corners android:topLeftRadius="4dp" android:topRightRadius="4dp" />
+</shape>

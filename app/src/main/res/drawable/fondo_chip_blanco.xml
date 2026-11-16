@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Chip "Meta" encima de una tarjeta destacada, donde el azul claro de siempre no se vería -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/superficie" />
+    <corners android:radius="@dimen/radio_chip_meta" />
+</shape>

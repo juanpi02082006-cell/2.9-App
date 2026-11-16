@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Textos de 2.9. Español de Colombia, tono cercano (README · Convenciones).
+  Los números se formatean en Java con Formato, no aquí.
+-->
+<resources>
+    <string name="app_name">2.9</string>
+
+    <!-- ===== 01 Bienvenida ===== -->
+    <!-- Una sola frase: la boleta de arriba ya demuestra de qué se trata -->
+    <string name="bienvenida_titulo">Sabe cuánto te falta.</string>
+    <string name="bienvenida_google">Continuar con Google</string>
+    <string name="bienvenida_papelito_materia">Cálculo II</string>
+    <string name="bienvenida_a_mano">te falta un 3.2 pa\' pasar</string>
+    <string name="bienvenida_ver_como_funciona">Ver cómo funciona</string>
+    <string name="bienvenida_entrando">Entrando…</string>
+
+    <!--
+      Microcopy de confianza. Dice solo lo que es cierto: la app SÍ usa el correo
+      (RF-02, es la llave del usuario en la base), así que no se promete lo contrario.
+    -->
+    <string name="bienvenida_privacidad">Solo tu nombre y tu correo. No publicamos nada en tu cuenta.</string>
+
+    <!-- Exigido por Google para verificar la pantalla de consentimiento OAuth -->
+    <string name="bienvenida_legal">Al continuar aceptas los %1$s y la %2$s.</string>
+    <string name="bienvenida_terminos">Términos</string>
+    <string name="bienvenida_politica">Política de privacidad</string>
+
+    <!-- La tarjeta es una demostración, no datos del usuario: hay que anunciarlo -->
+    <string name="bienvenida_desc_ejemplo">Ejemplo: en Cálculo II llevas 2.9 con dos cortes de tres evaluados. Te falta un 3.2 para pasar.</string>
+
+    <!-- ===== 02 Entrar ===== -->
+    <string name="entrar_titulo">Entra a tu cuenta</string>
+    <string name="entrar_identificador">Correo o usuario</string>
+    <string name="entrar_contrasena">Contraseña</string>
+    <string name="entrar_boton">Entrar</string>
+    <string name="entrar_olvidaste">¿Olvidaste tu contraseña?</string>
+    <string name="entrar_o">o</string>
+    <string name="entrar_google">Continuar con Google</string>
+    <string name="entrar_sin_cuenta">¿No tienes cuenta?</string>
+    <string name="entrar_crear">Crear cuenta</string>
+    <string name="entrar_error_identificador">Escribe tu correo o tu usuario</string>
+    <string name="entrar_error_contrasena">Escribe tu contraseña</string>
+    <!-- Mensaje único: no se dice cuál de los dos falló (RF-06) -->
+    <string name="entrar_error_credenciales">Usuario o contraseña incorrectos</string>
+    <string name="entrar_error_credenciales_detalle">Revísalos o entra con Google.</string>
+
+    <!-- ===== 03 Crear cuenta ===== -->
+    <string name="crear_titulo">Crea tu cuenta</string>
+    <string name="crear_subtitulo">Cuatro datos y listo.</string>
+    <string name="crear_nombre">Tu nombre</string>
+    <string name="crear_usuario">Usuario</string>
+    <string name="crear_usuario_ayuda">Letras, números y _. También lo puedes usar pa\' entrar.</string>
+    <string name="crear_correo">Correo</string>
+    <string name="crear_contrasena_ayuda">Mínimo 8 caracteres.</string>
+    <string name="crear_boton">Crear cuenta</string>
+    <string name="crear_google">Registrarme con Google</string>
+    <string name="crear_ya_tienes">¿Ya tienes cuenta?</string>
+    <string name="crear_entrar">Entrar</string>
+    <string name="crear_error_nombre">Escribe tu nombre</string>
+    <string name="crear_error_usuario">Usa de 3 a 20 letras, números o _</string>
+    <string name="crear_error_usuario_ocupado">Ese usuario ya está ocupado</string>
+    <string name="crear_error_correo">Ese correo no se ve bien</string>
+    <string name="crear_error_contrasena">La contraseña necesita 8 caracteres o más</string>
+
+    <!-- ===== 04 Verifica tu correo ===== -->
+    <string name="verifica_titulo">Revisa tu correo</string>
+    <string name="verifica_detalle">Te mandamos un enlace a %1$s pa\' confirmar que es tuyo.</string>
+    <string name="verifica_confirme">Ya lo confirmé</string>
+    <string name="verifica_reenviar">Reenviar correo</string>
+    <string name="verifica_spam">¿No te llegó? Revisa en spam.</string>
+    <string name="verifica_sin_confirmar">Todavía no aparece confirmado. Abre el enlace y vuelve.</string>
+    <string name="verifica_reenviado">Listo, te lo mandamos otra vez.</string>
+
+    <!-- ===== 05 Olvidaste tu contraseña ===== -->
+    <string name="olvide_titulo">¿Olvidaste tu contraseña?</string>
+    <string name="olvide_detalle">Tranqui. Escribe tu correo y te mandamos un enlace pa\' crear una nueva.</string>
+    <string name="olvide_boton">Enviar enlace</string>
+    <string name="olvide_enviado">Te mandamos el enlace a tu correo.</string>
+
+    <!-- ===== 01 Bienvenida (botones nuevos) ===== -->
+    <string name="bienvenida_empezar">Empezar</string>
+    <string name="bienvenida_ya_tienes">¿Ya tienes cuenta?</string>
+    <string name="bienvenida_entrar">Entrar</string>
+
+    <!-- ===== 01 Bienvenida (boleta de ejemplo) ===== -->
+    <string name="bienvenida_boleta_creditos">3 CR</string>
+    <string name="bienvenida_boleta_llevas">Llevas</string>
+    <string name="bienvenida_boleta_te_falta">Te falta</string>
+
+    <!-- ===== 21 Error al entrar ===== -->
+    <string name="error_login_titulo">No pudimos entrar</string>
+    <string name="error_login_detalle">Google no nos dejó verificar tu cuenta. Revisa tu conexión y vuelve a intentarlo.</string>
+    <string name="error_login_reintentar">Intentar de nuevo</string>
+    <string name="error_login_cancelado_titulo">Te devolviste</string>
+    <string name="error_login_cancelado">No alcanzaste a escoger la cuenta. Cuando quieras, le damos otra vez.</string>
+    <string name="error_login_sin_internet_titulo">Sin internet</string>
+    <string name="error_login_sin_internet">Necesitas conexión solo para entrar. Después la app funciona sin datos.</string>
+
+    <!-- ===== 02 ¿Dónde estudias? ===== -->
+    <string name="universidad_saludo">Hola, %1$s</string>
+    <string name="universidad_titulo">¿Dónde estudias?</string>
+    <string name="universidad_explicacion">Cargamos la forma de calificar de tu universidad. Después la puedes cambiar.</string>
+    <string name="universidad_buscar">Busca tu universidad</string>
+    <string name="universidad_listo">Listo</string>
+    <string name="universidad_saltar">Saltar por ahora</string>
+    <string name="universidad_configurar">La configuro yo</string>
+
+    <!-- ===== 03 Inicio · 18 Inicio vacío ===== -->
+    <string name="inicio_semana">Semana %1$d de %2$d</string>
+    <string name="inicio_saludo">¡Volviste!</string>
+    <string name="inicio_promedio_etiqueta">Promedio del semestre</string>
+    <string name="inicio_promedio_frase">Vas bien en %1$d de %2$d materias</string>
+    <string name="inicio_en_rojo_una">%1$s en rojo</string>
+    <string name="inicio_en_rojo_varias">%1$d en rojo</string>
+    <!-- Las dos piezas que se asoman detrás de la boleta de la Bienvenida -->
+    <string name="bienvenida_pieza_materia">Física I</string>
+    <string name="bienvenida_pieza_creditos">4 créditos</string>
+    <string name="bienvenida_pieza_nota">3.8</string>
+    <string name="bienvenida_pieza_avance">75 %</string>
+    <string name="bienvenida_pieza_semana">Semana\n12 de 16</string>
+    <!-- "CR" no lo entendía nadie; "Créditos" completo no cabe en la columna de 62 dp -->
+    <string name="semestre_col_creditos">Créd.</string>
+    <string name="semestre_col_creditos_desc">Créditos</string>
+    <string name="semestre_col_nota">Nota</string>
+    <string name="inicio_promedio_vacio">—</string>
+    <string name="inicio_vacio_titulo">Todavía no tienes materias</string>
+    <string name="inicio_vacio_detalle">Agrega la primera y empezamos a calcular.</string>
+    <string name="inicio_vacio_boton">Agregar mi primera materia</string>
+    <string name="inicio_vacio_a_mano">empieza por aquí</string>
+    <string name="inicio_sin_conexion">Sin conexión. Tus notas se guardan en el celular y se suben después.</string>
+
+    <!-- Encabezados de la planilla -->
+    <string name="planilla_materia">Materia</string>
+    <string name="planilla_c1">C1</string>
+    <string name="planilla_c2">C2</string>
+    <string name="planilla_c3">C3</string>
+    <string name="planilla_definitiva">Llevas</string>
+    <string name="planilla_definitiva_final">Def.</string>
+    <string name="planilla_pendiente">—</string>
+    <string name="planilla_en_riesgo">Está en rojo</string>
+
+    <!-- ===== Barra de navegación inferior ===== -->
+    <string name="nav_inicio">Inicio</string>
+    <string name="nav_semestres">Semestres</string>
+    <string name="nav_simular">Simular</string>
+    <string name="nav_perfil">Perfil</string>
+
+    <!-- ===== 04 Acciones rápidas ===== -->
+    <string name="acciones_titulo">¿Qué vas a hacer?</string>
+    <string name="acciones_registrar_nota">Registrar una nota</string>
+    <string name="acciones_registrar_nota_detalle">Lo más rápido: cuatro toques y listo</string>
+    <string name="acciones_nueva_materia">Nueva materia</string>
+    <string name="acciones_nueva_materia_detalle">Con su forma de calificar</string>
+    <string name="acciones_cancelar">Cancelar</string>
+
+    <!-- ===== 05 Registrar nota ===== -->
+    <string name="nota_titulo">Registrar nota</string>
+    <string name="nota_materia">Materia</string>
+    <string name="nota_corte">Corte</string>
+    <string name="nota_tipo">Tipo de nota</string>
+    <string name="nota_nombre">Nombre (opcional)</string>
+    <string name="nota_nombre_pista">Quiz 2, Taller de límites…</string>
+    <string name="nota_valor">Nota</string>
+    <string name="nota_valor_pista">0.0</string>
+    <string name="nota_peso">Vale</string>
+    <string name="nota_peso_opcional">Vale (opcional)</string>
+    <string name="nota_peso_pista">—</string>
+    <string name="nota_peso_quedan">quedan %1$s de %2$s %%</string>
+    <string name="nota_peso_se_pasa">Se pasa: quedan %1$s de %2$s %%</string>
+    <string name="nota_peso_igual">Vacío: todas valen igual</string>
+    <string name="hoja_titulo_parcial">Nota del parcial</string>
+    <string name="hoja_titulo_trabajos">Nueva nota</string>
+    <string name="hoja_titulo_auto">Nota de autoevaluación</string>
+    <string name="hoja_ubicacion">%1$s · %2$s · %3$s</string>
+    <string name="hoja_efecto_basta">Te basta un %1$s en %2$s.</string>
+    <string name="hoja_efecto_corte">El corte queda en %1$s.</string>
+    <string name="hoja_lo_que_falta">lo que falta</string>
+    <string name="hoja_el_parcial">el parcial</string>
+    <string name="hoja_la_autoevaluacion">la autoevaluación</string>
+    <string name="hoja_trabajos">trabajos</string>
+    <string name="hoja_parte_de_trabajos">el %1$s %% que falta de trabajos</string>
+    <string name="hoja_efecto_ya_llegas">Ya llegas a la meta del corte.</string>
+    <string name="texto_y">" y "</string>
+    <string name="corte_ya_llegas">Ya llegas a la meta del corte</string>
+    <string name="nota_previa_una">Con este %1$s, %2$s queda en %3$s.</string>
+    <string name="nota_previa_falta_peso">¿Cuánto vale? Quedan %1$s de %2$s %% del corte.</string>
+    <string name="nota_fecha">Fecha</string>
+    <string name="nota_guardar">Guardar nota</string>
+    <string name="nota_sobre_cinco">/ 5.0</string>
+    <string name="nota_corte_actual">%1$s · actual</string>
+    <string name="nota_fecha_hoy">Hoy, %1$s · se guarda con la fecha de hoy</string>
+    <!-- Estado de reposo de la nota a mano: sin esto quedaba un hueco hasta escribir -->
+    <string name="nota_previa_reposo">Escribe la nota y te digo cómo te deja.</string>
+    <string name="nota_previa_sube">¡Buena! Con este %1$s tus %2$s suben a %3$s y ahora te basta un %4$s en %5$s.</string>
+    <string name="nota_previa_baja">Con este %1$s tus %2$s bajan a %3$s y ahora necesitas un %4$s en %5$s.</string>
+    <string name="nota_previa_simple">Con este %1$s tus %2$s quedan en %3$s.</string>
+
+    <string name="nota_error_rango">La nota va de 0.0 a 5.0</string>
+
+    <!-- ===== 19 Nota guardada ===== -->
+    <string name="aviso_nota_guardada">Nota guardada en %1$s · %2$s</string>
+    <string name="aviso_deshacer">Deshacer</string>
+
+    <!-- ===== 06 Nueva materia · 15 Editar materia ===== -->
+    <string name="materia_titulo_nueva">Nueva materia</string>
+    <string name="materia_titulo_editar">Editar materia</string>
+    <string name="materia_nombre">Nombre de la materia</string>
+    <string name="materia_nombre_pista">Ej: Cálculo II</string>
+    <string name="materia_creditos">Créditos</string>
+    <string name="materia_profesor">Profesor</string>
+    <string name="materia_profesor_pista">Nombre del profe</string>
+    <string name="materia_agregar_profesor">+ Agregar profesor</string>
+    <string name="materia_como_califica">Cómo se califica</string>
+    <string name="materia_cambiar">Cambiar</string>
+    <string name="materia_resumen_cortes">cortes</string>
+    <string name="materia_resumen_cada_corte">Cada corte</string>
+    <string name="materia_resumen_pasa_con">Pasa con</string>
+    <string name="materia_cuantos_cortes">%1$d cortes</string>
+    <string name="materia_profesor_opcional">(opcional)</string>
+
+    <string name="materia_guardar">Guardar materia</string>
+    <string name="materia_borrar">Borrar materia</string>
+    <string name="materia_error_nombre">Ponle un nombre a la materia</string>
+
+    <!-- ===== 07 Forma de calificar ===== -->
+    <string name="forma_titulo">Forma de calificar</string>
+    <string name="forma_paso_cortes">01 · Cortes</string>
+    <string name="forma_paso_tipos">02 · Tipos de nota</string>
+    <string name="forma_paso_pasar">03 · Nota para pasar</string>
+    <string name="forma_cortes_detalle">Cuántos cortes tiene la materia y cuánto vale cada uno.</string>
+    <string name="forma_tipos_detalle">Cómo se reparte la nota dentro de un corte.</string>
+    <string name="forma_igual_en_cortes">Igual en los %1$d cortes</string>
+    <string name="forma_nota_para_pasar">Nota para pasar</string>
+    <string name="forma_total">Total %1$s</string>
+    <string name="forma_error_suma">Los porcentajes deben sumar 100 %</string>
+    <string name="forma_guardar">Guardar cambios</string>
+    <string name="forma_agregar_corte">+ Agregar corte</string>
+    <string name="forma_agregar_tipo">+ Agregar tipo de nota</string>
+    <string name="forma_corte_numero">Corte %1$d</string>
+
+    <!-- ===== 08 Detalle de materia ===== -->
+    <string name="detalle_llevas">Llevas</string>
+    <string name="detalle_evaluado">%1$s %% evaluado</string>
+    <!-- El porcentaje dentro del anillo y la palabra que lo acompaña al lado -->
+    <string name="detalle_evaluado_anillo">%1$s %%</string>
+    <string name="detalle_evaluado_etiqueta">evaluado</string>
+    <string name="detalle_creditos">%1$d créditos</string>
+    <string name="detalle_necesitas_etiqueta">Para pasar necesitas</string>
+    <string name="detalle_necesitas_donde">en el %1$s</string>
+    <string name="detalle_ya_pasaste">¡Ya pasaste!</string>
+    <string name="detalle_ya_pasaste_detalle">Aunque saques 0.0 en lo que falta.</string>
+    <string name="detalle_ya_no_alcanza">Ya no alcanza</string>
+    <string name="detalle_ya_no_alcanza_detalle">Necesitarías más de 5.0 en lo que falta.</string>
+    <string name="detalle_simular">Simular notas</string>
+    <string name="detalle_registrar_nota">Registrar nota</string>
+    <string name="detalle_cortes">Cortes</string>
+    <string name="detalle_corte_en_curso">En curso</string>
+    <string name="detalle_corte_pendiente">Sin notas</string>
+    <string name="detalle_a_mano">necesitas %1$s en el parcial</string>
+
+    <!-- ===== 09 Detalle de corte · 17 Con porcentajes ===== -->
+    <string name="corte_titulo">%1$s · %2$s</string>
+    <string name="corte_vale">Vale %1$s %% de la materia</string>
+    <string name="corte_meta">Meta %1$s</string>
+    <string name="corte_necesitas_en_parcial">Necesitas en el parcial</string>
+    <string name="corte_suponiendo_auto">Suponiendo 4.5 en autoevaluación</string>
+    <string name="corte_escala_min">0.0</string>
+    <string name="corte_escala_max">5.0</string>
+    <string name="corte_promedio">Promedio %1$s</string>
+    <string name="corte_sin_notas">Sin notas todavía</string>
+    <string name="corte_agregar_nota">+ Nota</string>
+    <string name="corte_con_porcentajes">Con porcentajes</string>
+    <string name="corte_todas_igual">Todas valen igual</string>
+    <string name="corte_peso">Peso</string>
+    <string name="corte_total_pesos">Llevas %1$s de %2$s %%</string>
+    <string name="corte_nota_numero">Nota %1$d</string>
+    <string name="general_simbolo_porcentaje" formatted="false">%</string>
+    <string name="corte_necesitas_en">Necesitas en %1$s</string>
+    <string name="corte_queda_en">El corte queda en</string>
+    <string name="corte_total_pesos_pasa">Te pasas: %1$s de %2$s %%</string>
+    <string name="corte_porcentaje_del_corte">%1$s %% del corte</string>
+
+    <!-- ===== 10 Semestres ===== -->
+    <string name="semestres_titulo">Semestres</string>
+    <string name="semestres_acumulado">Promedio acumulado</string>
+    <string name="semestres_acumulado_detalle">%1$d créditos aprobados</string>
+    <string name="semestres_grafica">Por semestre</string>
+    <string name="semestres_linea_tres">3.0</string>
+    <string name="semestres_agregar_anterior">+ Semestre anterior</string>
+    <string name="semestres_en_curso">En curso</string>
+    <string name="semestres_terminado">Terminado</string>
+    <string name="semestres_materias_creditos">%1$d materias · %2$d créditos</string>
+    <!-- Avance del semestre en curso, en el anillo de su tarjeta -->
+    <string name="semestres_avance">%1$d %%</string>
+    <string name="semestres_semana">Semana %1$d de %2$d</string>
+    <string name="semestres_desc_avance">Avance del semestre: semana %1$d de %2$d, %3$d %%</string>
+
+    <!-- ===== 11 Simular ===== -->
+    <string name="simular_titulo">Simular</string>
+    <string name="simular_explicacion">Mueve las notas que faltan. No se guarda nada.</string>
+    <string name="simular_definitiva">Definitiva simulada</string>
+    <string name="simular_pasarias">Pasarías</string>
+    <string name="simular_no_pasarias">No pasarías</string>
+    <string name="simular_registrada">Ya registrada</string>
+
+    <!-- ===== 12 Perfil ===== -->
+    <string name="perfil_titulo">Perfil</string>
+    <string name="perfil_forma_calificar">Forma de calificar</string>
+    <string name="perfil_forma_calificar_detalle">Cortes, tipos de nota y nota para pasar</string>
+    <string name="perfil_fechas">Fechas del semestre</string>
+    <string name="perfil_avisos">Avisos</string>
+    <string name="perfil_recordar_notas">Recordarme registrar notas</string>
+    <string name="perfil_recordar_notas_detalle">Una vez a la semana</string>
+    <string name="perfil_alerta_riesgo">Avisarme si una materia entra en rojo</string>
+    <string name="perfil_cerrar_sesion">Cerrar sesión</string>
+
+    <!-- ===== 13 Editar nota · 14 Borrar nota ===== -->
+    <string name="editar_nota_titulo">Editar nota</string>
+    <string name="editar_nota_guardar">Guardar cambios</string>
+    <string name="editar_nota_borrar">Borrar nota</string>
+    <string name="borrar_nota_titulo">¿Borrar esta nota?</string>
+    <string name="borrar_nota_efecto">Tu promedio de %1$s pasaría de %2$s a %3$s.</string>
+
+    <!-- ===== 16 Borrar materia ===== -->
+    <string name="borrar_materia_titulo">¿Borrar %1$s?</string>
+    <string name="borrar_materia_efecto">Se borran sus cortes y todas sus notas. Esto no se puede deshacer.</string>
+
+    <!-- ===== 22 Semestre anterior · 23 Detalle de semestre ===== -->
+    <string name="semestre_anterior_titulo">Semestre anterior</string>
+    <string name="semestre_anterior_explicacion">Solo necesitamos la nota final de cada materia.</string>
+    <string name="semestre_periodo">Periodo</string>
+    <string name="semestre_ano">Año</string>
+    <string name="semestre_materias">Materias</string>
+    <string name="semestre_agregar_materia">+ Agregar materia</string>
+    <string name="semestre_promedio">Promedio del semestre</string>
+    <string name="semestre_guardar">Guardar semestre</string>
+    <string name="semestre_editar_finales">Editar notas finales</string>
+    <string name="semestre_detalle_terminado">%1$d materias · %2$d créditos · Terminado</string>
+
+    <!-- ===== 24 Fechas del semestre ===== -->
+    <string name="fechas_titulo">Fechas del semestre</string>
+    <string name="fechas_inicio">Empieza</string>
+    <string name="fechas_fin">Termina</string>
+    <string name="fechas_semana">Vas en la semana %1$d de %2$d</string>
+    <string name="fechas_guardar">Guardar</string>
+
+    <!-- ===== Generales ===== -->
+    <string name="general_cancelar">Cancelar</string>
+    <string name="general_borrar">Borrar</string>
+    <string name="general_guardar">Guardar</string>
+    <string name="general_volver">Volver</string>
+    <string name="general_cerrar">Cerrar</string>
+    <string name="general_editar">Editar</string>
+    <string name="general_porcentaje">%1$s %%</string>
+    <string name="simbolo_porcentaje">%</string>
+
+    <!-- ===== Descripciones para lectores de pantalla (RNF-05) ===== -->
+    <string name="desc_volver">Volver</string>
+    <string name="desc_cerrar">Cerrar</string>
+    <string name="desc_editar_materia">Editar la materia</string>
+    <string name="desc_mi_perfil">Mi perfil</string>
+    <string name="desc_boton_mas">Registrar nota o crear materia</string>
+    <string name="desc_logo">Logo de 2.9</string>
+    <string name="desc_materia_en_riesgo">Materia en riesgo</string>
+    <string name="desc_buscar">Buscar</string>
+    <string name="desc_nota_bloqueada">Nota ya registrada, no se puede simular</string>
+    <string name="desc_grafica_semestres">Gráfica del promedio por semestre</string>
+
+    <!-- Con los datos reales del repositorio -->
+    <string name="nota_sin_materias">Primero agrega una materia.</string>
+    <string name="nota_maxima">Nota máxima 5.0, vuelve a poner la nota</string>
+    <string name="nota_corte_listo">%1$s ✓</string>
+    <string name="nota_tipo_tiene">✓ %1$s</string>
+    <string name="materia_lista">%1$s lista</string>
+    <string name="aviso_nota_borrada">Nota borrada</string>
+    <string name="simular_sin_materias">Agrega una materia para simular.</string>
+    <string name="simular_parte_que_falta">Lo que falta de %1$s</string>
+    <string name="simular_vale_corte">vale %1$s %%</string>
+    <string name="simular_reiniciar">Reiniciar</string>
+    <string name="detalle_necesitas_cada_corte">en cada corte que falta</string>
+    <string name="detalle_definitiva">Tu definitiva</string>
+    <string name="detalle_aprobaste">Pasaste la materia.</string>
+    <string name="detalle_no_aprobaste">No alcanzó para pasar.</string>
+    <string name="semestre_detalle_en_curso">%1$d materias · %2$d créditos · En curso</string>
+    <string name="semestre_anterior_incompleto">Escribe el año y al menos una materia con créditos y nota.</string>
+    <string name="forma_tipo_nuevo_titulo">Nuevo tipo de nota</string>
+    <string name="forma_tipo_nuevo_pista">Ej: Laboratorio</string>
+    <string name="forma_error_nota_pasar">La nota para pasar va de 0.1 a 5.0</string>
+    <string name="general_agregar">Agregar</string>
+    <string name="perfil_sin_nombre">Tu cuenta</string>
+    <string name="perfil_sin_universidad">Sin universidad</string>
+</resources>

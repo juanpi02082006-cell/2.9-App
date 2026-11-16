@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Fila de la lista de universidades (pantalla 02). Selección única con radio.
+  El divisor va pegado al borde de la fila, no flotando bajo el texto, para que el
+  aire quede repartido igual arriba y abajo.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/fondo_fila_pulsable"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/area_tactil_min"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/espacio_l"
+        android:paddingTop="@dimen/espacio_m"
+        android:paddingEnd="@dimen/espacio_l"
+        android:paddingBottom="@dimen/espacio_m">
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/radio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:focusable="false"
+            app:buttonTint="@color/borde_chip" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/espacio_s"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/nombre"
+                style="@style/Texto.Principal.Medio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Universidad de Antioquia" />
+
+            <TextView
+                android:id="@+id/formaCalificar"
+                style="@style/Texto.Apoyo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="3 cortes · 33/33/34 · pasa con 3.0" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divisor"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/borde_fino"
+        android:layout_marginStart="@dimen/espacio_l"
+        android:layout_marginEnd="@dimen/espacio_l"
+        android:background="@color/borde_suave" />
+</LinearLayout>

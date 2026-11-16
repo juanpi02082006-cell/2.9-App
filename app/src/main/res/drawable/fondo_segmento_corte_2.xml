@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Segmento 2 de la barra de cortes (pantalla 10).
+  Una sola tinta en tres intensidades, no tres colores distintos: en 2.9 el naranja
+  significa acción, el rojo riesgo y el azul suave seleccionado (doc 04 · reglas de
+  color). Usarlos como categorías haría leer "este corte es el peligroso".
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/acento" />
+</shape>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Una nota dentro de un componente (pantalla 09). Al tocarla se abre 13 Editar nota.
+  El campo de peso solo aparece en modo "Con porcentajes" (pantalla 17, RN-04).
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fila"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/fondo_fila_pulsable"
+    android:gravity="center_vertical"
+    android:minHeight="@dimen/area_tactil_min"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/espacio_l"
+    android:paddingTop="@dimen/espacio_xs"
+    android:paddingEnd="@dimen/espacio_l"
+    android:paddingBottom="@dimen/espacio_xs">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/nombre"
+            style="@style/Texto.Principal.Medio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            tools:text="Quiz 1" />
+
+        <TextView
+            android:id="@+id/fecha"
+            style="@style/Texto.Apoyo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="18 sep 2026" />
+    </LinearLayout>
+
+    <!--
+      Solo en modo "Con porcentajes". Recuadro propio y bajito (36 en vez de 52) para que
+      las filas no se toquen: con el sufijo de TextInputLayout el "%" quedaba más arriba
+      que el número y se salía. Toma el foco del campo para pintar el borde azul.
+    -->
+    <LinearLayout
+        android:id="@+id/campoPeso"
+        android:layout_width="84dp"
+        android:layout_height="36dp"
+        android:layout_marginEnd="@dimen/espacio_m"
+        android:addStatesFromChildren="true"
+        android:background="@drawable/fondo_campo_peso"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/espacio_s"
+        android:paddingEnd="@dimen/espacio_m"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <EditText
+            android:id="@+id/peso"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:digits="0123456789"
+            android:fontFamily="@font/dmsans_medium"
+            android:gravity="center_vertical|end"
+            android:importantForAutofill="no"
+            android:inputType="number"
+            android:maxLength="3"
+            android:maxLines="1"
+            android:padding="0dp"
+            android:textColor="@color/tinta"
+            android:textSize="15sp"
+            tools:ignore="LabelFor"
+            tools:text="20" />
+
+        <TextView
+            style="@style/Texto.Apoyo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/espacio_xs"
+            android:text="@string/general_simbolo_porcentaje" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/valor"
+        style="@style/Texto.NotaMediana"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="3.8" />
+</LinearLayout>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Paleta de 2.9 — modo oscuro, neobrutalista: los bordes y las sombras pasan a ser
+  claros sobre el fondo casi negro. Los mismos roles que en claro.
+
+  HOY NO SE APLICA: App.java fija MODE_NIGHT_NO. Para encenderlo basta quitar esa
+  línea y volver el tema a DayNight.
+-->
+<resources>
+    <!-- ===== Superficies ===== -->
+    <color name="fondo">#121212</color>
+    <color name="superficie">#1E1C1C</color>
+
+    <!-- ===== Texto ===== -->
+    <color name="tinta">#F7E9E9</color>
+    <color name="tinta_elevada">#333030</color>
+    <color name="texto_secundario">#C9B8BA</color>
+    <color name="blanco">#FFFFFF</color>
+
+    <!-- ===== Bordes ===== -->
+    <color name="borde">#F7E9E9</color>
+    <color name="borde_suave">#3A3434</color>
+    <color name="borde_punteado">#7D6E70</color>
+
+    <!-- ===== Acción ===== -->
+    <color name="acento">#68A4F1</color>
+    <color name="acento_oscuro">#9CC3F6</color>
+    <color name="acento_suave">#1D3A5F</color>
+
+    <!-- ===== Estados de una nota ===== -->
+    <color name="aprobado">#6FD69A</color>
+    <color name="aprobado_vivo">#6FD69A</color>
+    <color name="aprobado_suave">#163D27</color>
+
+    <color name="riesgo">#FF8A98</color>
+    <color name="riesgo_vivo">#FA576B</color>
+    <color name="riesgo_suave">#4A1A22</color>
+
+    <color name="reprobado">#FF9AA8</color>
+    <color name="reprobado_vivo">#FF6B7E</color>
+    <color name="reprobado_suave">#3D1219</color>
+
+    <!-- ===== Selección ===== -->
+    <color name="azul">#68A4F1</color>
+    <color name="azul_oscuro">#9CC3F6</color>
+    <color name="azul_suave">#1D3A5F</color>
+
+    <!-- ===== Derivados ===== -->
+    <color name="velo_dialogo">#99000000</color>
+
+    <!-- Variante oscura oficial del botón de Google Sign-In -->
+    <color name="google_fondo">#131314</color>
+    <color name="google_borde">#8E918F</color>
+    <color name="google_texto">#E3E3E3</color>
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Aviso 20 Sin conexión: nube tachada -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:tint="?attr/colorControlNormal">
+    <path
+        android:fillColor="@android:color/white"
+        android:fillType="evenOdd"
+        android:pathData="M12,5c3.42,0 6.3,2.44 6.92,5.69l0.14,0.75 0.75,0.08C21.19,11.69 22.5,13.07 22.5,14.75c0,1.8 -1.45,3.25 -3.25,3.25H6.25C4.18,18 2.5,16.32 2.5,14.25c0,-1.93 1.46,-3.52 3.34,-3.73l0.62,-0.07 0.29,-0.55C7.73,7.84 9.69,5 12,5ZM12,6.9c-1.52,0 -3.06,1.9 -3.57,3.74l-0.26,0.95 -0.97,0.11C6.01,11.83 4.4,12.8 4.4,14.25c0,1.02 0.83,1.85 1.85,1.85h13c0.75,0 1.35,-0.6 1.35,-1.35 0,-0.72 -0.55,-1.31 -1.26,-1.37l-1.4,-0.12 -0.26,-1.38C17.2,9.26 14.85,6.9 12,6.9Z" />
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M3.6,2.2L21.8,20.4l-1.4,1.4L2.2,3.6Z" />
+</vector>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Borde de tinta; con foco, azul oscuro (el azul de acción no llega a 3:1 sobre blanco) -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/acento_oscuro" android:state_focused="true" />
+    <item android:color="@color/borde" />
+</selector>

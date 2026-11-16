@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  07 Forma de calificar (doc 03, RF-06 a RF-08).
+  Tres pasos: cortes, tipos de nota y nota para pasar. Guardar solo se habilita
+  cuando todos los porcentajes suman 100 % (RN-02, RN-03).
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/botonVolver"
+        style="@style/Estilo.BotonIcono"
+        android:layout_marginStart="@dimen/espacio_s"
+        android:layout_marginTop="@dimen/espacio_m"
+        android:contentDescription="@string/desc_volver"
+        app:icon="@drawable/ic_volver"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/margen_pantalla"
+        android:paddingEnd="@dimen/margen_pantalla"
+        android:paddingBottom="@dimen/espacio_l"
+        app:layout_constraintBottom_toTopOf="@id/botonGuardar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/botonVolver">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/Texto.Titulo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/forma_titulo" />
+
+            <!-- ===== 01 Cortes ===== -->
+            <TextView
+                style="@style/Texto.EncabezadoPlanilla"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_xl"
+                android:text="@string/forma_paso_cortes" />
+
+            <TextView
+                style="@style/Texto.Apoyo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_xs"
+                android:text="@string/forma_cortes_detalle" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_m"
+                android:background="@drawable/fondo_seccion"
+                android:elevation="@dimen/elevacion_tarjeta"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/espacio_s"
+                android:paddingBottom="@dimen/espacio_s">
+
+                <LinearLayout
+                    android:id="@+id/listaCortes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/botonAgregarCorte"
+                    style="@style/Estilo.Boton.Enlace"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/espacio_s"
+                    android:text="@string/forma_agregar_corte" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/borde_fino"
+                    android:background="@color/borde_suave" />
+
+                <TextView
+                    android:id="@+id/totalCortes"
+                    style="@style/Texto.Total"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:paddingStart="@dimen/espacio_l"
+                    android:paddingTop="@dimen/espacio_m"
+                    android:paddingEnd="@dimen/espacio_l"
+                    android:paddingBottom="@dimen/espacio_s"
+                    tools:text="Total 100 %" />
+            </LinearLayout>
+
+            <!-- ===== 02 Tipos de nota ===== -->
+            <TextView
+                style="@style/Texto.EncabezadoPlanilla"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_xl"
+                android:text="@string/forma_paso_tipos" />
+
+            <TextView
+                style="@style/Texto.Apoyo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_xs"
+                android:text="@string/forma_tipos_detalle" />
+
+            <!-- RF-07: por defecto la composición es igual en todos los cortes -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_m"
+                android:background="@drawable/fondo_seccion"
+                android:elevation="@dimen/elevacion_tarjeta"
+                android:gravity="center_vertical"
+                android:minHeight="@dimen/area_tactil_min"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/espacio_l"
+                android:paddingEnd="@dimen/espacio_m">
+
+                <TextView
+                    android:id="@+id/etiquetaIgualEnCortes"
+                    style="@style/Texto.Principal.Medio"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    tools:text="Igual en los 3 cortes" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/interruptorIgualEnCortes"
+                    style="@style/Estilo.Interruptor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true" />
+            </LinearLayout>
+
+            <!-- Pestañas por corte: solo si el interruptor está apagado -->
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipsCortePorConfigurar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_m"
+                android:visibility="gone"
+                app:selectionRequired="true"
+                app:singleLine="true"
+                app:singleSelection="true"
+                tools:visibility="visible" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_m"
+                android:background="@drawable/fondo_seccion"
+                android:elevation="@dimen/elevacion_tarjeta"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/espacio_s"
+                android:paddingBottom="@dimen/espacio_s">
+
+                <LinearLayout
+                    android:id="@+id/listaTipos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/botonAgregarTipo"
+                    style="@style/Estilo.Boton.Enlace"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/espacio_s"
+                    android:text="@string/forma_agregar_tipo" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/borde_fino"
+                    android:background="@color/borde_suave" />
+
+                <TextView
+                    android:id="@+id/totalTipos"
+                    style="@style/Texto.Total"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:paddingStart="@dimen/espacio_l"
+                    android:paddingTop="@dimen/espacio_m"
+                    android:paddingEnd="@dimen/espacio_l"
+                    android:paddingBottom="@dimen/espacio_s"
+                    tools:text="Total 100 %" />
+            </LinearLayout>
+
+            <!-- ===== 03 Nota para pasar ===== -->
+            <TextView
+                style="@style/Texto.EncabezadoPlanilla"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_xl"
+                android:text="@string/forma_paso_pasar" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_m"
+                android:background="@drawable/fondo_seccion"
+                android:elevation="@dimen/elevacion_tarjeta"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/espacio_l">
+
+                <TextView
+                    style="@style/Texto.Principal.Medio"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/forma_nota_para_pasar" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/campoNotaParaPasar"
+                    style="@style/Estilo.Campo.SobreBlanco"
+                    android:layout_width="92dp"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/notaParaPasar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:inputType="numberDecimal"
+                        android:maxLines="1"
+                        android:text="3.0"
+                        tools:ignore="HardcodedText" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <!-- Mensaje de validación (RF-08) -->
+            <TextView
+                android:id="@+id/errorSuma"
+                style="@style/Texto.Apoyo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_m"
+                android:background="@drawable/fondo_error"
+                android:padding="@dimen/espacio_m"
+                android:text="@string/forma_error_suma"
+                android:textColor="@color/reprobado"
+                android:visibility="gone"
+                tools:visibility="visible" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/botonGuardar"
+        style="@style/Estilo.Boton.Principal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margen_pantalla"
+        android:layout_marginEnd="@dimen/margen_pantalla"
+        android:layout_marginBottom="@dimen/espacio_xl"
+        android:text="@string/forma_guardar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

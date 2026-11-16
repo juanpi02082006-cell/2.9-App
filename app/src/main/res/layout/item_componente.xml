@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Sección de un componente en el detalle de corte (pantalla 09).
+  Un componente puede tener varias notas (RF-16); las notas se agregan dentro de
+  listaNotas. El enlace de abajo cambia entre "Con porcentajes" y "Todas valen igual"
+  (RF-17, pantalla 17).
+-->
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Estilo.Planilla"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/espacio_m">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/espacio_l"
+        android:paddingBottom="@dimen/espacio_s">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/espacio_l"
+            android:paddingEnd="@dimen/espacio_l">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/nombre"
+                    style="@style/Texto.Principal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Trabajos y quices" />
+
+                <TextView
+                    android:id="@+id/porcentaje"
+                    style="@style/Texto.Apoyo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="30 % del corte" />
+            </LinearLayout>
+
+            <!-- Pastilla verde si va pasando, coral si no; sin fondo mientras no hay notas -->
+            <TextView
+                android:id="@+id/promedio"
+                style="@style/Texto.NotaMediana"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingStart="@dimen/espacio_s"
+                android:paddingTop="@dimen/espacio_xs"
+                android:paddingEnd="@dimen/espacio_s"
+                android:paddingBottom="@dimen/espacio_xs"
+                tools:background="@drawable/fondo_nota_aprobada"
+                tools:text="3.6" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/sinNotas"
+            style="@style/Texto.Apoyo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espacio_s"
+            android:paddingStart="@dimen/espacio_l"
+            android:paddingEnd="@dimen/espacio_l"
+            android:text="@string/corte_sin_notas"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/listaNotas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espacio_s"
+            android:orientation="vertical" />
+
+        <!-- Solo en "Con porcentajes": cuánto del % del componente ya tiene notas (RN-04) -->
+        <TextView
+            android:id="@+id/totalPesos"
+            style="@style/Texto.Total"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espacio_xs"
+            android:gravity="end"
+            android:paddingStart="@dimen/espacio_l"
+            android:paddingEnd="@dimen/espacio_l"
+            android:visibility="gone"
+            tools:text="Llevas 20 de 30 %"
+            tools:visibility="visible" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/espacio_s"
+            android:paddingEnd="@dimen/espacio_s">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/botonAgregarNota"
+                style="@style/Estilo.Boton.Enlace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/corte_agregar_nota"
+                app:icon="@drawable/ic_agregar_circulo"
+                app:iconGravity="textStart"
+                app:iconSize="18dp" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/botonModoPromedio"
+                style="@style/Estilo.Boton.Enlace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/corte_con_porcentajes"
+                android:textColor="@color/azul_oscuro" />
+        </LinearLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

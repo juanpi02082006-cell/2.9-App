@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  22 Semestre anterior (doc 03, RF-25).
+  Los semestres pasados solo guardan la nota final de cada materia (RN-09);
+  el promedio se calcula ponderado por créditos (RN-10).
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/botonVolver"
+        style="@style/Estilo.BotonIcono"
+        android:layout_marginStart="@dimen/espacio_s"
+        android:layout_marginTop="@dimen/espacio_m"
+        android:contentDescription="@string/desc_volver"
+        app:icon="@drawable/ic_volver"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/margen_pantalla"
+        android:paddingEnd="@dimen/margen_pantalla"
+        android:paddingBottom="@dimen/espacio_l"
+        app:layout_constraintBottom_toTopOf="@id/botonGuardar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/botonVolver">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/titulo"
+                style="@style/Texto.Titulo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/semestre_anterior_titulo" />
+
+            <TextView
+                style="@style/Texto.Apoyo.Grande"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_xs"
+                android:text="@string/semestre_anterior_explicacion" />
+
+            <!-- ===== Periodo ===== -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_xl"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/Texto.Etiqueta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/semestre_ano" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Estilo.Campo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/espacio_s">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/ano"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:maxLength="4"
+                            android:maxLines="1"
+                            tools:text="2025" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/espacio_m"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/Texto.Etiqueta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/semestre_periodo" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipsPeriodo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/espacio_s"
+                        app:selectionRequired="true"
+                        app:singleLine="true"
+                        app:singleSelection="true" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- ===== Materias con su nota final ===== -->
+            <TextView
+                style="@style/Texto.EncabezadoPlanilla"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_xl"
+                android:text="@string/semestre_materias" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_s"
+                android:background="@drawable/fondo_seccion"
+                android:elevation="@dimen/elevacion_tarjeta"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/espacio_s"
+                android:paddingBottom="@dimen/espacio_s">
+
+                <!-- Nombres de las columnas: los campos de cada fila (item_materia_final) no los llevan -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="@dimen/espacio_l"
+                    android:paddingTop="@dimen/espacio_xs"
+                    android:paddingEnd="@dimen/espacio_s">
+
+                    <TextView
+                        style="@style/Texto.EncabezadoPlanilla"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/planilla_materia" />
+
+                    <TextView
+                        style="@style/Texto.EncabezadoPlanilla"
+                        android:layout_width="62dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/espacio_s"
+                        android:contentDescription="@string/semestre_col_creditos_desc"
+                        android:gravity="center"
+                        android:text="@string/semestre_col_creditos" />
+
+                    <TextView
+                        style="@style/Texto.EncabezadoPlanilla"
+                        android:layout_width="72dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/espacio_s"
+                        android:gravity="center"
+                        android:text="@string/semestre_col_nota" />
+
+                    <Space
+                        android:layout_width="@dimen/area_tactil_min"
+                        android:layout_height="0dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/listaMaterias"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/botonAgregarMateria"
+                    style="@style/Estilo.Boton.Enlace"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/espacio_s"
+                    android:text="@string/semestre_agregar_materia" />
+            </LinearLayout>
+
+            <!-- ===== Promedio calculado ===== -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_l"
+                android:background="@drawable/fondo_tarjeta_destacada"
+                android:elevation="@dimen/elevacion_tarjeta"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/espacio_xl">
+
+                <TextView
+                    style="@style/Texto.Apoyo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/semestre_promedio" />
+
+                <TextView
+                    android:id="@+id/promedio"
+                    style="@style/Texto.NumeroGrande"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="40sp"
+                    tools:text="3.5" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/botonGuardar"
+        style="@style/Estilo.Boton.Principal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margen_pantalla"
+        android:layout_marginEnd="@dimen/margen_pantalla"
+        android:layout_marginBottom="@dimen/espacio_xl"
+        android:text="@string/semestre_guardar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

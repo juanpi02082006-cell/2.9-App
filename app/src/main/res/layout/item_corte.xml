@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Tarjeta de un corte dentro del detalle de materia (pantalla 08).
+  Muestra la nota del corte y la de cada componente. Lleva al detalle del corte (09).
+-->
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tarjetaCorte"
+    style="@style/Estilo.Planilla"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/espacio_m"
+    android:checkable="false"
+    android:clickable="true"
+    android:focusable="true"
+    app:rippleColor="@color/borde_suave">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/espacio_l">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/nombreCorte"
+                    style="@style/Texto.Principal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Corte 1" />
+
+                <TextView
+                    android:id="@+id/valeCorte"
+                    style="@style/Texto.Apoyo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Vale 33 % de la materia" />
+            </LinearLayout>
+
+            <!-- Chip de meta: solo en los cortes que faltan -->
+            <TextView
+                android:id="@+id/chipMeta"
+                style="@style/Texto.ChipMeta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/espacio_s"
+                android:visibility="gone"
+                tools:text="Meta 3.2"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/notaCorte"
+                style="@style/Texto.NotaPlanilla"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="2.7" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="@dimen/espacio_xs"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_chevron_derecha"
+                app:tint="@color/borde_punteado" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/borde_fino"
+            android:layout_marginTop="@dimen/espacio_m"
+            android:background="@color/borde_suave" />
+
+        <!-- Un renglón por componente: Parcial · Trabajos y quices · Autoevaluación -->
+        <LinearLayout
+            android:id="@+id/listaComponentes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espacio_s"
+            android:orientation="vertical" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

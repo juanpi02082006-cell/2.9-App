@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Barra de navegación inferior (doc 03 · Barra de navegación).
+  Flotante, fondo borde_punteado, esquinas 24, alto 68. El botón + es un círculo
+  de 60 con anillo de 5 dp color fondo, que sobresale 24 dp por encima de la barra.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/barraNavegacion"
+    android:layout_width="match_parent"
+    android:layout_height="92dp"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <LinearLayout
+        android:id="@+id/barra"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/alto_barra_nav"
+        android:background="@drawable/fondo_barra_nav"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/padding_barra_nav"
+        android:paddingTop="@dimen/padding_barra_nav_vertical"
+        android:paddingEnd="@dimen/padding_barra_nav"
+        android:paddingBottom="@dimen/padding_barra_nav_vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:id="@+id/pestanaInicio"
+            style="@style/Estilo.Pestana">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_inicio"
+                app:tint="@color/texto_pestana" />
+
+            <TextView
+                style="@style/Texto.Pestana"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_xs"
+                android:gravity="center"
+                android:text="@string/nav_inicio" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/pestanaSemestres"
+            style="@style/Estilo.Pestana">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_semestres"
+                app:tint="@color/texto_pestana" />
+
+            <TextView
+                style="@style/Texto.Pestana"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_xs"
+                android:gravity="center"
+                android:text="@string/nav_semestres" />
+        </LinearLayout>
+
+        <!-- Hueco donde se posa el botón + -->
+        <Space
+            android:layout_width="72dp"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:id="@+id/pestanaSimular"
+            style="@style/Estilo.Pestana">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_simular"
+                app:tint="@color/texto_pestana" />
+
+            <TextView
+                style="@style/Texto.Pestana"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_xs"
+                android:gravity="center"
+                android:text="@string/nav_simular" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/pestanaPerfil"
+            style="@style/Estilo.Pestana">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_perfil"
+                app:tint="@color/texto_pestana" />
+
+            <TextView
+                style="@style/Texto.Pestana"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_xs"
+                android:gravity="center"
+                android:text="@string/nav_perfil" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 60 dp de círculo + 5 dp de anillo color fondo = 70 dp -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/botonMas"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="22dp"
+        android:contentDescription="@string/desc_boton_mas"
+        android:insetBottom="0dp"
+        android:insetLeft="0dp"
+        android:insetRight="0dp"
+        android:insetTop="0dp"
+        android:padding="0dp"
+        app:backgroundTint="@color/acento"
+        app:cornerRadius="35dp"
+        app:elevation="0dp"
+        app:icon="@drawable/ic_mas"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:iconSize="28dp"
+        app:iconTint="@color/tinta"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:rippleColor="@color/acento_oscuro"
+        app:strokeColor="@color/tinta"
+        app:strokeWidth="0dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  09 Registrar nota (doc 03, RF-13 a RF-15).
+
+  Orden pensado para que sea rápido: materia → corte → tipo → nota. Lo único que hay que
+  escribir de verdad es la nota, así que va en una tarjeta grande con el teclado ya
+  abierto, y el efecto (RF-14) va dentro de esa misma tarjeta para verlo mientras se
+  escribe. Guardar queda siempre a la vista, encima del teclado.
+
+  Nombre y "Vale %" solo aparecen en los tipos de varias notas (Trabajos y quices): el
+  parcial y la autoevaluación son una nota cada uno.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/desplazable"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/margen_pantalla"
+        android:paddingTop="@dimen/espacio_xl"
+        android:paddingEnd="@dimen/margen_pantalla"
+        android:paddingBottom="@dimen/espacio_l"
+        app:layout_constraintBottom_toTopOf="@id/botonGuardar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- ===== Encabezado ===== -->
+            <!-- El relleno de abajo deja ver la sombra del botón cerrar -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/espacio_xs">
+
+                <TextView
+                    style="@style/Texto.Titulo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/nota_titulo" />
+
+                <ImageView
+                    android:id="@+id/botonCerrar"
+                    style="@style/Estilo.BotonCircular"
+                    android:background="@drawable/fondo_boton_circular_plano"
+                    android:contentDescription="@string/desc_cerrar"
+                    android:elevation="@dimen/elevacion_tarjeta"
+                    android:src="@drawable/ic_cerrar"
+                    app:tint="@color/tinta" />
+            </LinearLayout>
+
+            <!-- ===== Materia ===== -->
+            <TextView
+                style="@style/Texto.Etiqueta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_l"
+                android:text="@string/nota_materia" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_xs"
+                android:clipToPadding="false"
+                android:scrollbars="none">
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipsMateria"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:selectionRequired="true"
+                    app:singleLine="true"
+                    app:singleSelection="true" />
+            </HorizontalScrollView>
+
+            <!-- ===== Corte: el actual viene marcado y los completos llevan ✓ ===== -->
+            <TextView
+                style="@style/Texto.Etiqueta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_m"
+                android:text="@string/nota_corte" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipsCorte"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_xs"
+                app:selectionRequired="true"
+                app:singleSelection="true" />
+
+            <!-- ===== Tipo de nota, con su peso o la nota que ya tiene ===== -->
+            <TextView
+                style="@style/Texto.Etiqueta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_m"
+                android:text="@string/nota_tipo" />
+
+            <LinearLayout
+                android:id="@+id/chipsTipo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_s"
+                android:baselineAligned="false"
+                android:orientation="horizontal" />
+
+            <!-- ===== La nota: grande, sola y con su efecto debajo ===== -->
+            <LinearLayout
+                android:id="@+id/tarjetaNota"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_l"
+                android:background="@drawable/fondo_seccion"
+                android:elevation="@dimen/elevacion_tarjeta"
+                android:orientation="vertical"
+                android:padding="@dimen/espacio_l">
+
+                <TextView
+                    style="@style/Texto.Etiqueta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nota_valor" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/campoNota"
+                    style="@style/Estilo.Campo.Relleno"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/espacio_s"
+                    app:suffixText="@string/nota_sobre_cinco"
+                    app:suffixTextColor="@color/texto_secundario">
+
+                    <!-- inputType deja el teclado de solo números; digits acepta el
+                         punto que pone el código (sin él, el campo lo borra).
+                         Alto según el número y relleno propio: con alto fijo y el relleno
+                         de Material, a 44sp se cortaba la parte de arriba del número -->
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/valorNota"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="@dimen/alto_nota_grande"
+                        android:paddingTop="@dimen/espacio_s"
+                        android:paddingBottom="@dimen/espacio_s"
+                        android:digits="0123456789."
+                        android:fontFamily="@font/dmsans_semibold"
+                        android:gravity="center"
+                        android:hint="@string/nota_valor_pista"
+                        android:imeOptions="actionDone"
+                        android:inputType="number"
+                        android:maxLength="3"
+                        android:maxLines="1"
+                        android:textSize="44sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Siempre visible: antes de escribir dice qué va a pasar; después, el efecto -->
+                <TextView
+                    android:id="@+id/textoVistaPrevia"
+                    style="@style/Texto.Anotacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/espacio_m"
+                    android:gravity="center"
+                    tools:text="Con este 4.5 tus trabajos suben a 3.8 y ahora te basta un 2.7 en el parcial." />
+            </LinearLayout>
+
+            <!-- ===== Nombre y cuánto vale (RN-04): solo en tipos de varias notas ===== -->
+            <LinearLayout
+                android:id="@+id/filaTrabajos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_l"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/Texto.Etiqueta"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/nota_nombre" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/campoNombre"
+                            style="@style/Estilo.Campo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/espacio_s">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/nombre"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/nota_nombre_pista"
+                                android:imeOptions="actionNext"
+                                android:inputType="textCapSentences"
+                                android:maxLines="1" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="@dimen/ancho_campo_vale"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/espacio_m"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/etiquetaPeso"
+                            style="@style/Texto.Etiqueta"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:text="@string/nota_peso" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/campoPeso"
+                            style="@style/Estilo.Campo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/espacio_s"
+                            app:suffixText="%"
+                            app:suffixTextColor="@color/texto_secundario">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/valorPeso"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:digits="0123456789"
+                                android:gravity="center_vertical|end"
+                                android:hint="@string/nota_peso_pista"
+                                android:imeOptions="actionDone"
+                                android:inputType="number"
+                                android:maxLength="3"
+                                android:maxLines="1" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/pesoDisponible"
+                    style="@style/Texto.Apoyo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/espacio_xs"
+                    android:gravity="end"
+                    tools:text="quedan 10 de 30 %" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Siempre a la vista: con el teclado abierto queda justo encima de él -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/botonGuardar"
+        style="@style/Estilo.Boton.Principal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margen_pantalla"
+        android:layout_marginEnd="@dimen/margen_pantalla"
+        android:layout_marginBottom="@dimen/espacio_m"
+        android:enabled="false"
+        android:text="@string/nota_guardar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

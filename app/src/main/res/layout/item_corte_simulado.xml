@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Un corte en la pantalla 11 Simular: "Corte 2 · vale 33 %" y adentro sus partes.
+  Si el corte ya está evaluado no lleva partes: solo su nota con candado en el encabezado.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/espacio_m"
+    android:background="@drawable/fondo_seccion"
+    android:elevation="@dimen/elevacion_tarjeta"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/espacio_l"
+    android:paddingTop="@dimen/espacio_m"
+    android:paddingEnd="@dimen/espacio_l"
+    android:paddingBottom="@dimen/espacio_m">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/area_tactil_min"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/nombre"
+            style="@style/Texto.Principal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Corte 2" />
+
+        <TextView
+            android:id="@+id/vale"
+            style="@style/Texto.Apoyo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/espacio_s"
+            android:layout_weight="1"
+            tools:text="vale 33 %" />
+
+        <ImageView
+            android:id="@+id/candado"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="@dimen/espacio_s"
+            android:contentDescription="@string/desc_nota_bloqueada"
+            android:src="@drawable/ic_candado"
+            android:visibility="gone"
+            app:tint="@color/texto_secundario"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/nota"
+            style="@style/Texto.NotaMediana"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:text="3.6"
+            tools:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/partes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
+</LinearLayout>

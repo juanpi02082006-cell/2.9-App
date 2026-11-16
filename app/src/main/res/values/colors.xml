@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Paleta de 2.9 — modo claro. Estilo plano (2026-10-17): tarjetas blancas con sombra
+  suave, bordes claros y la paleta que escogió el equipo:
+  #F7E9E9 rosado pálido, #CDE1F8 azul claro, #68A4F1 azul y #FA576B coral.
+
+  Es una paleta SEMÁNTICA: el acento (azul) es solo la acción, y cada estado de una
+  nota tiene su propio color (el coral es el riesgo). Antes un mismo color significaba
+  acción y riesgo a la vez, y eso hacía leer como "peligro" cosas que solo eran botones.
+
+  El azul y el coral NO sirven como color de letra sobre el fondo claro (no llegan a
+  4.5:1): sobre ellos va siempre tinta negra, y para letra de color están las variantes
+  oscuras (acento_oscuro, riesgo, reprobado). Los tonos vivos, solo como relleno (el
+  coral sobre el fondo da 2.7:1: no alcanza ni para números grandes).
+-->
+<resources>
+    <!-- ===== Superficies ===== -->
+    <color name="fondo">#F7E9E9</color>
+    <color name="superficie">#FFFFFF</color>
+    <!-- Sombra de las tarjetas, como "2.9/Sombra tarjeta" de Figma. La opacidad la pone el tema -->
+    <color name="sombra">#8C5961</color>
+
+    <!-- ===== Texto ===== -->
+    <color name="tinta">#111111</color>
+    <color name="tinta_elevada">#2A2A2A</color>
+    <color name="texto_secundario">#574A4C</color>
+    <color name="blanco">#FFFFFF</color>
+
+    <!-- ===== Bordes ===== -->
+    <!-- Borde de campos y botones blancos. Para separar sin marcar, borde_suave -->
+    <color name="borde">#D9C6C8</color>
+    <color name="borde_suave">#EED5D6</color>
+    <!-- Relleno neutro: chips de estado sin carga ("Terminado") -->
+    <color name="neutro_suave">#ECEAEA</color>
+    <color name="borde_punteado">#9E8B8D</color>
+
+    <!-- ===== Acción ===== -->
+    <color name="acento">#68A4F1</color>
+    <!-- Letra y bordes de foco del color de acción (5.2:1 sobre el fondo) -->
+    <color name="acento_oscuro">#1F5FB8</color>
+    <color name="acento_suave">#CDE1F8</color>
+
+    <!-- ===== Estados de una nota (doc 02 · 3.4) ===== -->
+    <!-- Aprobado: la definitiva alcanza la nota para pasar -->
+    <color name="aprobado">#1E7A46</color>
+    <color name="aprobado_vivo">#2E9E5B</color>
+    <color name="aprobado_suave">#CFEFDB</color>
+    <!-- Verde menta: relleno de "Te falta" (lo que todavía se puede lograr). Solo relleno -->
+    <color name="verde_menta">#7FD8A8</color>
+
+    <!-- En riesgo: va por debajo, pero todavía alcanza (RN-07) -->
+    <color name="riesgo">#B3263A</color>
+    <color name="riesgo_vivo">#FA576B</color>
+    <color name="riesgo_suave">#FFD9DE</color>
+
+    <!-- Reprobado: necesitaría más de 5.0 en lo que falta. También errores y borrar -->
+    <color name="reprobado">#8F1B2C</color>
+    <color name="reprobado_vivo">#D93348</color>
+    <color name="reprobado_suave">#FBC7CF</color>
+
+    <!-- ===== Selección ===== -->
+    <!-- Mismo tono que la acción: tenerlos distintos inventaba un color de más -->
+    <color name="azul">#68A4F1</color>
+    <color name="azul_oscuro">#1F5FB8</color>
+    <color name="azul_suave">#CDE1F8</color>
+
+    <!-- ===== Derivados ===== -->
+    <color name="velo_dialogo">#66111111</color>
+
+    <!--
+      Botón de Google Sign-In. Estos valores los fija Google en sus guías de marca,
+      no salen de nuestra paleta: el logo G nunca va sobre un fondo de color propio.
+    -->
+    <color name="google_fondo">#FFFFFF</color>
+    <color name="google_borde">#747775</color>
+    <color name="google_texto">#1F1F1F</color>
+</resources>

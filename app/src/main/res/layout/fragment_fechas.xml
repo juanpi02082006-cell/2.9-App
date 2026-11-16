@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  24 Fechas del semestre (doc 03, RF-27).
+  Con las dos fechas la app calcula en qué semana va y lo muestra con una barra.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/botonVolver"
+        style="@style/Estilo.BotonIcono"
+        android:layout_marginStart="@dimen/espacio_s"
+        android:layout_marginTop="@dimen/espacio_m"
+        android:contentDescription="@string/desc_volver"
+        app:icon="@drawable/ic_volver"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/contenido"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/margen_pantalla"
+        android:paddingEnd="@dimen/margen_pantalla"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/botonVolver">
+
+        <TextView
+            style="@style/Texto.Titulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fechas_titulo" />
+
+        <TextView
+            style="@style/Texto.Etiqueta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espacio_xl"
+            android:text="@string/fechas_inicio" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Estilo.Campo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espacio_s"
+            app:endIconDrawable="@drawable/ic_calendario"
+            app:endIconMode="custom"
+            app:endIconTint="@color/texto_secundario">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/fechaInicio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:inputType="none"
+                android:maxLines="1"
+                tools:text="11 ago 2026" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            style="@style/Texto.Etiqueta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espacio_l"
+            android:text="@string/fechas_fin" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Estilo.Campo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espacio_s"
+            app:endIconDrawable="@drawable/ic_calendario"
+            app:endIconMode="custom"
+            app:endIconTint="@color/texto_secundario">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/fechaFin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:inputType="none"
+                android:maxLines="1"
+                tools:text="28 nov 2026" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- En qué semana va -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espacio_xl"
+            android:background="@drawable/fondo_tarjeta_destacada"
+            android:elevation="@dimen/elevacion_tarjeta"
+            android:orientation="vertical"
+            android:padding="@dimen/espacio_xl">
+
+            <TextView
+                android:id="@+id/semana"
+                style="@style/Texto.Apoyo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Vas en la semana 7 de 16" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/alto_barra_progreso"
+                android:layout_marginTop="@dimen/espacio_m"
+                android:background="@drawable/fondo_barra_progreso"
+                android:orientation="horizontal">
+
+                <View
+                    android:id="@+id/barraSemanaLlena"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="7"
+                    android:background="@drawable/fondo_barra_progreso_relleno" />
+
+                <View
+                    android:id="@+id/barraSemanaVacia"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="9" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/botonGuardar"
+        style="@style/Estilo.Boton.Principal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margen_pantalla"
+        android:layout_marginEnd="@dimen/margen_pantalla"
+        android:layout_marginBottom="@dimen/espacio_xl"
+        android:text="@string/fechas_guardar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

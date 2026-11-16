@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Grafo de navegación de 2.9: las flechas del prototipo de Figma (doc 03 · Mapa de
+  navegación). Las pantallas 04, 13 y 14 no están aquí porque son hojas inferiores y
+  diálogos, que se abren con show() desde el Fragment o la Activity.
+-->
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/bienvenidaFragment">
+
+    <!-- ===== 01 Bienvenida · 21 Error al entrar ===== -->
+    <fragment
+        android:id="@+id/bienvenidaFragment"
+        android:name="com.dosnueve.app.ui.acceso.BienvenidaFragment"
+        android:label="Bienvenida"
+        tools:layout="@layout/fragment_bienvenida">
+
+        <action
+            android:id="@+id/aUniversidad"
+            app:destination="@id/universidadFragment" />
+        <action
+            android:id="@+id/aInicio"
+            app:destination="@id/inicioFragment"
+            app:popUpTo="@id/bienvenidaFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- ===== 02 Entrar · 25 Error al entrar ===== -->
+    <fragment
+        android:id="@+id/entrarFragment"
+        android:name="com.dosnueve.app.ui.acceso.EntrarFragment"
+        android:label="Entrar"
+        tools:layout="@layout/fragment_entrar" />
+
+    <!-- ===== 03 Crear cuenta ===== -->
+    <fragment
+        android:id="@+id/crearCuentaFragment"
+        android:name="com.dosnueve.app.ui.acceso.CrearCuentaFragment"
+        android:label="Crear cuenta"
+        tools:layout="@layout/fragment_crear_cuenta" />
+
+    <!-- ===== 04 Verifica tu correo ===== -->
+    <fragment
+        android:id="@+id/verificaCorreoFragment"
+        android:name="com.dosnueve.app.ui.acceso.VerificaCorreoFragment"
+        android:label="Verifica tu correo"
+        tools:layout="@layout/fragment_verifica_correo">
+
+        <argument
+            android:name="correo"
+            android:defaultValue=""
+            app:argType="string" />
+    </fragment>
+
+    <!-- ===== 05 Olvidaste tu contraseña ===== -->
+    <fragment
+        android:id="@+id/olvideContrasenaFragment"
+        android:name="com.dosnueve.app.ui.acceso.OlvideContrasenaFragment"
+        android:label="Olvidaste tu contraseña"
+        tools:layout="@layout/fragment_olvide_contrasena" />
+
+    <!-- ===== 06 ¿Dónde estudias? ===== -->
+    <fragment
+        android:id="@+id/universidadFragment"
+        android:name="com.dosnueve.app.ui.onboarding.UniversidadFragment"
+        android:label="¿Dónde estudias?"
+        tools:layout="@layout/fragment_universidad" />
+
+    <!-- ===== 03 Inicio · 18 Inicio vacío · 20 Sin conexión ===== -->
+    <fragment
+        android:id="@+id/inicioFragment"
+        android:name="com.dosnueve.app.ui.inicio.InicioFragment"
+        android:label="Inicio"
+        tools:layout="@layout/fragment_inicio" />
+
+    <!-- ===== 05 Registrar nota ===== -->
+    <fragment
+        android:id="@+id/registrarNotaFragment"
+        android:name="com.dosnueve.app.ui.nota.RegistrarNotaFragment"
+        android:label="Registrar nota"
+        tools:layout="@layout/fragment_registrar_nota">
+
+        <argument
+            android:name="materiaId"
+            android:defaultValue="0L"
+            app:argType="long" />
+        <argument
+            android:name="corteId"
+            android:defaultValue="0L"
+            app:argType="long" />
+    </fragment>
+
+    <!-- ===== 06 Nueva materia ===== -->
+    <fragment
+        android:id="@+id/nuevaMateriaFragment"
+        android:name="com.dosnueve.app.ui.materia.MateriaFragment"
+        android:label="Nueva materia"
+        tools:layout="@layout/fragment_materia" />
+
+    <!-- ===== 15 Editar materia · 16 Borrar materia (mismo layout que 06) ===== -->
+    <fragment
+        android:id="@+id/editarMateriaFragment"
+        android:name="com.dosnueve.app.ui.materia.MateriaFragment"
+        android:label="Editar materia"
+        tools:layout="@layout/fragment_materia">
+
+        <argument
+            android:name="materiaId"
+            app:argType="long" />
+    </fragment>
+
+    <!-- ===== 07 Forma de calificar ===== -->
+    <fragment
+        android:id="@+id/formaCalificarFragment"
+        android:name="com.dosnueve.app.ui.materia.FormaCalificarFragment"
+        android:label="Forma de calificar"
+        tools:layout="@layout/fragment_forma_calificar">
+
+        <!-- 0: la plantilla. Con una materia: solo la forma de esa materia -->
+        <argument
+            android:name="materiaId"
+            android:defaultValue="0L"
+            app:argType="long" />
+    </fragment>
+
+    <!-- ===== 08 Detalle de materia ===== -->
+    <fragment
+        android:id="@+id/detalleMateriaFragment"
+        android:name="com.dosnueve.app.ui.materia.DetalleMateriaFragment"
+        android:label="Detalle de materia"
+        tools:layout="@layout/fragment_detalle_materia">
+
+        <argument
+            android:name="materiaId"
+            app:argType="long" />
+    </fragment>
+
+    <!-- ===== 09 Detalle de corte · 17 Con porcentajes ===== -->
+    <fragment
+        android:id="@+id/detalleCorteFragment"
+        android:name="com.dosnueve.app.ui.corte.DetalleCorteFragment"
+        android:label="Detalle de corte"
+        tools:layout="@layout/fragment_detalle_corte">
+
+        <argument
+            android:name="materiaId"
+            app:argType="long" />
+        <!-- El número del corte: 1, 2, 3… -->
+        <argument
+            android:name="corteId"
+            app:argType="long" />
+    </fragment>
+
+    <!-- ===== 10 Semestres ===== -->
+    <fragment
+        android:id="@+id/semestresFragment"
+        android:name="com.dosnueve.app.ui.semestres.SemestresFragment"
+        android:label="Semestres"
+        tools:layout="@layout/fragment_semestres" />
+
+    <!-- ===== 22 Semestre anterior ===== -->
+    <fragment
+        android:id="@+id/semestreAnteriorFragment"
+        android:name="com.dosnueve.app.ui.semestres.SemestreAnteriorFragment"
+        android:label="Semestre anterior"
+        tools:layout="@layout/fragment_semestre_anterior">
+
+        <!-- 0: uno nuevo. Si no, se editan las notas finales de ese semestre -->
+        <argument
+            android:name="semestreId"
+            android:defaultValue="0L"
+            app:argType="long" />
+    </fragment>
+
+    <!-- ===== 23 Detalle de semestre ===== -->
+    <fragment
+        android:id="@+id/detalleSemestreFragment"
+        android:name="com.dosnueve.app.ui.semestres.DetalleSemestreFragment"
+        android:label="Detalle de semestre"
+        tools:layout="@layout/fragment_detalle_semestre">
+
+        <argument
+            android:name="semestreId"
+            app:argType="long" />
+    </fragment>
+
+    <!-- ===== 11 Simular ===== -->
+    <fragment
+        android:id="@+id/simularFragment"
+        android:name="com.dosnueve.app.ui.simular.SimularFragment"
+        android:label="Simular"
+        tools:layout="@layout/fragment_simular">
+
+        <!-- Desde el detalle de una materia llega ya escogida -->
+        <argument
+            android:name="materiaId"
+            android:defaultValue="0L"
+            app:argType="long" />
+    </fragment>
+
+    <!-- ===== 12 Perfil ===== -->
+    <fragment
+        android:id="@+id/perfilFragment"
+        android:name="com.dosnueve.app.ui.perfil.PerfilFragment"
+        android:label="Perfil"
+        tools:layout="@layout/fragment_perfil" />
+
+    <!-- ===== 24 Fechas del semestre ===== -->
+    <fragment
+        android:id="@+id/fechasFragment"
+        android:name="com.dosnueve.app.ui.perfil.FechasFragment"
+        android:label="Fechas del semestre"
+        tools:layout="@layout/fragment_fechas" />
+</navigation>

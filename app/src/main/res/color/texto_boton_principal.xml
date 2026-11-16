@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Texto del botón principal: tinta sobre el azul (el blanco no llega a 3:1) -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/texto_secundario" android:state_enabled="false" />
+    <item android:color="@color/tinta" />
+</selector>

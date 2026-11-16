@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Borde grueso del campo de nota: tinta, y azul oscuro con foco -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/acento_oscuro" android:state_focused="true" />
+    <item android:color="@color/borde" />
+</selector>

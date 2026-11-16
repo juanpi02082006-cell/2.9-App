@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Dibuja el círculo de lapicero de un solo plumazo recortando el trazo de 0 a 1.
+  600 ms con desaceleración: rápido al principio, como cuando uno encierra una nota.
+-->
+<objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="600"
+    android:interpolator="@android:interpolator/decelerate_quad"
+    android:propertyName="trimPathEnd"
+    android:valueFrom="0"
+    android:valueTo="1"
+    android:valueType="floatType" />

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Tarjeta "Cómo se califica" de las pantallas 10 y 19.
+
+  La barra muestra la proporción de los cortes en una sola tinta con tres
+  intensidades. Antes llevaba negro/azul/naranja, pero en 2.9 esos colores ya
+  significan otra cosa (doc 04) y se leían como estados, no como categorías.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/fondo_seccion"
+    android:elevation="@dimen/elevacion_tarjeta"
+    android:orientation="vertical"
+    android:padding="@dimen/espacio_l">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/Texto.Principal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/materia_como_califica" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/botonCambiarForma"
+            style="@style/Estilo.Boton.Enlace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="0dp"
+            android:paddingStart="@dimen/espacio_s"
+            android:paddingEnd="0dp"
+            android:text="@string/materia_cambiar" />
+    </LinearLayout>
+
+    <!-- Proporción de los cortes -->
+    <LinearLayout
+        android:id="@+id/barraCortes"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_marginTop="@dimen/espacio_m"
+        android:orientation="horizontal" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/espacio_m"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/etiquetaCortes"
+            style="@style/Texto.Apoyo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/materia_resumen_cortes" />
+
+        <TextView
+            android:id="@+id/resumenCortes"
+            style="@style/Texto.Principal.Medio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="33 % · 33 % · 34 %" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/espacio_s"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/Texto.Apoyo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/materia_resumen_cada_corte" />
+
+        <TextView
+            android:id="@+id/resumenTipos"
+            style="@style/Texto.Principal.Medio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Parcial 60 · Trab. 30 · Auto 10" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/espacio_s"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/Texto.Apoyo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/materia_resumen_pasa_con" />
+
+        <TextView
+            android:id="@+id/resumenPasar"
+            style="@style/Texto.Principal.Medio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="3.0" />
+    </LinearLayout>
+</LinearLayout>

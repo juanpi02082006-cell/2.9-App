@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Fila de la lista de semestres (pantalla 10). Lleva al detalle del semestre (23).
+  El semestre en curso lleva un anillo con cuánto va del semestre (semana 12 de 16 =
+  75 %); los terminados no, para que el actual resalte.
+-->
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tarjeta"
+    style="@style/Estilo.Planilla"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/espacio_s"
+    android:clickable="true"
+    android:focusable="true"
+    app:rippleColor="@color/borde_suave">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/espacio_l">
+
+        <FrameLayout
+            android:id="@+id/bloqueAvance"
+            android:layout_width="@dimen/tamano_anillo"
+            android:layout_height="@dimen/tamano_anillo"
+            android:layout_marginEnd="@dimen/espacio_m"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/anilloAvance"
+                style="@style/Estilo.Anillo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:importantForAccessibility="no"
+                tools:progress="75" />
+
+            <TextView
+                android:id="@+id/porcentajeAvance"
+                style="@style/Texto.Anillo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:importantForAccessibility="no"
+                tools:text="75 %" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/periodo"
+                    style="@style/Texto.Principal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="2026-2" />
+
+                <TextView
+                    android:id="@+id/estado"
+                    style="@style/Texto.ChipMeta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/espacio_s"
+                    android:text="@string/semestres_en_curso" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/detalle"
+                style="@style/Texto.Apoyo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="6 materias · 18 créditos" />
+
+            <TextView
+                android:id="@+id/semana"
+                style="@style/Texto.Apoyo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                tools:text="Semana 12 de 16"
+                tools:visibility="visible" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/promedio"
+            style="@style/Texto.NotaPlanilla"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="3.7" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="@dimen/espacio_xs"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_chevron_derecha"
+            app:tint="@color/borde_punteado" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

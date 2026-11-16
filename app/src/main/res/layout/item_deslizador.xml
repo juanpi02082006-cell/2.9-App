@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Una nota que falta, dentro de la tarjeta de su corte (pantalla 11): nombre, cuánto vale
+  de la materia y el deslizador. Lo ya registrado va en item_simulado_fijo, sin deslizador.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/espacio_s">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/nombre"
+            style="@style/Texto.Principal.Medio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Parcial" />
+
+        <TextView
+            android:id="@+id/peso"
+            style="@style/Texto.Apoyo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/espacio_s"
+            android:layout_weight="1"
+            tools:text="20 %" />
+
+        <TextView
+            android:id="@+id/valor"
+            style="@style/Texto.NotaMediana"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="3.5" />
+    </LinearLayout>
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/deslizador"
+        style="@style/Estilo.Deslizador"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stepSize="0.1"
+        android:value="3.0"
+        android:valueFrom="0.0"
+        android:valueTo="5.0" />
+</LinearLayout>

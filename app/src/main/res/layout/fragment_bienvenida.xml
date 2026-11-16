@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  01 Bienvenida (doc 03), estilo plano (2026-10-17).
+
+  Solo presenta la app: el login se mudó a la 02 Entrar, por eso aquí quedan
+  "Empezar" y "¿Ya tienes cuenta? Entrar".
+
+  La protagonista es la boleta de ejemplo de Cálculo II (doc 02 · 4): los cortes, lo
+  que lleva (2.9, en coral porque está en riesgo) y lo que le falta (3.2). Con eso no
+  hace falta explicar la app; el texto es una sola frase.
+
+  Los elementos van en una cadena vertical: el espacio entre la boleta y la frase se
+  estira para llenar la pantalla, y en una pantalla chica se encoge y deja hacer scroll.
+-->
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:background="@color/fondo"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/margen_pantalla"
+        android:paddingEnd="@dimen/margen_pantalla"
+        android:paddingBottom="@dimen/espacio_xl">
+
+        <!--
+          Este espacio y el de abajo se reparten lo que sobra: la boleta queda centrada.
+          Su mínimo deja sitio para las dos piezas que se asoman detrás de la boleta.
+        -->
+        <Space
+            android:id="@+id/espacioArriba"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/boleta"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_min="104dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="spread"
+            app:layout_constraintVertical_weight="3" />
+
+        <!-- 24 dp por debajo del borde de arriba de la boleta: ahí se apoyan las dos piezas -->
+        <Space
+            android:id="@+id/anclaPiezas"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/boleta" />
+
+        <!--
+          ===== Dos piezas detrás de la boleta =====
+          Otra materia que va bien (verde) y el avance del semestre: con la boleta, se ve
+          toda la app sin explicarla. Tienen menos elevación que la boleta, así que quedan
+          debajo; el relleno de abajo es la parte que la boleta tapa. Son decorado: el
+          lector de pantalla ya lee la descripción de la boleta.
+        -->
+        <LinearLayout
+            android:id="@+id/piezaMateria"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/espacio_xs"
+            android:background="@drawable/fondo_tarjeta"
+            android:elevation="1dp"
+            android:gravity="center_vertical"
+            android:importantForAccessibility="noHideDescendants"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/espacio_m"
+            android:paddingTop="@dimen/espacio_m"
+            android:paddingEnd="@dimen/espacio_m"
+            android:paddingBottom="36dp"
+            android:rotation="-7"
+            app:layout_constraintBottom_toTopOf="@id/anclaPiezas"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/Texto.EncabezadoPlanilla"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bienvenida_pieza_materia"
+                    android:textColor="@color/tinta" />
+
+                <TextView
+                    style="@style/Texto.Apoyo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bienvenida_pieza_creditos" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/Texto.NotaMediana"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/espacio_m"
+                android:background="@drawable/fondo_nota_aprobada"
+                android:paddingStart="@dimen/espacio_s"
+                android:paddingTop="@dimen/espacio_xs"
+                android:paddingEnd="@dimen/espacio_s"
+                android:paddingBottom="@dimen/espacio_xs"
+                android:text="@string/bienvenida_pieza_nota" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/piezaSemestre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/espacio_xs"
+            android:background="@drawable/fondo_tarjeta"
+            android:elevation="1dp"
+            android:gravity="center_vertical"
+            android:importantForAccessibility="noHideDescendants"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/espacio_s"
+            android:paddingTop="@dimen/espacio_s"
+            android:paddingEnd="@dimen/espacio_m"
+            android:paddingBottom="32dp"
+            android:rotation="6"
+            app:layout_constraintBottom_toTopOf="@id/anclaPiezas"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <FrameLayout
+                android:layout_width="44dp"
+                android:layout_height="44dp">
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    style="@style/Estilo.Anillo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:progress="75"
+                    app:indicatorSize="44dp"
+                    app:trackThickness="5dp" />
+
+                <TextView
+                    style="@style/Texto.Anillo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/bienvenida_pieza_avance"
+                    android:textSize="12sp" />
+            </FrameLayout>
+
+            <TextView
+                style="@style/Texto.Apoyo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/espacio_s"
+                android:text="@string/bienvenida_pieza_semana" />
+        </LinearLayout>
+
+        <!-- ===== La boleta de ejemplo ===== -->
+        <FrameLayout
+            android:id="@+id/boleta"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/fondo_tarjeta" android:clipToOutline="true" android:elevation="@dimen/elevacion_tarjeta"
+            android:contentDescription="@string/bienvenida_desc_ejemplo"
+            android:focusable="true"
+            android:rotation="2"
+            app:layout_constraintBottom_toTopOf="@id/espacio"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/espacioArriba">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:importantForAccessibility="noHideDescendants"
+                android:orientation="vertical">
+
+                <!-- Materia y créditos -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="@dimen/espacio_l"
+                    android:paddingTop="@dimen/espacio_l"
+                    android:paddingEnd="@dimen/espacio_l"
+                    android:paddingBottom="@dimen/espacio_l">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/dmsans_semibold"
+                        android:letterSpacing="0.03"
+                        app:fontFamily="@font/dmsans_semibold"
+                        android:text="@string/bienvenida_papelito_materia"
+                        android:textAllCaps="true"
+                        android:textColor="@color/tinta"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        style="@style/Texto.Etiqueta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/bienvenida_boleta_creditos" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/borde_fino"
+                    android:background="@color/borde_suave" />
+
+                <!-- Los tres cortes: el 3 todavía no tiene nota -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingStart="@dimen/espacio_l"
+                        android:paddingTop="@dimen/espacio_m"
+                        android:paddingEnd="@dimen/espacio_l"
+                        android:paddingBottom="@dimen/espacio_m">
+
+                        <TextView
+                            style="@style/Texto.Etiqueta"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="C1"
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            style="@style/Texto.NumeroGrande"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="2.7"
+                            android:textSize="32sp"
+                            tools:ignore="HardcodedText" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="@dimen/borde_fino"
+                        android:layout_height="match_parent"
+                        android:background="@color/borde_suave" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingStart="@dimen/espacio_l"
+                        android:paddingTop="@dimen/espacio_m"
+                        android:paddingEnd="@dimen/espacio_l"
+                        android:paddingBottom="@dimen/espacio_m">
+
+                        <TextView
+                            style="@style/Texto.Etiqueta"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="C2"
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            style="@style/Texto.NumeroGrande"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="3.1"
+                            android:textSize="32sp"
+                            tools:ignore="HardcodedText" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="@dimen/borde_fino"
+                        android:layout_height="match_parent"
+                        android:background="@color/borde_suave" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingStart="@dimen/espacio_l"
+                        android:paddingTop="@dimen/espacio_m"
+                        android:paddingEnd="@dimen/espacio_l"
+                        android:paddingBottom="@dimen/espacio_m">
+
+                        <TextView
+                            style="@style/Texto.Etiqueta"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="C3"
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            style="@style/Texto.NumeroGrande"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="\?" android:textColor="@color/texto_secundario"
+                            android:textSize="32sp"
+                            tools:ignore="HardcodedText" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/borde_fino"
+                    android:background="@color/borde_suave" />
+
+                <!-- Lo que lleva (en riesgo: coral) y lo que le falta -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/fondo_celda_llevas"
+                        android:orientation="vertical"
+                        android:paddingStart="@dimen/espacio_l"
+                        android:paddingTop="@dimen/espacio_l"
+                        android:paddingEnd="@dimen/espacio_l"
+                        android:paddingBottom="@dimen/espacio_l">
+
+                        <TextView
+                            style="@style/Texto.Etiqueta"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/bienvenida_boleta_llevas" />
+
+                        <TextView
+                            style="@style/Texto.NumeroGrande"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/espacio_xs"
+                            android:text="2.9"
+                            tools:ignore="HardcodedText" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="@dimen/borde_fino"
+                        android:layout_height="match_parent"
+                        android:background="@color/borde_suave" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/fondo_celda_falta"
+                        android:orientation="vertical"
+                        android:paddingStart="@dimen/espacio_l"
+                        android:paddingTop="@dimen/espacio_l"
+                        android:paddingEnd="@dimen/espacio_l"
+                        android:paddingBottom="@dimen/espacio_l">
+
+                        <TextView
+                            style="@style/Texto.Etiqueta"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/bienvenida_boleta_te_falta" />
+
+                        <TextView
+                            style="@style/Texto.NumeroGrande"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/espacio_xs"
+                            android:text="3.2"
+                            tools:ignore="HardcodedText" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </FrameLayout>
+
+        <!--
+          Se estira con el de arriba, pero le toca un cuarto de lo que sobra (pesos 3 y 1):
+          la boleta queda más cerca de la frase. Nunca menos de 24 dp
+        -->
+        <Space
+            android:id="@+id/espacio"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/titulo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_min="24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/boleta"
+            app:layout_constraintVertical_weight="1" />
+
+        <TextView
+            android:id="@+id/titulo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/dmsans_semibold"
+            android:includeFontPadding="false"
+            android:letterSpacing="-0.03"
+            android:lineSpacingMultiplier="0.95"
+            android:text="Descubre cuánto te falta"
+            android:textColor="@color/tinta"
+            android:textSize="40sp"
+            app:fontFamily="@font/dmsans_semibold"
+            app:layout_constraintBottom_toTopOf="@id/botonEmpezar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/espacio" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/botonEmpezar"
+            style="@style/Estilo.Boton.Principal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="@string/bienvenida_empezar"
+            app:icon="@drawable/ic_chevron_derecha"
+            app:iconGravity="textEnd"
+            app:layout_constraintBottom_toTopOf="@id/pie"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titulo" />
+
+        <LinearLayout
+            android:id="@+id/pie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espacio_m"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/botonEmpezar">
+
+            <TextView
+                style="@style/Texto.Apoyo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bienvenida_ya_tienes"
+                android:textSize="14sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/botonEntrar"
+                style="@style/Estilo.Boton.Enlace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="0dp"
+                android:paddingStart="@dimen/espacio_s"
+                android:paddingEnd="@dimen/espacio_s"
+                android:text="@string/bienvenida_entrar" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

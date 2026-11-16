@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  04 Acciones rápidas (doc 03). Hoja inferior que sale del botón + de la barra.
+  "Registrar una nota" va destacada porque es el camino de 4 toques (RNF-03).
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/margen_pantalla"
+    android:paddingTop="@dimen/espacio_m"
+    android:paddingEnd="@dimen/margen_pantalla"
+    android:paddingBottom="@dimen/espacio_xl">
+
+    <View
+        android:layout_width="@dimen/agarradera_ancho"
+        android:layout_height="@dimen/agarradera_alto"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/fondo_agarradera" />
+
+    <TextView
+        style="@style/Texto.Titulo.Pequeno"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/espacio_xl"
+        android:text="@string/acciones_titulo" />
+
+    <!-- Destacada: fondo acento -->
+    <LinearLayout
+        android:id="@+id/accionRegistrarNota"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/espacio_l"
+        android:background="@drawable/fondo_accion_destacada"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/alto_boton"
+        android:orientation="horizontal"
+        android:padding="@dimen/espacio_l">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/Texto.Principal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/acciones_registrar_nota"
+                android:textColor="@color/tinta" />
+
+            <TextView
+                style="@style/Texto.Apoyo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/acciones_registrar_nota_detalle"
+                android:textColor="@color/tinta" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_chevron_derecha"
+            app:tint="@color/tinta" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/accionNuevaMateria"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/espacio_m"
+        android:background="@drawable/fondo_seccion"
+        android:elevation="@dimen/elevacion_tarjeta"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/alto_boton"
+        android:orientation="horizontal"
+        android:padding="@dimen/espacio_l">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/Texto.Principal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/acciones_nueva_materia" />
+
+            <TextView
+                style="@style/Texto.Apoyo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/acciones_nueva_materia_detalle" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_chevron_derecha"
+            app:tint="@color/texto_secundario" />
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/botonCancelar"
+        style="@style/Estilo.Boton.Enlace"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/espacio_s"
+        android:text="@string/acciones_cancelar"
+        android:textColor="@color/texto_secundario" />
+</LinearLayout>

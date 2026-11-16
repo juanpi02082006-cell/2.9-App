@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Escala tipográfica de 2.9 (doc 04 · 2).
+  Cada estilo apunta al .ttf concreto en vez de a la familia + peso, porque
+  android:textFontWeight solo existe desde API 28 y la app soporta desde API 26.
+  Mínimo 12 sp en cualquier texto (RNF-05).
+-->
+<resources>
+
+    <!-- ===== Números y títulos ===== -->
+
+    <!-- 3.7 del promedio del semestre -->
+    <style name="Texto.NumeroGigante" parent="">
+        <item name="android:fontFamily">@font/dmsans_medium</item>
+        <item name="fontFamily">@font/dmsans_medium</item>
+        <item name="android:textSize">72sp</item>
+        <item name="android:textColor">@color/tinta</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:letterSpacing">-0.03</item>
+    </style>
+
+    <!-- 3.2 de "necesitas" dentro de la tarjeta destacada -->
+    <style name="Texto.NumeroGrande" parent="">
+        <item name="android:fontFamily">@font/dmsans_medium</item>
+        <item name="fontFamily">@font/dmsans_medium</item>
+        <item name="android:textSize">48sp</item>
+        <item name="android:textColor">@color/tinta</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:letterSpacing">-0.02</item>
+    </style>
+
+    <!-- "Registrar nota", "Detalle de materia" -->
+    <style name="Texto.Titulo" parent="">
+        <item name="android:fontFamily">@font/dmsans_semibold</item>
+        <item name="fontFamily">@font/dmsans_semibold</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:textColor">@color/tinta</item>
+        <item name="android:letterSpacing">-0.02</item>
+    </style>
+
+    <style name="Texto.Titulo.Pequeno" parent="Texto.Titulo">
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <!-- Nota de un corte o definitiva dentro de la planilla -->
+    <style name="Texto.NotaPlanilla" parent="">
+        <item name="android:fontFamily">@font/dmsans_medium</item>
+        <item name="fontFamily">@font/dmsans_medium</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/tinta</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- El coral vivo de la paleta queda para rellenos: como letra, su variante oscura -->
+    <style name="Texto.NotaPlanilla.EnRiesgo" parent="Texto.NotaPlanilla">
+        <item name="android:textColor">@color/riesgo</item>
+    </style>
+
+    <!-- El porcentaje en el centro de un anillo de progreso (Estilo.Anillo) -->
+    <style name="Texto.Anillo" parent="">
+        <item name="android:fontFamily">@font/dmsans_medium</item>
+        <item name="fontFamily">@font/dmsans_medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/tinta</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <!-- Nota de un corte, tamaño intermedio (detalle de materia) -->
+    <style name="Texto.NotaMediana" parent="">
+        <item name="android:fontFamily">@font/dmsans_medium</item>
+        <item name="fontFamily">@font/dmsans_medium</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/tinta</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- ===== DM Sans: interfaz ===== -->
+
+    <!-- Nombres de materias, opciones de lista -->
+    <style name="Texto.Principal" parent="">
+        <item name="android:fontFamily">@font/dmsans_semibold</item>
+        <item name="fontFamily">@font/dmsans_semibold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/tinta</item>
+    </style>
+
+    <style name="Texto.Principal.Medio" parent="Texto.Principal">
+        <item name="android:fontFamily">@font/dmsans_medium</item>
+        <item name="fontFamily">@font/dmsans_medium</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!-- "Nombre de la materia" encima de un campo -->
+    <style name="Texto.Etiqueta" parent="">
+        <item name="android:fontFamily">@font/dmsans_semibold</item>
+        <item name="fontFamily">@font/dmsans_semibold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/tinta</item>
+    </style>
+
+    <!-- "3 créditos", "Semana 12 de 16" -->
+    <style name="Texto.Apoyo" parent="">
+        <item name="android:fontFamily">@font/dmsans_regular</item>
+        <item name="fontFamily">@font/dmsans_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/texto_secundario</item>
+    </style>
+
+    <style name="Texto.Apoyo.Grande" parent="Texto.Apoyo">
+        <item name="android:textSize">16sp</item>
+        <item name="android:lineSpacingExtra">3sp</item>
+    </style>
+
+    <!-- MATERIA · C1 · C2 · C3 · DEF. -->
+    <style name="Texto.EncabezadoPlanilla" parent="">
+        <item name="android:fontFamily">@font/dmsans_semibold</item>
+        <item name="fontFamily">@font/dmsans_semibold</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/texto_secundario</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">0.04</item>
+    </style>
+
+    <!-- Anotación corta en coral oscuro junto a una nota. Máximo una por pantalla -->
+    <style name="Texto.Anotacion" parent="">
+        <item name="android:fontFamily">@font/dmsans_semibold</item>
+        <item name="fontFamily">@font/dmsans_semibold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/riesgo</item>
+    </style>
+
+    <!-- ===== Chips de "Meta" y "Necesitas" (doc 04 · 4) ===== -->
+    <style name="Texto.ChipMeta" parent="">
+        <item name="android:fontFamily">@font/dmsans_semibold</item>
+        <item name="fontFamily">@font/dmsans_semibold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/acento_oscuro</item>
+        <item name="android:background">@drawable/fondo_chip_meta</item>
+        <item name="android:paddingStart">@dimen/espacio_s</item>
+        <item name="android:paddingEnd">@dimen/espacio_s</item>
+        <item name="android:paddingTop">@dimen/espacio_xs</item>
+        <item name="android:paddingBottom">@dimen/espacio_xs</item>
+    </style>
+
+    <!-- Totales de porcentaje: "Total 100 %" en azul, en rojo si no cuadra -->
+    <style name="Texto.Total" parent="">
+        <item name="android:fontFamily">@font/dmsans_semibold</item>
+        <item name="fontFamily">@font/dmsans_semibold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/azul_oscuro</item>
+    </style>
+
+    <style name="Texto.Total.Error" parent="Texto.Total">
+        <item name="android:textColor">@color/reprobado</item>
+    </style>
+</resources>

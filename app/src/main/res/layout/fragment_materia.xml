@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  06 Nueva materia · 15 Editar materia (doc 03).
+  Es el mismo layout: al editar se prellena y aparece "Borrar materia" (RF-12).
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/botonVolver"
+        style="@style/Estilo.BotonIcono"
+        android:layout_marginStart="@dimen/espacio_s"
+        android:layout_marginTop="@dimen/espacio_m"
+        android:contentDescription="@string/desc_volver"
+        app:icon="@drawable/ic_volver"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/margen_pantalla"
+        android:paddingEnd="@dimen/margen_pantalla"
+        android:paddingBottom="@dimen/espacio_l"
+        app:layout_constraintBottom_toTopOf="@id/botonGuardar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/botonVolver">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/titulo"
+                style="@style/Texto.Titulo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/materia_titulo_nueva" />
+
+            <!-- ===== Nombre ===== -->
+            <TextView
+                style="@style/Texto.Etiqueta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_xl"
+                android:text="@string/materia_nombre" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/campoNombre"
+                style="@style/Estilo.Campo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_s">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/nombre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/materia_nombre_pista"
+                    android:inputType="textCapWords"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--
+              ===== Créditos del 1 al 10 =====
+              Dos filas de 5, todas a la vista: en una sola fila con scroll, del 7 en
+              adelante quedaban escondidos. Las filas se arman desde el código
+            -->
+            <TextView
+                style="@style/Texto.Etiqueta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_l"
+                android:text="@string/materia_creditos" />
+
+            <LinearLayout
+                android:id="@+id/gridCreditos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_s"
+                android:orientation="vertical" />
+
+            <!-- ===== Profesor (opcional, RF-11) ===== -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/botonAgregarProfesor"
+                style="@style/Estilo.Boton.Enlace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_s"
+                android:paddingStart="0dp"
+                android:text="@string/materia_agregar_profesor" />
+
+            <LinearLayout
+                android:id="@+id/bloqueProfesor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <TextView
+                    style="@style/Texto.Etiqueta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/espacio_s"
+                    android:text="@string/materia_profesor" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Estilo.Campo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/espacio_s">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/profesor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/materia_profesor_pista"
+                        android:inputType="textCapWords"
+                        android:maxLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <include
+                android:id="@+id/resumenCalificacion"
+                layout="@layout/vista_resumen_calificacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_l" />
+
+            <!-- Solo al editar (15 → 16) -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/botonBorrarMateria"
+                style="@style/Estilo.Boton.Enlace"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_l"
+                android:text="@string/materia_borrar"
+                android:textColor="@color/reprobado"
+                android:visibility="gone"
+                app:icon="@drawable/ic_basura"
+                app:iconGravity="textStart"
+                app:iconTint="@color/reprobado"
+                tools:visibility="visible" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/botonGuardar"
+        style="@style/Estilo.Boton.Principal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margen_pantalla"
+        android:layout_marginEnd="@dimen/margen_pantalla"
+        android:layout_marginBottom="@dimen/espacio_xl"
+        android:text="@string/materia_guardar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

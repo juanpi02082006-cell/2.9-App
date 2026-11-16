@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Componentes de 2.9 (doc 04 · 4) -->
+<resources>
+
+    <!-- ===== Botones ===== -->
+
+    <!--
+      Plano: relleno azul, esquinas 16, sin borde ni sombra, texto tinta en DM Sans
+      SemiBold 16 (el blanco no llega a 3:1 sobre el azul).
+    -->
+    <style name="Estilo.Boton.Principal" parent="Widget.Material3.Button">
+        <item name="android:minHeight">@dimen/alto_boton</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/dmsans_semibold</item>
+        <item name="fontFamily">@font/dmsans_semibold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textColor">@color/texto_boton_principal</item>
+        <item name="backgroundTint">@color/fondo_boton_principal</item>
+        <item name="cornerRadius">@dimen/radio_boton</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="iconTint">@color/tinta</item>
+        <item name="iconPadding">@dimen/espacio_s</item>
+        <item name="elevation">0dp</item>
+    </style>
+
+    <!-- Igual al principal, en blanco con un borde suave -->
+    <style name="Estilo.Boton.Secundario" parent="Estilo.Boton.Principal">
+        <item name="android:textColor">@color/texto_boton_secundario</item>
+        <item name="backgroundTint">@color/superficie</item>
+        <item name="strokeColor">@color/borde_boton_secundario</item>
+        <item name="strokeWidth">@dimen/borde_fino</item>
+        <item name="rippleColor">@color/borde_suave</item>
+    </style>
+
+    <!-- Igual al principal, en coral. Solo para borrar -->
+    <style name="Estilo.Boton.Peligro" parent="Estilo.Boton.Principal">
+        <item name="backgroundTint">@color/riesgo_vivo</item>
+    </style>
+
+    <!-- Variantes para la barra de botones de un MaterialAlertDialog -->
+    <style name="Estilo.Boton.Peligro.Dialogo" parent="Widget.Material3.Button.TextButton.Dialog">
+        <item name="android:fontFamily">@font/dmsans_semibold</item>
+        <item name="fontFamily">@font/dmsans_semibold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textColor">@color/tinta</item>
+        <item name="backgroundTint">@color/riesgo_vivo</item>
+        <item name="cornerRadius">@dimen/radio_campo</item>
+        <item name="android:minHeight">@dimen/area_tactil_min</item>
+    </style>
+
+    <style name="Estilo.Boton.Secundario.Dialogo" parent="Widget.Material3.Button.TextButton.Dialog">
+        <item name="android:fontFamily">@font/dmsans_semibold</item>
+        <item name="fontFamily">@font/dmsans_semibold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textColor">@color/tinta</item>
+        <item name="android:minHeight">@dimen/area_tactil_min</item>
+    </style>
+
+    <!-- Botón de ícono (volver, lápiz, cerrar). Área táctil mínima 48 dp (RNF-05) -->
+    <style name="Estilo.BotonIcono" parent="Widget.Material3.Button.IconButton">
+        <item name="android:layout_width">@dimen/area_tactil_min</item>
+        <item name="android:layout_height">@dimen/area_tactil_min</item>
+        <item name="android:minWidth">@dimen/area_tactil_min</item>
+        <item name="android:minHeight">@dimen/area_tactil_min</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="iconSize">24dp</item>
+        <item name="iconTint">@color/tinta</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconPadding">0dp</item>
+        <item name="android:padding">12dp</item>
+        <item name="rippleColor">@color/borde_suave</item>
+    </style>
+
+    <!-- Enlace de texto: "+ Agregar profesor", "Todas valen igual" -->
+    <style name="Estilo.Boton.Enlace" parent="Widget.Material3.Button.TextButton">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/dmsans_semibold</item>
+        <item name="fontFamily">@font/dmsans_semibold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+        <!-- El azul de acción no se lee como letra sobre el fondo: va su variante oscura -->
+        <item name="android:textColor">@color/acento_oscuro</item>
+        <item name="iconTint">@color/acento_oscuro</item>
+        <item name="android:minHeight">@dimen/area_tactil_min</item>
+        <item name="rippleColor">@color/acento_suave</item>
+    </style>
+
+    <!-- ===== Chips ===== -->
+
+    <!-- Plano: fondo blanco sin borde. Seleccionado: fondo azul_suave + texto azul_oscuro -->
+    <style name="Estilo.Chip.Seleccionable" parent="Widget.Material3.Chip.Filter">
+        <item name="android:minHeight">@dimen/alto_chip</item>
+        <item name="chipMinHeight">@dimen/alto_chip</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/dmsans_semibold</item>
+        <item name="fontFamily">@font/dmsans_semibold</item>
+        <!-- El Chip toma la letra de su textAppearance, no del fontFamily de arriba -->
+        <item name="android:textAppearance">@style/Texto.Chip</item>
+        <item name="android:textColor">@color/texto_chip</item>
+        <item name="chipBackgroundColor">@color/fondo_chip</item>
+        <item name="chipStrokeWidth">0dp</item>
+        <item name="chipCornerRadius">@dimen/radio_campo</item>
+        <item name="checkedIconVisible">false</item>
+        <item name="chipIconVisible">false</item>
+        <item name="closeIconVisible">false</item>
+        <item name="rippleColor">@color/azul_suave</item>
+        <item name="android:checkable">true</item>
+        <item name="ensureMinTouchTargetSize">true</item>
+    </style>
+
+    <!-- Sufijo de un campo de 24sp ("10 %"): del mismo tamaño, si no queda chiquito y arriba -->
+    <style name="Texto.SufijoGrande" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:fontFamily">@font/dmsans_semibold</item>
+        <item name="fontFamily">@font/dmsans_semibold</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="Texto.Chip" parent="TextAppearance.Material3.LabelLarge">
+        <item name="android:fontFamily">@font/dmsans_semibold</item>
+        <item name="fontFamily">@font/dmsans_semibold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <!-- Chip angosto para los créditos 1–5 -->
+    <style name="Estilo.Chip.Credito" parent="Estilo.Chip.Seleccionable">
+        <item name="chipStartPadding">@dimen/espacio_l</item>
+        <item name="chipEndPadding">@dimen/espacio_l</item>
+        <item name="textStartPadding">0dp</item>
+        <item name="textEndPadding">0dp</item>
+    </style>
+
+    <!-- ===== Campos de texto ===== -->
+
+    <!--
+      Plano, como en Figma: fondo blanco sin borde, esquinas 12, alto 52. El borde azul
+      oscuro aparece solo mientras se escribe
+    -->
+    <style name="Estilo.Campo" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxBackgroundColor">@color/superficie</item>
+        <item name="boxStrokeColor">@color/borde_campo</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">@dimen/borde_grueso</item>
+        <item name="boxCornerRadiusTopStart">@dimen/radio_campo</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/radio_campo</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/radio_campo</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/radio_campo</item>
+        <item name="hintEnabled">false</item>
+        <item name="android:textColorHint">@color/texto_secundario</item>
+        <item name="errorTextColor">@color/reprobado</item>
+        <item name="errorIconTint">@color/reprobado</item>
+        <item name="materialThemeOverlay">@style/Superposicion.Campo</item>
+    </style>
+
+    <!-- Campo plano: sin borde, el borde azul aparece solo mientras se escribe -->
+    <style name="Estilo.Campo.Nota" parent="Estilo.Campo">
+        <item name="boxStrokeColor">@color/borde_campo_nota</item>
+        <item name="boxStrokeWidth">0dp</item>
+    </style>
+
+    <!-- Igual al de la nota, relleno con el fondo: va dentro de una tarjeta blanca -->
+    <style name="Estilo.Campo.Relleno" parent="Estilo.Campo.Nota">
+        <item name="boxBackgroundColor">@color/fondo</item>
+    </style>
+
+    <!-- Campo de texto dentro de una tarjeta u hoja blanca: sin borde no se vería en blanco -->
+    <style name="Estilo.Campo.SobreBlanco" parent="Estilo.Campo">
+        <item name="boxBackgroundColor">@color/fondo</item>
+    </style>
+
+    <style name="Superposicion.Campo" parent="">
+        <item name="editTextStyle">@style/Estilo.Campo.Texto</item>
+    </style>
+
+    <style name="Estilo.Campo.Texto" parent="Widget.Material3.TextInputEditText.OutlinedBox">
+        <item name="android:minHeight">@dimen/alto_campo</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/dmsans_medium</item>
+        <item name="fontFamily">@font/dmsans_medium</item>
+        <item name="android:textColor">@color/tinta</item>
+        <item name="android:textColorHint">@color/texto_secundario</item>
+        <item name="android:paddingStart">@dimen/espacio_l</item>
+        <item name="android:paddingEnd">@dimen/espacio_l</item>
+    </style>
+
+    <!-- ===== Tarjetas ===== -->
+
+    <!-- Planilla: tarjeta blanca plana, esquinas 20, sin borde y con sombra suave -->
+    <style name="Estilo.Planilla" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardBackgroundColor">@color/superficie</item>
+        <item name="cardCornerRadius">@dimen/radio_tarjeta_plana</item>
+        <item name="strokeWidth">0dp</item>
+        <item name="cardElevation">@dimen/elevacion_tarjeta</item>
+    </style>
+
+    <!--
+      Tarjeta destacada: lo más importante de la pantalla ("necesitas", la definitiva
+      simulada). Azul claro como el promedio del Inicio, con la sombra de las tarjetas.
+    -->
+    <style name="Estilo.TarjetaDestacada" parent="Widget.Material3.CardView.Filled">
+        <item name="cardBackgroundColor">@color/acento_suave</item>
+        <item name="cardCornerRadius">@dimen/radio_tarjeta_plana</item>
+        <item name="cardElevation">@dimen/elevacion_tarjeta</item>
+        <item name="strokeWidth">0dp</item>
+    </style>
+
+    <!-- ===== Aviso (Snackbar): fondo tinta, esquinas 14, acción Deshacer ===== -->
+    <style name="Estilo.Aviso" parent="Widget.Material3.Snackbar">
+        <item name="backgroundTint">@color/tinta</item>
+        <item name="shapeAppearanceOverlay">@style/Forma.Aviso</item>
+        <item name="android:layout_margin">@dimen/espacio_l</item>
+    </style>
+
+    <style name="Forma.Aviso" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/radio_aviso</item>
+    </style>
+
+    <style name="Estilo.Aviso.Texto" parent="Widget.Material3.Snackbar.TextView">
+        <item name="android:fontFamily">@font/dmsans_medium</item>
+        <item name="fontFamily">@font/dmsans_medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/blanco</item>
+        <item name="android:maxLines">3</item>
+    </style>
+
+    <style name="Estilo.Aviso.Accion" parent="Widget.Material3.Button.TextButton.Snackbar">
+        <item name="android:fontFamily">@font/dmsans_semibold</item>
+        <item name="fontFamily">@font/dmsans_semibold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textColor">@color/acento_suave</item>
+    </style>
+
+    <!--
+      ===== Anillo de progreso =====
+      Solo para una parte de un todo (cuánto de la materia está evaluado, cuánto va
+      del semestre), nunca para una nota: las notas van como número. El número va
+      adentro, en tinta (Texto.Anillo). El arco en azul oscuro sobre azul claro: el
+      azul de acción no llega a 3:1 contra blanco.
+    -->
+    <style name="Estilo.Anillo" parent="Widget.Material3.CircularProgressIndicator">
+        <item name="indicatorSize">@dimen/tamano_anillo</item>
+        <item name="trackThickness">@dimen/grosor_anillo</item>
+        <item name="indicatorColor">@color/acento_oscuro</item>
+        <item name="trackColor">@color/acento_suave</item>
+        <item name="trackCornerRadius">@dimen/radio_anillo</item>
+        <item name="android:max">100</item>
+        <item name="android:indeterminate">false</item>
+    </style>
+
+    <!-- ===== Interruptor: encendido azul_oscuro ===== -->
+    <style name="Estilo.Interruptor" parent="Widget.Material3.CompoundButton.MaterialSwitch">
+        <item name="trackTint">@color/pista_interruptor</item>
+        <item name="thumbTint">@color/blanco</item>
+    </style>
+
+    <!-- ===== Deslizador de la pantalla Simular (paso 0.1, de 0 a 5) ===== -->
+    <style name="Estilo.Deslizador" parent="Widget.Material3.Slider">
+        <item name="thumbColor">@color/acento</item>
+        <item name="trackColorActive">@color/acento</item>
+        <item name="trackColorInactive">@color/acento_suave</item>
+        <item name="haloColor">@color/acento_suave</item>
+        <item name="tickVisible">false</item>
+        <item name="android:valueFrom">0.0</item>
+        <item name="android:valueTo">5.0</item>
+        <item name="android:stepSize">0.1</item>
+    </style>
+
+    <!-- ===== Pestaña de la barra inferior ===== -->
+    <style name="Estilo.Pestana" parent="">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/fondo_pestana</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingTop">@dimen/espacio_s</item>
+        <item name="android:paddingBottom">@dimen/espacio_s</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <!--
+      Etiqueta de pestaña. "Semestres" apenas cabe en los ~68dp de cada ranura, así
+      que se deja encoger hasta 10sp antes que recortarse cuando el usuario sube el
+      tamaño de fuente del sistema.
+    -->
+    <style name="Texto.Pestana" parent="">
+        <item name="android:fontFamily">@font/dmsans_semibold</item>
+        <item name="fontFamily">@font/dmsans_semibold</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/texto_pestana</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:maxLines">1</item>
+        <item name="autoSizeTextType">uniform</item>
+        <item name="autoSizeMinTextSize">10sp</item>
+        <item name="autoSizeMaxTextSize">12sp</item>
+        <item name="autoSizeStepGranularity">1sp</item>
+    </style>
+    <!--
+      Botón de Google Sign-In según las guías de marca de Google: fondo neutro con
+      borde, G oficial a 4 colores sin teñir y texto "Continuar con Google".
+      El naranja de 2.9 NO puede ir detrás del logo G, por eso este botón se sale
+      del estilo de acción de la app y el acento se mueve al enlace secundario.
+    -->
+    <style name="Estilo.Boton.Google" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:minHeight">@dimen/alto_boton</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/dmsans_semibold</item>
+        <item name="fontFamily">@font/dmsans_semibold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textColor">@color/google_texto</item>
+        <item name="backgroundTint">@color/google_fondo</item>
+        <item name="strokeColor">@color/google_borde</item>
+        <item name="strokeWidth">@dimen/borde_fino</item>
+        <item name="cornerRadius">@dimen/radio_boton</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="iconPadding">@dimen/espacio_m</item>
+        <item name="iconSize">20dp</item>
+        <item name="rippleColor">@color/borde_suave</item>
+    </style>
+
+    <!-- ===== Pantallas de cuenta (bocetos 01 a 05) ===== -->
+
+    <!-- Volver: círculo blanco con borde, arriba a la izquierda -->
+    <style name="Estilo.BotonCircular" parent="">
+        <item name="android:layout_width">@dimen/tamano_boton_circular</item>
+        <item name="android:layout_height">@dimen/tamano_boton_circular</item>
+        <item name="android:background">@drawable/fondo_boton_circular</item>
+        <item name="android:padding">@dimen/espacio_m</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <!--
+      Campo con ícono a la izquierda (entrar, crear cuenta, olvidé la contraseña). Estas
+      pantallas no llevan etiqueta encima del campo, así que el nombre del campo va como
+      etiqueta flotante: sube al borde al escribir en vez de desaparecer.
+    -->
+    <style name="Estilo.Campo.ConIcono" parent="Estilo.Campo">
+        <item name="hintEnabled">true</item>
+        <item name="hintTextColor">@color/acento_oscuro</item>
+        <item name="startIconTint">@color/texto_secundario</item>
+        <item name="endIconTint">@color/texto_secundario</item>
+        <item name="boxStrokeWidthFocused">@dimen/borde_grueso</item>
+    </style>
+
+    <!-- Texto de ayuda bajo un campo (bocetos 03) -->
+    <style name="Texto.AyudaCampo" parent="Texto.Apoyo">
+        <item name="android:layout_marginStart">@dimen/espacio_xl</item>
+        <item name="android:layout_marginTop">@dimen/espacio_xs</item>
+    </style>
+
+</resources>

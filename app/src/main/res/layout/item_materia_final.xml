@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Fila editable de la pantalla 22: materia, créditos y nota final (RN-09) -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/espacio_l"
+    android:paddingTop="@dimen/espacio_s"
+    android:paddingEnd="@dimen/espacio_s"
+    android:paddingBottom="@dimen/espacio_s">
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Estilo.Campo.SobreBlanco"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/nombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/materia_nombre_pista"
+            android:inputType="textCapWords"
+            android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Estilo.Campo.SobreBlanco"
+        android:layout_width="62dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/espacio_s">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/creditos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="2"
+            android:maxLines="1"
+            android:paddingStart="@dimen/espacio_xs"
+            android:paddingEnd="@dimen/espacio_xs"
+            tools:text="3" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Estilo.Campo.Relleno"
+        android:layout_width="72dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/espacio_s">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/notaFinal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:hint="@string/nota_valor_pista"
+            android:inputType="numberDecimal"
+            android:maxLines="1"
+            android:paddingStart="@dimen/espacio_xs"
+            android:paddingEnd="@dimen/espacio_xs"
+            tools:text="3.1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/botonQuitar"
+        style="@style/Estilo.BotonIcono"
+        android:contentDescription="@string/general_borrar"
+        app:icon="@drawable/ic_cerrar"
+        app:iconSize="18dp"
+        app:iconTint="@color/texto_secundario" />
+</LinearLayout>

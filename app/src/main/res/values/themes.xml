@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Tema de 2.9 (doc 04 · Sistema de diseño), plano desde el 2026-10-17:
+  tarjetas blancas con sombra suave y la paleta rosado, azul claro, azul y coral.
+
+  La app es SIEMPRE clara, sin importar el tema del sistema. Por eso el tema es Light
+  y App.java fija MODE_NIGHT_NO.
+
+  La paleta oscura queda escrita en values-night/colors.xml por si algún día se
+  decide activarla; hoy no se aplica.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Tema.DosNueve.Base" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Acción = azul. Sobre el azul va tinta: el blanco no llega a 3:1 -->
+        <item name="colorPrimary">@color/acento</item>
+        <item name="colorOnPrimary">@color/tinta</item>
+        <item name="colorPrimaryContainer">@color/acento_suave</item>
+        <item name="colorOnPrimaryContainer">@color/tinta</item>
+
+        <!-- Seleccionado = azul suave -->
+        <item name="colorSecondary">@color/azul_oscuro</item>
+        <item name="colorOnSecondary">@color/blanco</item>
+        <item name="colorSecondaryContainer">@color/azul_suave</item>
+        <item name="colorOnSecondaryContainer">@color/azul_oscuro</item>
+
+        <!-- Errores = coral oscuro (antes compartían color con la acción) -->
+        <item name="colorError">@color/reprobado</item>
+        <item name="colorOnError">@color/blanco</item>
+        <item name="colorErrorContainer">@color/reprobado_suave</item>
+        <item name="colorOnErrorContainer">@color/reprobado</item>
+
+        <item name="android:colorBackground">@color/fondo</item>
+        <item name="colorOnBackground">@color/tinta</item>
+        <item name="colorSurface">@color/superficie</item>
+        <item name="colorOnSurface">@color/tinta</item>
+        <item name="colorSurfaceVariant">@color/borde_suave</item>
+        <item name="colorOnSurfaceVariant">@color/texto_secundario</item>
+        <item name="colorOutline">@color/borde</item>
+        <item name="colorOutlineVariant">@color/borde_suave</item>
+
+        <!-- Barras del sistema: el papel llega hasta arriba -->
+        <item name="android:statusBarColor">@color/fondo</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/fondo</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
+
+        <!--
+          Sombra de las tarjetas como en Figma ("2.9/Sombra tarjeta": #8C5961 al 18 %).
+          Por defecto Android casi no pinta la sombra de ambiente (3.9 %) y sobre el rosado
+          solo se veían las esquinas. El color va en el tema para que lo tomen todas las
+          vistas con elevación (Android 9 en adelante)
+        -->
+        <item name="android:ambientShadowAlpha">0.18</item>
+        <item name="android:spotShadowAlpha">0.12</item>
+        <item name="android:outlineAmbientShadowColor" tools:targetApi="28">@color/sombra</item>
+        <item name="android:outlineSpotShadowColor" tools:targetApi="28">@color/sombra</item>
+
+        <!-- Toda la interfaz en DM Sans -->
+        <item name="android:fontFamily">@font/dm_sans</item>
+        <item name="fontFamily">@font/dm_sans</item>
+        <item name="android:textColor">@color/tinta</item>
+
+        <!-- Componentes del sistema de diseño (doc 04 · 4) -->
+        <item name="materialButtonStyle">@style/Estilo.Boton.Principal</item>
+        <item name="chipStyle">@style/Estilo.Chip.Seleccionable</item>
+        <item name="textInputStyle">@style/Estilo.Campo</item>
+        <item name="materialCardViewStyle">@style/Estilo.Planilla</item>
+        <item name="bottomSheetDialogTheme">@style/Tema.DosNueve.HojaInferior</item>
+        <item name="materialAlertDialogTheme">@style/Tema.DosNueve.Dialogo</item>
+        <item name="snackbarStyle">@style/Estilo.Aviso</item>
+        <item name="snackbarTextViewStyle">@style/Estilo.Aviso.Texto</item>
+        <item name="snackbarButtonStyle">@style/Estilo.Aviso.Accion</item>
+        <item name="sliderStyle">@style/Estilo.Deslizador</item>
+    </style>
+
+    <style name="Tema.DosNueve" parent="Tema.DosNueve.Base" />
+
+    <!-- Hoja inferior: esquinas superiores 24, fondo blanco (doc 04 · 4) -->
+    <style name="Tema.DosNueve.HojaInferior" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/Estilo.HojaInferior</item>
+        <item name="android:navigationBarColor">@color/superficie</item>
+    </style>
+
+    <style name="Estilo.HojaInferior" parent="Widget.Material3.BottomSheet.Modal">
+        <item name="backgroundTint">@color/superficie</item>
+        <item name="shapeAppearanceOverlay">@style/Forma.HojaInferior</item>
+    </style>
+
+    <style name="Forma.HojaInferior" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">@dimen/radio_hoja_inferior</item>
+        <item name="cornerSizeTopRight">@dimen/radio_hoja_inferior</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
+
+    <!-- Diálogo: fondo blanco, esquinas 20, ancho 330 (doc 04 · 4) -->
+    <style name="Tema.DosNueve.Dialogo" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="android:fontFamily">@font/dm_sans</item>
+        <item name="shapeAppearanceOverlay">@style/Forma.Dialogo</item>
+        <item name="backgroundTint">@color/superficie</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/Estilo.Dialogo.Titulo</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/Estilo.Dialogo.Cuerpo</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Estilo.Boton.Peligro.Dialogo</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Estilo.Boton.Secundario.Dialogo</item>
+    </style>
+
+    <style name="Forma.Dialogo" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/radio_dialogo</item>
+    </style>
+
+    <style name="Estilo.Dialogo.Titulo" parent="MaterialAlertDialog.Material3.Title.Text">
+        <item name="android:fontFamily">@font/dmsans_semibold</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/tinta</item>
+    </style>
+
+    <style name="Estilo.Dialogo.Cuerpo" parent="MaterialAlertDialog.Material3.Body.Text">
+        <item name="android:fontFamily">@font/dmsans_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/texto_secundario</item>
+        <item name="android:lineSpacingExtra">3sp</item>
+    </style>
+    <!-- Esquinas de la foto del cuaderno de la pantalla 01 (doc 03) -->
+    <style name="Forma.FotoCuaderno" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/radio_foto_cuaderno</item>
+    </style>
+</resources>

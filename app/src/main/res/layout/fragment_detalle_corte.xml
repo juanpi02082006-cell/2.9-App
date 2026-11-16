@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  09 Detalle de corte · 17 Con porcentajes (doc 03, RF-22 y RF-17).
+  Meta del corte, parcial necesario con la barra de 0 a 5, y una sección por
+  componente. En modo "Con porcentajes" cada nota muestra además su peso.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/botonVolver"
+        style="@style/Estilo.BotonIcono"
+        android:layout_marginStart="@dimen/espacio_s"
+        android:layout_marginTop="@dimen/espacio_m"
+        android:contentDescription="@string/desc_volver"
+        app:icon="@drawable/ic_volver"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:clipChildren="false"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/margen_pantalla"
+        android:paddingEnd="@dimen/margen_pantalla"
+        android:paddingBottom="@dimen/espacio_xl"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/botonVolver">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/titulo"
+                style="@style/Texto.Titulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Cálculo II · Corte 3" />
+
+            <TextView
+                android:id="@+id/vale"
+                style="@style/Texto.Apoyo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Vale 34 % de la materia" />
+
+            <!-- ===== Parcial necesario y meta del corte: tarjeta destacada, como en Simular ===== -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Estilo.TarjetaDestacada"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_xl">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/espacio_xl">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <!-- Dice en qué: el parcial, la autoevaluación… o "El corte queda en" -->
+                            <TextView
+                                android:id="@+id/etiquetaNecesitas"
+                                style="@style/Texto.Apoyo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/corte_necesitas_en_parcial" />
+
+                            <TextView
+                                android:id="@+id/necesitas"
+                                style="@style/Texto.NumeroGrande"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                tools:text="2.8" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/chipMeta"
+                            style="@style/Texto.ChipMeta"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:background="@drawable/fondo_chip_blanco"
+                            android:paddingStart="@dimen/espacio_m"
+                            android:paddingTop="@dimen/espacio_s"
+                            android:paddingEnd="@dimen/espacio_m"
+                            android:paddingBottom="@dimen/espacio_s"
+                            tools:text="Meta 3.2" />
+                    </LinearLayout>
+
+                    <!-- Barra de 0 a 5: pesos proporcionales, sin librerías (doc 04 · 6) -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
+                        android:layout_marginTop="@dimen/espacio_m"
+                        android:background="@drawable/fondo_barra_escala"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:id="@+id/barraLlena"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="56"
+                            android:background="@drawable/fondo_barra_progreso_relleno" />
+
+                        <View
+                            android:id="@+id/barraVacia"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="44" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/espacio_xs"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/Texto.Apoyo"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/corte_escala_min" />
+
+                        <TextView
+                            style="@style/Texto.Apoyo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/corte_escala_max" />
+                    </LinearLayout>
+
+                    <!-- RN-13: si la autoevaluación no tiene nota se supone 4.5, y se dice -->
+                    <TextView
+                        android:id="@+id/suponiendoAuto"
+                        style="@style/Texto.Apoyo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/espacio_s"
+                        android:text="@string/corte_suponiendo_auto"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Una sección por componente: Parcial, Trabajos y quices, Autoevaluación -->
+            <LinearLayout
+                android:id="@+id/listaComponentes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_l"
+                android:orientation="vertical" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

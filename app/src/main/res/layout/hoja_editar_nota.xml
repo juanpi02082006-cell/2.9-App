@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  13 Editar nota (doc 03, RF-18). Hoja inferior con nombre, nota y fecha.
+  "Borrar nota" abre el diálogo 14, que muestra cómo cambia el promedio.
+
+  También es la hoja de "+ Nota" dentro de un corte: ahí ya se sabe la materia, el corte
+  y el tipo, así que solo pide lo que falta. Parcial y autoevaluación: solo la nota.
+  Trabajos y quices: nombre, nota y, si va "Con porcentajes", cuánto vale (RN-04).
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/margen_pantalla"
+    android:paddingTop="@dimen/espacio_m"
+    android:paddingEnd="@dimen/margen_pantalla"
+    android:paddingBottom="@dimen/espacio_xl">
+
+    <View
+        android:layout_width="@dimen/agarradera_ancho"
+        android:layout_height="@dimen/agarradera_alto"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/fondo_agarradera" />
+
+    <TextView
+        android:id="@+id/titulo"
+        style="@style/Texto.Titulo.Pequeno"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/espacio_xl"
+        android:text="@string/editar_nota_titulo" />
+
+    <TextView
+        android:id="@+id/ubicacion"
+        style="@style/Texto.Apoyo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Cálculo II · Corte 3 · Trabajos y quices" />
+
+    <LinearLayout
+        android:id="@+id/grupoNombre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/Texto.Etiqueta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espacio_l"
+            android:text="@string/nota_nombre" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Estilo.Campo.SobreBlanco"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espacio_s">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nombre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/nota_nombre_pista"
+                android:inputType="textCapSentences"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/espacio_l"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/Texto.Etiqueta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nota_valor" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/campoNota"
+                style="@style/Estilo.Campo.Relleno"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_s">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/valorNota"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/dmsans_semibold"
+                    android:hint="@string/nota_valor_pista"
+                    android:inputType="numberDecimal"
+                    android:maxLength="3"
+                    android:maxLines="1"
+                    android:textSize="24sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <!--
+          Solo en Trabajos y quices: cuánto vale del corte. Obligatorio si va "Con
+          porcentajes"; si todas valen igual es opcional y escribirlo lo cambia de modo
+        -->
+        <LinearLayout
+            android:id="@+id/grupoPeso"
+            android:layout_width="@dimen/ancho_campo_vale"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/espacio_m"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/etiquetaPeso"
+                style="@style/Texto.Etiqueta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nota_peso" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Estilo.Campo.Relleno"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_s"
+                app:suffixText="%"
+                app:suffixTextAppearance="@style/Texto.SufijoGrande"
+                app:suffixTextColor="@color/texto_secundario">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/valorPeso"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:digits="0123456789"
+                    android:fontFamily="@font/dmsans_semibold"
+                    android:gravity="center_vertical|end"
+                    android:hint="@string/nota_peso_pista"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:maxLines="1"
+                    android:textSize="24sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/pesoDisponible"
+        style="@style/Texto.Apoyo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/espacio_xs"
+        android:gravity="end"
+        android:visibility="gone"
+        tools:text="quedan 10 de 30 %"
+        tools:visibility="visible" />
+
+    <!--
+      Solo al editar: una nota nueva se guarda con la fecha de hoy. Va en su propia fila:
+      al lado de la nota y del "Vale", a un tercio del ancho, la fecha se cortaba
+    -->
+    <LinearLayout
+        android:id="@+id/grupoFecha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/espacio_m"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/Texto.Etiqueta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nota_fecha" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/campoFecha"
+            style="@style/Estilo.Campo.SobreBlanco"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espacio_s"
+            app:endIconDrawable="@drawable/ic_calendario"
+            app:endIconMode="custom"
+            app:endIconTint="@color/texto_secundario">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/fecha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:inputType="none"
+                android:maxLines="1"
+                tools:text="18 sep 2026" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <!-- Lo que cambia en el corte con esta nota, en una línea -->
+    <TextView
+        android:id="@+id/efecto"
+        style="@style/Texto.Anotacion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/espacio_m"
+        android:visibility="gone"
+        tools:text="Te basta un 2.7 en el parcial."
+        tools:visibility="visible" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/botonGuardar"
+        style="@style/Estilo.Boton.Principal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/espacio_xl"
+        android:text="@string/editar_nota_guardar" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/botonBorrar"
+        style="@style/Estilo.Boton.Enlace"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/espacio_s"
+        android:text="@string/editar_nota_borrar"
+        android:textColor="@color/reprobado"
+        app:icon="@drawable/ic_basura"
+        app:iconGravity="textStart"
+        app:iconTint="@color/reprobado" />
+</LinearLayout>

@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  03 Crear cuenta (doc 03, RF-01 y RF-04).
+
+  Cuatro datos: nombre, usuario único, correo y contraseña de mínimo 8. El usuario
+  se reserva en la colección usernames antes de crear la cuenta (doc 06 · 4), por eso
+  puede fallar con "Ese usuario ya está ocupado" aunque todo lo demás esté bien.
+-->
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:background="@color/fondo"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:paddingStart="@dimen/margen_pantalla"
+        android:paddingEnd="@dimen/margen_pantalla"
+        android:paddingBottom="@dimen/espacio_xl">
+
+        <ImageView
+            android:id="@+id/botonVolver"
+            style="@style/Estilo.BotonCircular"
+            android:layout_marginTop="@dimen/espacio_xl"
+            android:contentDescription="@string/desc_volver"
+            android:src="@drawable/ic_chevron_izquierda"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/tinta" />
+
+        <TextView
+            android:id="@+id/titulo"
+            style="@style/Texto.Titulo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="@string/crear_titulo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/botonVolver" />
+
+        <TextView
+            android:id="@+id/subtitulo"
+            style="@style/Texto.Apoyo.Grande"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/crear_subtitulo"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titulo" />
+
+        <!-- ===== Nombre ===== -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/campoNombre"
+            style="@style/Estilo.Campo.ConIcono"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/subtitulo"
+            app:startIconDrawable="@drawable/ic_usuario_linea">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nombre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="name"
+                android:hint="@string/crear_nombre"
+                android:imeOptions="actionNext"
+                android:inputType="textPersonName|textCapWords"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- ===== Usuario ===== -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/campoUsuario"
+            style="@style/Estilo.Campo.ConIcono"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espacio_m"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/campoNombre"
+            app:startIconDrawable="@drawable/ic_arroba">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/usuario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="newUsername"
+                android:hint="@string/crear_usuario"
+                android:imeOptions="actionNext"
+                android:inputType="text"
+                android:maxLength="20"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/ayudaUsuario"
+            style="@style/Texto.AyudaCampo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/crear_usuario_ayuda"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/campoUsuario" />
+
+        <!-- ===== Correo ===== -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/campoCorreo"
+            style="@style/Estilo.Campo.ConIcono"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espacio_m"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ayudaUsuario"
+            app:startIconDrawable="@drawable/ic_correo">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/correo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="emailAddress"
+                android:hint="@string/crear_correo"
+                android:imeOptions="actionNext"
+                android:inputType="textEmailAddress"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- ===== Contraseña ===== -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/campoContrasena"
+            style="@style/Estilo.Campo.ConIcono"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espacio_m"
+            app:endIconDrawable="@drawable/ic_ojo"
+            app:endIconMode="password_toggle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/campoCorreo"
+            app:startIconDrawable="@drawable/ic_candado_linea">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/contrasena"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="newPassword"
+                android:hint="@string/entrar_contrasena"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/ayudaContrasena"
+            style="@style/Texto.AyudaCampo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/crear_contrasena_ayuda"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/campoContrasena" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/botonCrear"
+            style="@style/Estilo.Boton.Principal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espacio_l"
+            android:text="@string/crear_boton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ayudaContrasena" />
+
+        <ProgressBar
+            android:id="@+id/cargando"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:indeterminateTint="@color/tinta"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/botonCrear"
+            app:layout_constraintEnd_toEndOf="@id/botonCrear"
+            app:layout_constraintStart_toStartOf="@id/botonCrear"
+            app:layout_constraintTop_toTopOf="@id/botonCrear" />
+
+        <!-- ===== Separador "o" ===== -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/borde_fino"
+            android:layout_marginEnd="@dimen/espacio_l"
+            android:background="@color/borde"
+            app:layout_constraintBottom_toBottomOf="@id/separadorO"
+            app:layout_constraintEnd_toStartOf="@id/separadorO"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/separadorO" />
+
+        <TextView
+            android:id="@+id/separadorO"
+            style="@style/Texto.Apoyo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espacio_l"
+            android:text="@string/entrar_o"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/botonCrear" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/borde_fino"
+            android:layout_marginStart="@dimen/espacio_l"
+            android:background="@color/borde"
+            app:layout_constraintBottom_toBottomOf="@id/separadorO"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/separadorO"
+            app:layout_constraintTop_toTopOf="@id/separadorO" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/botonGoogle"
+            style="@style/Estilo.Boton.Google"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espacio_l"
+            android:text="@string/crear_google"
+            app:icon="@drawable/ic_google"
+            app:iconGravity="textStart"
+            app:iconTint="@null"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/separadorO" />
+
+        <!-- ===== Pie ===== -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/botonGoogle"
+            app:layout_constraintVertical_bias="1">
+
+            <TextView
+                style="@style/Texto.Apoyo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/crear_ya_tienes"
+                android:textSize="14sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/botonEntrar"
+                style="@style/Estilo.Boton.Enlace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="0dp"
+                android:paddingStart="@dimen/espacio_s"
+                android:paddingEnd="@dimen/espacio_s"
+                android:text="@string/crear_entrar" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

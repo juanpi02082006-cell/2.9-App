@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tarjeta destacada (promedio del Inicio, Fechas, Semestre anterior): degradado de azul claro -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <gradient android:angle="315" android:startColor="@color/acento_suave" android:endColor="#EAF2FC" />
+    <corners android:radius="@dimen/radio_tarjeta_plana" />
+</shape>

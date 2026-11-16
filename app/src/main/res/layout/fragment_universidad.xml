@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  02 ¿Dónde estudias? (doc 03, RF-03).
+  Lista de universidades con selección única. Se puede saltar o configurar a mano.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:paddingStart="@dimen/margen_pantalla"
+    android:paddingEnd="@dimen/margen_pantalla">
+
+    <TextView
+        android:id="@+id/saludo"
+        style="@style/Texto.Apoyo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Hola, Juanma" />
+
+    <TextView
+        android:id="@+id/titulo"
+        style="@style/Texto.Titulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/universidad_titulo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/saludo" />
+
+    <TextView
+        android:id="@+id/explicacion"
+        style="@style/Texto.Apoyo.Grande"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/espacio_s"
+        android:text="@string/universidad_explicacion"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titulo" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/campoBuscar"
+        style="@style/Estilo.Campo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/espacio_xl"
+        app:endIconDrawable="@drawable/ic_buscar"
+        app:endIconMode="custom"
+        app:endIconTint="@color/texto_secundario"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/explicacion">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/buscar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/universidad_buscar"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/tarjetaLista"
+        style="@style/Estilo.Planilla"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/espacio_l"
+        android:layout_marginBottom="@dimen/espacio_l"
+        app:layout_constraintBottom_toTopOf="@id/botonListo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/campoBuscar">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listaUniversidades"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:itemCount="5"
+            tools:listitem="@layout/item_universidad" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/botonListo"
+        style="@style/Estilo.Boton.Principal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/espacio_l"
+        android:enabled="false"
+        android:text="@string/universidad_listo"
+        app:layout_constraintBottom_toTopOf="@id/filaSecundaria"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/filaSecundaria"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/espacio_xl"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/botonSaltar"
+            style="@style/Estilo.Boton.Enlace"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/universidad_saltar"
+            android:textColor="@color/texto_secundario" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/botonConfigurar"
+            style="@style/Estilo.Boton.Enlace"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/universidad_configurar" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Fila de la planilla del Inicio (pantalla 03).
+  Alto 68. La materia en riesgo lleva el círculo de lapicero encima de la
+  definitiva: el riesgo nunca se indica solo con color (RNF-05).
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fila"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/alto_fila_planilla"
+    android:background="@drawable/fondo_fila_pulsable"
+    android:clipChildren="false"
+    android:paddingStart="@dimen/planilla_sangria"
+    android:paddingEnd="@dimen/espacio_m">
+
+    <TextView
+        android:id="@+id/nombre"
+        style="@style/Texto.Principal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintBottom_toTopOf="@id/creditos"
+        app:layout_constraintEnd_toStartOf="@id/corte1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Cálculo II" />
+
+    <TextView
+        android:id="@+id/creditos"
+        style="@style/Texto.Apoyo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:maxLines="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/corte1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/nombre"
+        tools:text="3 créditos" />
+
+    <TextView
+        android:id="@+id/corte1"
+        style="@style/Texto.NotaMediana"
+        android:layout_width="@dimen/col_corte"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/corte2"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="2.7" />
+
+    <TextView
+        android:id="@+id/corte2"
+        style="@style/Texto.NotaMediana"
+        android:layout_width="@dimen/col_corte"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/corte3"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="3.1" />
+
+    <TextView
+        android:id="@+id/corte3"
+        style="@style/Texto.NotaMediana"
+        android:layout_width="@dimen/col_corte"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/texto_secundario"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/definitiva"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="—" />
+
+    <!-- En riesgo lleva la casilla coral (fondo_celda_riesgo.xml) -->
+    <TextView
+        android:id="@+id/definitiva"
+        style="@style/Texto.NotaPlanilla"
+        android:layout_width="@dimen/col_definitiva"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="@drawable/fondo_celda_riesgo"
+        tools:text="2.9" />
+
+    <View
+        android:id="@+id/divisor"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/borde_fino"
+        android:background="@color/borde_suave"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Una barra de la gráfica por semestre (pantalla 10).
+  La altura es proporcional: el Space de arriba pesa (5 − nota) y la barra pesa (nota).
+  El valor va ENCIMA de la barra, en una franja de alto fijo (alto_valor_barra) que
+  tienen todas las columnas: como es igual en todas, la escala no se descuadra, y la
+  línea del 3.0 baja esa misma franja (fragment_semestres.xml). Así la línea ya no
+  pasa por encima de los números.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/espacio_s"
+    android:paddingEnd="@dimen/espacio_s">
+
+    <Space
+        android:id="@+id/espacioArriba"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.5" />
+
+    <TextView
+        android:id="@+id/valor"
+        style="@style/Texto.Etiqueta"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/alto_valor_barra"
+        android:gravity="center_horizontal|bottom"
+        android:includeFontPadding="false"
+        android:paddingBottom="@dimen/espacio_xs"
+        tools:text="3.5" />
+
+    <View
+        android:id="@+id/barra"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3.5"
+        android:background="@drawable/fondo_barra_semestre" />
+</LinearLayout>

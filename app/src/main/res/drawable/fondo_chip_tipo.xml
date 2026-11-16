@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Chip de dos líneas (nombre + porcentaje) de la pantalla 09.
+  Material Chip solo pinta una línea, así que este es propio: mismo lenguaje que
+  Estilo.Chip.Seleccionable (blanco sin borde, azul suave al elegirlo).
+-->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/azul_oscuro">
+
+    <item android:id="@android:id/mask">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/blanco" />
+            <corners android:radius="@dimen/radio_campo" />
+        </shape>
+    </item>
+
+    <item>
+        <selector>
+            <item android:state_selected="true">
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/azul_suave" />
+                    <corners android:radius="@dimen/radio_campo" />
+                </shape>
+            </item>
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/superficie" />
+                    <corners android:radius="@dimen/radio_campo" />
+                </shape>
+            </item>
+        </selector>
+    </item>
+</ripple>

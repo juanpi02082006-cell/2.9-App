@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Medidas de 2.9 (doc 04 · 3) -->
+<resources>
+    <!-- Márgenes y espacios -->
+    <dimen name="margen_pantalla">20dp</dimen>
+    <dimen name="espacio_xs">4dp</dimen>
+    <dimen name="espacio_s">8dp</dimen>
+    <dimen name="espacio_m">12dp</dimen>
+    <dimen name="espacio_l">16dp</dimen>
+    <dimen name="espacio_xl">20dp</dimen>
+
+    <!-- Esquinas -->
+    <!--
+      Estilo plano (2026-10-17): tarjetas con esquinas de 20 (radio_tarjeta_plana),
+      botones de 16 y campos de 12. Antes botones y campos eran píldoras (radio 40).
+    -->
+    <dimen name="radio_planilla">14dp</dimen>
+    <dimen name="radio_campo">12dp</dimen>
+    <dimen name="radio_boton">16dp</dimen>
+    <dimen name="radio_barra_nav">24dp</dimen>
+    <dimen name="radio_chip_meta">8dp</dimen>
+    <dimen name="radio_hoja_inferior">24dp</dimen>
+    <dimen name="radio_dialogo">20dp</dimen>
+    <dimen name="radio_aviso">14dp</dimen>
+
+    <!-- Alturas -->
+    <!-- 56 de botón + 4 de su sombra dura -->
+    <dimen name="alto_boton">60dp</dimen>
+    <dimen name="alto_campo">52dp</dimen>
+    <dimen name="alto_chip">48dp</dimen>
+    <dimen name="alto_fila_planilla">68dp</dimen>
+    <dimen name="alto_barra_nav">68dp</dimen>
+    <dimen name="tamano_boton_mas">60dp</dimen>
+    <dimen name="area_tactil_min">48dp</dimen>
+
+    <!-- Bordes -->
+    <dimen name="borde_fino">1dp</dimen>
+    <dimen name="borde_grueso">2dp</dimen>
+    <dimen name="borde_nota">2dp</dimen>
+    <!-- El borde de tinta de botones, tarjetas y campos con foco -->
+
+    <!--
+      Sombras duras: un rectángulo de tinta corrido abajo y a la derecha, sin
+      desenfoque. Al presionar un botón, el botón baja sobre su sombra.
+    -->
+    <!-- Relleno de un bloque con sombra: su borde + la sombra (2.5 + 7) -->
+    <!-- Relleno de un botón: los lados normales + la sombra donde corresponde -->
+
+    <!-- Planilla: línea de margen a 22 dp del borde izquierdo -->
+
+    <!-- Barra de navegación: separada 16 de los lados y 24 de abajo -->
+    <dimen name="separacion_barra_nav_lados">16dp</dimen>
+    <dimen name="separacion_barra_nav_abajo">24dp</dimen>
+    <dimen name="anillo_boton_mas">5dp</dimen>
+    <!-- Padding de la barra. El chip de la pestaña activa mide lo mismo que su
+         ranura, así que sin este margen sus esquinas se salen de la silueta
+         redondeada de la barra (radio 24dp). -->
+    <dimen name="padding_barra_nav">12dp</dimen>
+    <dimen name="padding_barra_nav_vertical">6dp</dimen>
+    <!-- Espacio que deben dejar las pantallas con barra inferior al final del scroll -->
+    <dimen name="espacio_bajo_barra_nav">120dp</dimen>
+
+    <!-- Planilla: el encabezado y las filas comparten estos anchos -->
+    <dimen name="planilla_sangria">34dp</dimen>
+    <dimen name="col_corte">36dp</dimen>
+    <!-- 64: el encabezado "LLEVAS" en mayúsculas no cabe en 48 y se partía letra por letra -->
+    <dimen name="col_definitiva">64dp</dimen>
+
+    <!-- Campo de porcentaje de la pantalla 07: cabe "100" y nada más -->
+    <dimen name="ancho_campo_porcentaje">66dp</dimen>
+
+    <!-- Pantalla 01: la tarjeta de la foto lleva esquinas de 28 (doc 03) -->
+    <dimen name="radio_foto_cuaderno">28dp</dimen>
+    <dimen name="tamano_insignia_check">56dp</dimen>
+
+    <!-- Pantalla 09: chip de tipo de nota, con el peso debajo -->
+    <dimen name="alto_chip_tipo">72dp</dimen>
+    <dimen name="alto_campo_nota">88dp</dimen>
+    <!-- La nota grande de la tarjeta de Registrar nota: 44sp centrados -->
+    <dimen name="alto_nota_grande">76dp</dimen>
+    <!-- Columna del "Vale %": cabe "Vale (opcional)" en una línea y la fila no se descuadra -->
+    <dimen name="ancho_campo_vale">136dp</dimen>
+
+    <!-- Pantallas de cuenta -->
+    <dimen name="tamano_boton_circular">48dp</dimen>
+    <dimen name="tamano_icono_grande">96dp</dimen>
+
+    <!-- Anillo de progreso (Estilo.Anillo) -->
+    <dimen name="tamano_anillo">64dp</dimen>
+    <dimen name="grosor_anillo">7dp</dimen>
+    <dimen name="radio_anillo">4dp</dimen>
+
+    <!-- Otros -->
+    <dimen name="tamano_avatar">40dp</dimen>
+    <dimen name="alto_barra_progreso">8dp</dimen>
+    <dimen name="agarradera_ancho">40dp</dimen>
+    <dimen name="agarradera_alto">4dp</dimen>
+    <!-- Estilo plano -->
+    <dimen name="radio_tarjeta_plana">20dp</dimen>
+    <dimen name="elevacion_tarjeta">3dp</dimen>
+    <dimen name="alto_valor_barra">24dp</dimen>
+</resources>
