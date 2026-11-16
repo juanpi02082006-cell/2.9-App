@@ -17,6 +17,7 @@ import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.dosnueve.app.R;
+import com.dosnueve.app.data.Cuenta;
 import com.dosnueve.app.data.Repositorio;
 import com.google.android.material.materialswitch.MaterialSwitch;
 
@@ -112,9 +113,7 @@ public class PerfilFragment extends Fragment {
     }
 
     private void cerrarSesion() {
-        // Fase 5: FirebaseAuth.getInstance().signOut() y limpiar las credenciales.
-        // Las materias y notas se quedan en el celular
-        Repositorio.get().cerrarSesion();
+        Cuenta.cerrarSesion(requireContext());
 
         // Se borra todo el historial: después de cerrar sesión, atrás no puede
         // devolver a las pantallas de la cuenta anterior

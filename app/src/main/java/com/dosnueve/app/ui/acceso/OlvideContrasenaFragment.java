@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.dosnueve.app.R;
+import com.dosnueve.app.data.Cuenta;
 import com.dosnueve.app.util.Validaciones;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -59,17 +60,25 @@ public class OlvideContrasenaFragment extends Fragment {
         campoCorreo.setError(null);
         mostrarCargando(true);
 
-        // Fase 2: sendPasswordResetEmail(escrito).
         // Se avisa igual exista o no la cuenta: decir "ese correo no está registrado"
-        // revelaría quién tiene cuenta.
-        botonEnviar.postDelayed(() -> {
+        // revelaría quién tiene cuenta
+        Cuenta.recuperarContrasena(escrito).addOnCompleteListener(envio -> {
             if (!isAdded()) {
                 return;
             }
             mostrarCargando(false);
-            Snackbar.make(requireView(), R.string.olvide_enviado, Snackbar.LENGTH_LONG).show();
-            volver();
-        }, 500L);
+            if (envio.isSuccessful()) {
+                Snackbar.make(requireView(), R.string.olvide_enviado, Snackbar.LENGTH_LONG).show();
+                volver();
+                return;
+            }
+            Cuenta.Falla falla = Cuenta.queFallo(envio.getException());
+            campoCorreo.setError(getString(
+                    falla == Cuenta.Falla.SIN_INTERNET ? R.string.error_sin_internet_corto
+                            : falla == Cuenta.Falla.MUCHOS_INTENTOS ? R.string.error_muchos_intentos
+                            : falla == Cuenta.Falla.CREDENCIALES ? R.string.crear_error_correo
+                            : R.string.error_algo_fallo));
+        });
     }
 
     private void mostrarCargando(boolean enviando) {

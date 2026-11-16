@@ -1,5 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
+    // Lee app/google-services.json (no se sube a GitHub)
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -48,6 +50,16 @@ dependencies {
     // ViewModel y LiveData
     implementation(libs.lifecycle.viewmodel)
     implementation(libs.lifecycle.livedata)
+
+    // Firebase: cuentas (Auth) y datos en la nube (Firestore)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
+
+    // Entrar con Google (Credential Manager)
+    implementation(libs.credentials)
+    implementation(libs.credentials.play.services.auth)
+    implementation(libs.googleid)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.espresso.core)

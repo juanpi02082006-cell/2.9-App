@@ -19,6 +19,7 @@ import androidx.navigation.NavDestination;
 import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.dosnueve.app.data.Cuenta;
 import com.dosnueve.app.data.Repositorio;
 import com.dosnueve.app.ui.acciones.AccionesBottomSheet;
 import com.google.android.material.snackbar.Snackbar;
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                 (controlador, destino, argumentos) -> alCambiarDePantalla(destino));
 
         // Con la sesión abierta se entra directo al Inicio, sin pasar por la Bienvenida
-        if (estado == null && Repositorio.get().haySesion()) {
+        if (estado == null && Cuenta.haySesion()) {
             navegacion.navigate(R.id.inicioFragment, null, new NavOptions.Builder()
                     .setPopUpTo(R.id.bienvenidaFragment, true)
                     .build());

@@ -13,12 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.dosnueve.app.R;
-import com.dosnueve.app.data.Repositorio;
-import com.dosnueve.app.util.Validaciones;
+import com.dosnueve.app.data.Cuenta;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -103,38 +101,58 @@ public class EntrarFragment extends Fragment {
 
         ocultarError();
         mostrarCargando(true);
-
-        // Fase 2: si pareceCorreo(quien) se usa tal cual; si no, se lee
-        // usernames/{quien} para sacar el correo. Luego
-        // signInWithEmailAndPassword(correo, clave) → éxito: alEntrar();
-        // fallo: mostrarError().
-        boolean esCorreo = Validaciones.pareceCorreo(quien);
-        botonEntrar.postDelayed(() -> {
-            if (isAdded()) {
-                alEntrar();
+        Cuenta.entrar(quien, clave).addOnCompleteListener(entrada -> {
+            if (!isAdded()) {
+                return;
             }
-        }, 450L);
+            mostrarCargando(false);
+            if (entrada.isSuccessful()) {
+                Llegada.ir(this, entrada.getResult());
+            } else {
+                mostrarFalla(Cuenta.queFallo(entrada.getException()));
+            }
+        });
     }
 
     private void entrarConGoogle() {
         ocultarError();
         mostrarCargando(true);
-
-        // Fase 2: Credential Manager → ID token → signInWithCredential.
-        // Si usuarios/{uid} no existe, se crea y va a 06; si existe, va a 07.
-        botonEntrar.postDelayed(() -> {
-            if (isAdded()) {
-                irA(R.id.universidadFragment);
+        Cuenta.entrarConGoogle(requireActivity()).addOnCompleteListener(entrada -> {
+            if (!isAdded()) {
+                return;
             }
-        }, 450L);
+            mostrarCargando(false);
+            if (entrada.isSuccessful()) {
+                Llegada.ir(this, entrada.getResult());
+            } else {
+                mostrarFalla(Cuenta.queFallo(entrada.getException()));
+            }
+        });
     }
 
-    /** Entró bien: a 07 Inicio, sin poder volver atrás al login. */
-    private void alEntrar() {
-        mostrarCargando(false);
-        Repositorio.get().entrar(texto(identificador));
-        NavHostFragment.findNavController(this).navigate(R.id.inicioFragment, null,
-                new NavOptions.Builder().setPopUpTo(R.id.bienvenidaFragment, true).build());
+    private void mostrarFalla(Cuenta.Falla falla) {
+        switch (falla) {
+            case CANCELADO:
+                // Cerró el selector de Google: no hay nada que decirle
+                break;
+            case CREDENCIALES:
+                mostrarError();
+                break;
+            case SIN_INTERNET:
+                mostrarError(R.string.error_login_sin_internet_titulo,
+                        R.string.error_login_sin_internet, false);
+                break;
+            case MUCHOS_INTENTOS:
+                mostrarError(R.string.error_muchos_intentos_titulo,
+                        R.string.error_muchos_intentos, false);
+                break;
+            case SIN_CUENTA_GOOGLE:
+                mostrarError(R.string.error_login_titulo, R.string.error_google_sin_cuenta, false);
+                break;
+            default:
+                mostrarError(R.string.error_login_titulo, R.string.error_algo_fallo, false);
+                break;
+        }
     }
 
     // ===== Estados =====
@@ -148,22 +166,23 @@ public class EntrarFragment extends Fragment {
     }
 
     /** 25 Error al entrar: mensaje único y el campo de contraseña en rojo (RF-06). */
-    public void mostrarError() {
+    private void mostrarError() {
         mostrarError(R.string.entrar_error_credenciales,
-                R.string.entrar_error_credenciales_detalle);
+                R.string.entrar_error_credenciales_detalle, true);
     }
 
-    public void mostrarError(@StringRes int titulo, @StringRes int detalle) {
-        mostrarCargando(false);
-
+    /** Si no es la contraseña (sin internet, Google…), el campo no se pone en rojo. */
+    private void mostrarError(@StringRes int titulo, @StringRes int detalle, boolean esLaClave) {
         TextView comoSeLlama = bloqueError.findViewById(R.id.errorTitulo);
         TextView queDice = bloqueError.findViewById(R.id.errorDetalle);
         comoSeLlama.setText(titulo);
         queDice.setText(detalle);
 
         bloqueError.setVisibility(View.VISIBLE);
-        campoContrasena.setError(" ");
-        contrasena.requestFocus();
+        if (esLaClave) {
+            campoContrasena.setError(" ");
+            contrasena.requestFocus();
+        }
         bloqueError.announceForAccessibility(getString(titulo) + ". " + getString(detalle));
     }
 

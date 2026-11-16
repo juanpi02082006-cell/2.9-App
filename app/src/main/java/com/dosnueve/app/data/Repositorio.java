@@ -63,7 +63,6 @@ public final class Repositorio {
     private String nombre = "";
     private String correo = "";
     private String universidad = "";
-    private boolean sesionIniciada;
     private boolean recordarNotas;
     private boolean avisarRiesgo;
     private LocalDate inicioSemestre;
@@ -119,29 +118,13 @@ public final class Repositorio {
         return universidad;
     }
 
-    public boolean haySesion() {
-        return sesionIniciada;
-    }
-
-    /** Crear cuenta: se guardan el nombre y el correo; la sesión empieza en ¿Dónde estudias? */
+    /**
+     * Nombre y correo de la cuenta, que vienen de Firebase al entrar (ver {@link Cuenta}).
+     * La sesión ya no se guarda aquí: la lleva Firebase Auth.
+     */
     public void guardarCuenta(String suNombre, String suCorreo) {
         nombre = suNombre.trim();
         correo = suCorreo.trim();
-        guardarYAvisar();
-    }
-
-    /**
-     * Entrar con correo o usuario. Lo que se escribió se guarda como correo si lleva
-     * arroba; si no, como nombre, para tener cómo saludar.
-     */
-    public void entrar(String quien) {
-        String limpio = quien == null ? "" : quien.trim();
-        if (limpio.contains("@")) {
-            correo = limpio;
-        } else if (!limpio.isEmpty() && nombre.isEmpty()) {
-            nombre = limpio;
-        }
-        sesionIniciada = true;
         guardarYAvisar();
     }
 
@@ -150,19 +133,11 @@ public final class Repositorio {
         universidad = suNombre;
         formaDeCalificar = formaPorDefecto(cortes);
         notaParaPasar = paraPasar;
-        sesionIniciada = true;
         guardarYAvisar();
     }
 
     /** ¿Dónde estudias? → Saltar por ahora: queda la forma de calificar que haya. */
     public void empezarSinUniversidad() {
-        sesionIniciada = true;
-        guardarYAvisar();
-    }
-
-    /** Las materias y notas se quedan en el celular: solo se cierra la sesión. */
-    public void cerrarSesion() {
-        sesionIniciada = false;
         guardarYAvisar();
     }
 
@@ -528,7 +503,6 @@ public final class Repositorio {
         cuenta.put("nombre", nombre);
         cuenta.put("correo", correo);
         cuenta.put("universidad", universidad);
-        cuenta.put("sesionIniciada", sesionIniciada);
         cuenta.put("recordarNotas", recordarNotas);
         cuenta.put("avisarRiesgo", avisarRiesgo);
         raiz.put("cuenta", cuenta);
@@ -576,7 +550,6 @@ public final class Repositorio {
             nombre = cuenta.optString("nombre", "");
             correo = cuenta.optString("correo", "");
             universidad = cuenta.optString("universidad", "");
-            sesionIniciada = cuenta.optBoolean("sesionIniciada", false);
             recordarNotas = cuenta.optBoolean("recordarNotas", false);
             avisarRiesgo = cuenta.optBoolean("avisarRiesgo", false);
         }

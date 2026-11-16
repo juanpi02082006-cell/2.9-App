@@ -66,4 +66,17 @@ public final class Validaciones {
         }
         return limpio;
     }
+
+    /**
+     * Si el usuario sugerido ya está tomado se le pone un número: juanma, juanma2,
+     * juanma3… Se recorta lo necesario para no pasar de 20 caracteres.
+     */
+    public static String usuarioConNumero(String base, int intento) {
+        if (intento <= 1) {
+            return base;
+        }
+        String numero = String.valueOf(intento);
+        int cabe = 20 - numero.length();
+        return (base.length() > cabe ? base.substring(0, cabe) : base) + numero;
+    }
 }

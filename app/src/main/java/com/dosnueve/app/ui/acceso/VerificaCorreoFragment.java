@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.dosnueve.app.R;
+import com.dosnueve.app.data.Cuenta;
 import com.google.android.material.button.MaterialButton;
 
 /**
@@ -57,20 +58,41 @@ public class VerificaCorreoFragment extends Fragment {
     private void revisarSiYaConfirmo() {
         aviso.setVisibility(View.GONE);
         mostrarCargando(true);
-
-        // Fase 2: usuario.reload() y luego isEmailVerified().
-        // Si ya está → irA(06); si no → mostrarAviso(verifica_sin_confirmar)
-        botonConfirme.postDelayed(() -> {
-            if (isAdded()) {
-                mostrarCargando(false);
-                NavHostFragment.findNavController(this).navigate(R.id.universidadFragment);
+        Cuenta.yaConfirmoElCorreo().addOnCompleteListener(revision -> {
+            if (!isAdded()) {
+                return;
             }
-        }, 500L);
+            mostrarCargando(false);
+            if (!revision.isSuccessful()) {
+                mostrarAviso(mensajeDeFalla(revision.getException()));
+            } else if (Boolean.TRUE.equals(revision.getResult())) {
+                NavHostFragment.findNavController(this).navigate(R.id.universidadFragment);
+            } else {
+                mostrarAviso(R.string.verifica_sin_confirmar);
+            }
+        });
     }
 
     private void reenviar() {
-        // Fase 2: usuario.sendEmailVerification()
-        mostrarAviso(R.string.verifica_reenviado);
+        Cuenta.reenviarVerificacion().addOnCompleteListener(envio -> {
+            if (isAdded()) {
+                mostrarAviso(envio.isSuccessful()
+                        ? R.string.verifica_reenviado
+                        : mensajeDeFalla(envio.getException()));
+            }
+        });
+    }
+
+    @StringRes
+    private int mensajeDeFalla(@Nullable Exception error) {
+        switch (Cuenta.queFallo(error)) {
+            case SIN_INTERNET:
+                return R.string.error_sin_internet_corto;
+            case MUCHOS_INTENTOS:
+                return R.string.error_muchos_intentos;
+            default:
+                return R.string.error_algo_fallo;
+        }
     }
 
     private void mostrarAviso(@StringRes int mensaje) {

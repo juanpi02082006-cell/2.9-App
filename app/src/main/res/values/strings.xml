@@ -62,6 +62,7 @@
     <string name="crear_error_usuario_ocupado">Ese usuario ya está ocupado</string>
     <string name="crear_error_correo">Ese correo no se ve bien</string>
     <string name="crear_error_contrasena">La contraseña necesita 8 caracteres o más</string>
+    <string name="crear_error_correo_ocupado">Ese correo ya tiene cuenta</string>
 
     <!-- ===== 04 Verifica tu correo ===== -->
     <string name="verifica_titulo">Revisa tu correo</string>
@@ -96,6 +97,11 @@
     <string name="error_login_cancelado">No alcanzaste a escoger la cuenta. Cuando quieras, le damos otra vez.</string>
     <string name="error_login_sin_internet_titulo">Sin internet</string>
     <string name="error_login_sin_internet">Necesitas conexión solo para entrar. Después la app funciona sin datos.</string>
+    <string name="error_muchos_intentos_titulo">Demasiados intentos</string>
+    <string name="error_muchos_intentos">Espera un momento y vuelve a intentarlo.</string>
+    <string name="error_google_sin_cuenta">No hay una cuenta de Google en este celular.</string>
+    <string name="error_algo_fallo">Algo falló. Intenta de nuevo.</string>
+    <string name="error_sin_internet_corto">Sin internet. Revisa tu conexión.</string>
 
     <!-- ===== 02 ¿Dónde estudias? ===== -->
     <string name="universidad_saludo">Hola, %1$s</string>

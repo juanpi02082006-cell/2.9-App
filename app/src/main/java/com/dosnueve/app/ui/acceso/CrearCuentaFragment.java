@@ -9,13 +9,15 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.dosnueve.app.R;
-import com.dosnueve.app.data.Repositorio;
+import com.dosnueve.app.data.Cuenta;
 import com.dosnueve.app.util.Validaciones;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -100,17 +102,52 @@ public class CrearCuentaFragment extends Fragment {
             return;
         }
         mostrarCargando(true);
+        Cuenta.crearCuenta(texto(nombre), texto(usuario), texto(correo), texto(contrasena))
+                .addOnCompleteListener(creada -> {
+                    if (!isAdded()) {
+                        return;
+                    }
+                    mostrarCargando(false);
+                    if (creada.isSuccessful()) {
+                        irAVerificar();
+                    } else {
+                        mostrarFalla(Cuenta.queFallo(creada.getException()));
+                    }
+                });
+    }
 
-        // Fase 2 (doc 06 · 4):
-        //  1. revisar que usernames/{usuario} no exista → si existe, usuarioOcupado()
-        //  2. createUserWithEmailAndPassword
-        //  3. WriteBatch: usernames/{usuario} + usuarios/{uid} con proveedor "correo"
-        //  4. sendEmailVerification() → pantalla 04
-        botonCrear.postDelayed(() -> {
-            if (isAdded()) {
-                irAVerificar();
-            }
-        }, 500L);
+    private void mostrarFalla(Cuenta.Falla falla) {
+        switch (falla) {
+            case CANCELADO:
+                break;
+            case USUARIO_OCUPADO:
+                usuarioOcupado();
+                break;
+            case CORREO_OCUPADO:
+                campoCorreo.setError(getString(R.string.crear_error_correo_ocupado));
+                correo.requestFocus();
+                break;
+            case CREDENCIALES:
+                campoCorreo.setError(getString(R.string.crear_error_correo));
+                correo.requestFocus();
+                break;
+            case SIN_INTERNET:
+                avisar(R.string.error_sin_internet_corto);
+                break;
+            case MUCHOS_INTENTOS:
+                avisar(R.string.error_muchos_intentos);
+                break;
+            case SIN_CUENTA_GOOGLE:
+                avisar(R.string.error_google_sin_cuenta);
+                break;
+            default:
+                avisar(R.string.error_algo_fallo);
+                break;
+        }
+    }
+
+    private void avisar(@StringRes int mensaje) {
+        Snackbar.make(requireView(), mensaje, Snackbar.LENGTH_LONG).show();
     }
 
     /** Valida los cuatro campos y marca todos los que fallen, no solo el primero. */
@@ -136,29 +173,28 @@ public class CrearCuentaFragment extends Fragment {
         return bien;
     }
 
-    /** Lo llama el repositorio cuando el usuario ya está tomado. */
-    public void usuarioOcupado() {
-        mostrarCargando(false);
+    private void usuarioOcupado() {
         campoUsuario.setError(getString(R.string.crear_error_usuario_ocupado));
-        campoUsuario.requestFocus();
+        usuario.requestFocus();
     }
 
+    /** Igual que en 02: si la cuenta es nueva, el usuario sale del correo (juanma, juanma2…). */
     private void registrarseConGoogle() {
         mostrarCargando(true);
-
-        // Fase 2: igual que en 02, pero si la cuenta es nueva se le sugiere un
-        // usuario a partir del correo (Validaciones.usuarioSugerido)
-        botonCrear.postDelayed(() -> {
-            if (isAdded()) {
-                NavHostFragment.findNavController(this).navigate(R.id.universidadFragment);
+        Cuenta.entrarConGoogle(requireActivity()).addOnCompleteListener(entrada -> {
+            if (!isAdded()) {
+                return;
             }
-        }, 450L);
+            mostrarCargando(false);
+            if (entrada.isSuccessful()) {
+                Llegada.ir(this, entrada.getResult());
+            } else {
+                mostrarFalla(Cuenta.queFallo(entrada.getException()));
+            }
+        });
     }
 
     private void irAVerificar() {
-        mostrarCargando(false);
-        // Fase 2: esto lo guardará Firebase; por ahora queda en el celular
-        Repositorio.get().guardarCuenta(texto(nombre), texto(correo));
         Bundle argumentos = new Bundle();
         argumentos.putString("correo", texto(correo));
         NavHostFragment.findNavController(this)

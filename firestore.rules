@@ -1,0 +1,33 @@
+rules_version = '2';
+
+// Reglas de 2.9 (doc 05 · 6). Se pegan en la consola de Firebase:
+// Firestore Database → Reglas → Publicar.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // usuario → correo, para poder entrar con el usuario.
+    // Se puede leer UNO (hace falta antes de entrar), nunca listarlos todos.
+    // Crear sobre uno que ya existe cuenta como "update" y se niega: así el usuario es único.
+    match /usernames/{usuario} {
+      allow get: if true;
+      allow list: if false;
+      allow create: if request.auth != null
+        && usuario.matches('^[a-z0-9_]{3,20}$')
+        && request.resource.data.uid == request.auth.uid;
+      allow update: if false;
+      allow delete: if request.auth != null && resource.data.uid == request.auth.uid;
+    }
+
+    // Todo lo de cada persona (perfil, semestres, materias, notas) vive bajo su uid
+    // y solo ella lo puede leer o escribir.
+    match /usuarios/{uid}/{documento=**} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Universidades: solo lectura, se cargan desde la consola.
+    match /universidades/{id} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}
