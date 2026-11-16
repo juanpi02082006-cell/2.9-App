@@ -21,9 +21,12 @@ public class UniversidadAdapter extends RecyclerView.Adapter<UniversidadAdapter.
         void alEscoger(Universidad universidad);
     }
 
+    private static final long NINGUNA = -1;
+
     private final List<Universidad> universidades = new ArrayList<>();
     private final AlEscoger alEscoger;
-    private int escogida = RecyclerView.NO_POSITION;
+    /** Por id y no por posición: la escogida sigue marcada aunque se cambie la búsqueda. */
+    private long escogida = NINGUNA;
 
     public UniversidadAdapter(AlEscoger alEscoger) {
         this.alEscoger = alEscoger;
@@ -32,8 +35,16 @@ public class UniversidadAdapter extends RecyclerView.Adapter<UniversidadAdapter.
     public void mostrar(List<Universidad> nuevas) {
         universidades.clear();
         universidades.addAll(nuevas);
-        escogida = RecyclerView.NO_POSITION;
         notifyDataSetChanged();
+    }
+
+    private int posicionDe(long id) {
+        for (int i = 0; i < universidades.size(); i++) {
+            if (universidades.get(i).id == id) {
+                return i;
+            }
+        }
+        return RecyclerView.NO_POSITION;
     }
 
     @NonNull
@@ -47,14 +58,14 @@ public class UniversidadAdapter extends RecyclerView.Adapter<UniversidadAdapter.
     @Override
     public void onBindViewHolder(@NonNull FilaVista vista, int posicion) {
         Universidad universidad = universidades.get(posicion);
-        vista.pintar(universidad, posicion == escogida, posicion == universidades.size() - 1);
+        vista.pintar(universidad, universidad.id == escogida, posicion == universidades.size() - 1);
         vista.itemView.setOnClickListener(v -> {
-            int anterior = escogida;
-            escogida = vista.getBindingAdapterPosition();
+            int anterior = posicionDe(escogida);
+            escogida = universidad.id;
             if (anterior != RecyclerView.NO_POSITION) {
                 notifyItemChanged(anterior);
             }
-            notifyItemChanged(escogida);
+            notifyItemChanged(vista.getBindingAdapterPosition());
             alEscoger.alEscoger(universidad);
         });
     }
@@ -81,7 +92,7 @@ public class UniversidadAdapter extends RecyclerView.Adapter<UniversidadAdapter.
 
         void pintar(Universidad universidad, boolean escogida, boolean esLaUltima) {
             nombre.setText(universidad.nombre);
-            formaCalificar.setText(universidad.formaCalificar);
+            formaCalificar.setText(universidad.detalle);
             radio.setChecked(escogida);
             divisor.setVisibility(esLaUltima ? View.GONE : View.VISIBLE);
         }

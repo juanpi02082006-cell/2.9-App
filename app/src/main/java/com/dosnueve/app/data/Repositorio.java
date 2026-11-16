@@ -223,12 +223,16 @@ public final class Repositorio {
         avisar();
     }
 
-    /** ¿Dónde estudias? → Listo: su forma de calificar pasa a ser la plantilla (RF-03). */
-    public void elegirUniversidad(String suNombre, double[] cortes, double paraPasar) {
+    /**
+     * ¿Dónde estudias? → Listo: su forma de calificar pasa a ser la plantilla (RF-03).
+     * Se guarda el código SNIES y también el nombre, para mostrarlo sin buscarlo.
+     */
+    public void elegirUniversidad(String id, String suNombre, double[] cortes, double paraPasar) {
         universidad = suNombre;
         formaDeCalificar = formaPorDefecto(cortes);
         notaParaPasar = paraPasar;
         Map<String, Object> cambio = new HashMap<>();
+        cambio.put("universidadId", id);
         cambio.put("universidad", suNombre);
         cambio.put("plantilla", plantillaAMapa(formaDeCalificar, notaParaPasar));
         escribirPerfil(cambio);

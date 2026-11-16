@@ -5,6 +5,41 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    function esDueno(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    function notaDe0a5(valor) {
+      return valor is number && valor >= 0 && valor <= 5;
+    }
+
+    // El usuario no se cambia aquí: está apartado en usernames
+    function perfilValido(d) {
+      return d.nombre is string
+        && d.get('recordarNotas', false) is bool
+        && d.get('alertaRiesgo', false) is bool
+        && (!('plantilla' in d) || notaDe0a5(d.plantilla.notaParaPasar))
+        && (resource == null || d.username == resource.data.username);
+    }
+
+    // Créditos de 1 a 10; nota para pasar y nota final (semestres anteriores) de 0 a 5
+    function materiaValida(d) {
+      return d.nombre is string && d.nombre.size() > 0
+        && d.creditos is int && d.creditos >= 1 && d.creditos <= 10
+        && notaDe0a5(d.notaParaPasar)
+        && (d.get('notaFinal', null) == null || notaDe0a5(d.notaFinal))
+        && d.cortes is list && d.cortes.size() <= 10;
+    }
+
+    // Nota de 0 a 5; el peso ("Con porcentajes") es un % del corte, de 0 a 100
+    function notaValida(d) {
+      return notaDe0a5(d.valor)
+        && d.corte is int && d.corte >= 1 && d.corte <= 10
+        && d.componenteId is string
+        && (d.get('peso', null) == null
+            || (d.peso is number && d.peso >= 0 && d.peso <= 100));
+    }
+
     // usuario → correo, para poder entrar con el usuario.
     // Se puede leer UNO (hace falta antes de entrar), nunca listarlos todos.
     // Crear sobre uno que ya existe cuenta como "update" y se niega: así el usuario es único.
@@ -18,16 +53,26 @@ service cloud.firestore {
       allow delete: if request.auth != null && resource.data.uid == request.auth.uid;
     }
 
-    // Todo lo de cada persona (perfil, semestres, materias, notas) vive bajo su uid
-    // y solo ella lo puede leer o escribir.
-    match /usuarios/{uid}/{documento=**} {
-      allow read, write: if request.auth != null && request.auth.uid == uid;
-    }
+    // Todo lo de cada persona vive bajo su uid y solo ella lo puede leer o escribir
+    match /usuarios/{uid} {
+      allow read, delete: if esDueno(uid);
+      allow create, update: if esDueno(uid) && perfilValido(request.resource.data);
 
-    // Universidades: solo lectura, se cargan desde la consola.
-    match /universidades/{id} {
-      allow read: if true;
-      allow write: if false;
+      match /semestres/{semestre} {
+        allow read, delete: if esDueno(uid);
+        allow create, update: if esDueno(uid)
+          && request.resource.data.estado in ['en_curso', 'terminado'];
+
+        match /materias/{materia} {
+          allow read, delete: if esDueno(uid);
+          allow create, update: if esDueno(uid) && materiaValida(request.resource.data);
+
+          match /notas/{nota} {
+            allow read, delete: if esDueno(uid);
+            allow create, update: if esDueno(uid) && notaValida(request.resource.data);
+          }
+        }
+      }
     }
   }
 }

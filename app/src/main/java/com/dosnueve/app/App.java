@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.dosnueve.app.data.Conexion;
 import com.dosnueve.app.data.Cuenta;
 import com.dosnueve.app.data.Repositorio;
 
@@ -23,5 +24,6 @@ public class App extends Application {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         Repositorio.iniciar(this);
         Cuenta.iniciar();
+        Conexion.iniciar(this);
     }
 }

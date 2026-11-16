@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dosnueve.app.R;
+import com.dosnueve.app.data.Conexion;
 import com.dosnueve.app.data.Repositorio;
 import com.dosnueve.app.data.modelo.Materia;
 import com.dosnueve.app.data.modelo.Nota;
@@ -54,6 +55,11 @@ public class InicioFragment extends Fragment {
                 .setOnClickListener(v -> irANuevaMateria());
 
         Repositorio.get().cambios().observe(getViewLifecycleOwner(), cambio -> mostrar(vista, filas()));
+
+        // Aparece al quedarse sin Internet y se va sola cuando vuelve
+        View sinConexion = vista.findViewById(R.id.avisoSinConexion);
+        Conexion.hayInternet().observe(getViewLifecycleOwner(), hay ->
+                sinConexion.setVisibility(Boolean.FALSE.equals(hay) ? View.VISIBLE : View.GONE));
     }
 
     private void mostrar(View vista, List<FilaPlanilla> filas) {

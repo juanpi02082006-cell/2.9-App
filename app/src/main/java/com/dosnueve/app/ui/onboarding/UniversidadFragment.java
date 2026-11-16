@@ -1,6 +1,8 @@
 package com.dosnueve.app.ui.onboarding;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dosnueve.app.R;
 import com.dosnueve.app.data.Repositorio;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +27,8 @@ import java.util.List;
 /**
  * 02 ¿Dónde estudias? (doc 03, RF-03).
  *
- * <p>Selección única de universidad. Se puede saltar o configurar la forma de
- * calificar a mano (pantalla 07). La lista real llegará de {@code GET /universidades}.
+ * <p>Selección única entre las instituciones del SNIES ({@link Universidad#todas}), con
+ * buscador. Se puede saltar o configurar la forma de calificar a mano (pantalla 07).
  */
 public class UniversidadFragment extends Fragment {
 
@@ -51,7 +54,32 @@ public class UniversidadFragment extends Fragment {
         RecyclerView lista = vista.findViewById(R.id.listaUniversidades);
         lista.setLayoutManager(new LinearLayoutManager(requireContext()));
         lista.setAdapter(adaptador);
-        adaptador.mostrar(universidades());
+        List<Universidad> todas = Universidad.todas(requireContext());
+        adaptador.mostrar(todas);
+
+        // Filtra mientras se escribe; sin tildes ni mayúsculas ("bogota" encuentra Bogotá)
+        TextInputEditText buscar = vista.findViewById(R.id.buscar);
+        buscar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence t, int i, int c, int d) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence t, int i, int a, int c) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable texto) {
+                List<Universidad> encontradas = new ArrayList<>();
+                for (Universidad universidad : todas) {
+                    if (universidad.coincide(texto.toString())) {
+                        encontradas.add(universidad);
+                    }
+                }
+                adaptador.mostrar(encontradas);
+                lista.scrollToPosition(0);
+            }
+        });
 
         // Se saluda con el nombre de la cuenta; si todavía no hay, sin saludo
         TextView saludo = vista.findViewById(R.id.saludo);
@@ -62,7 +90,8 @@ public class UniversidadFragment extends Fragment {
         botonListo.setOnClickListener(v -> {
             if (elegida != null) {
                 // Su forma de calificar pasa a ser la plantilla de las materias nuevas
-                Repositorio.get().elegirUniversidad(elegida.nombre, elegida.cortes, elegida.notaParaPasar);
+                Repositorio.get().elegirUniversidad(String.valueOf(elegida.id), elegida.nombre,
+                        elegida.cortes, elegida.notaParaPasar);
             }
             irAlInicio();
         });
@@ -85,16 +114,5 @@ public class UniversidadFragment extends Fragment {
                 .build();
         NavHostFragment.findNavController(this)
                 .navigate(R.id.inicioFragment, null, sinVolverAlLogin);
-    }
-
-    /** Mientras no exista {@code GET /universidades}, la lista va aquí. */
-    private List<Universidad> universidades() {
-        List<Universidad> universidades = new ArrayList<>();
-        universidades.add(new Universidad(1, "Universidad de Antioquia", new double[]{33, 33, 34}, 3.0));
-        universidades.add(new Universidad(2, "Universidad Nacional de Colombia", new double[]{30, 30, 40}, 3.0));
-        universidades.add(new Universidad(3, "Universidad de los Andes", new double[]{30, 30, 40}, 3.0));
-        universidades.add(new Universidad(4, "Universidad Pontificia Bolivariana", new double[]{33, 33, 34}, 3.0));
-        universidades.add(new Universidad(5, "Universidad EAFIT", new double[]{50, 50}, 3.0));
-        return universidades;
     }
 }
