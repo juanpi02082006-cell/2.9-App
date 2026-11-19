@@ -336,6 +336,79 @@
     <string name="avatar_idea">Bombillo</string>
     <string name="avatar_musica">Música</string>
 
+    <!--
+      ===== Momentos: al cerrar un corte o el semestre =====
+      Cortes: %1$s nombre · %2$s materia · %3$s nota del corte · %4$d número del corte ·
+      %5$s lo que necesita en lo que falta. Los que usan %1$s se saltan si no hay nombre.
+    -->
+    <string name="momento_etiqueta_corte">Corte %1$d · %2$s</string>
+    <string name="momento_etiqueta_semestre">Semestre %1$s</string>
+    <string name="momento_aprobadas">%1$d de %2$d materias aprobadas</string>
+    <string name="momento_mejor">Tu mejor materia: %1$s · %2$s</string>
+    <string name="momento_plan_llevas">Llevas %1$s en la materia</string>
+    <string name="momento_plan_necesitas">Necesitas %1$s en lo que falta</string>
+    <string name="momento_plan_definitiva">Definitiva %1$s</string>
+    <string name="momento_seguir">Seguir</string>
+    <string name="momento_sello_de_lujo">DE LUJO</string>
+    <string name="momento_sello_aprobado">APROBADO</string>
+    <string name="momento_sello_paso">PASÓ</string>
+    <string name="momento_sello_se_viene">SE VIENE</string>
+    <string name="momento_sello_la_sacaste">LA SACASTE</string>
+    <string name="momento_sello_otra_vuelta">OTRA VUELTA</string>
+    <string name="momento_sello_cerrado">CERRADO</string>
+
+    <string-array name="momento_de_lujo">
+        <item>%3$s en %2$s. Eso no es una nota, es un mensaje para el profe.</item>
+        <item>%1$s, con ese %3$s ya puedes dar la clase.</item>
+        <item>Corte %4$d con %3$s. Que lo enmarquen y lo cuelguen en la sala.</item>
+        <item>%3$s. El profe va a revisar dos veces para creérselo.</item>
+    </string-array>
+    <string-array name="momento_muy_bien">
+        <item>Corte %4$d cerrado con %3$s. Así sí da gusto revisar notas.</item>
+        <item>%3$s en %2$s. Ese corte quedó bien parado.</item>
+        <item>%1$s, ese %3$s no es suerte: es todo lo que estudiaste.</item>
+        <item>Con %3$s, %2$s ya te está pidiendo cacao.</item>
+    </string-array>
+    <string-array name="momento_bien">
+        <item>%3$s: pasaste con margen y sin sustos.</item>
+        <item>Corte %4$d adentro. %2$s sigue en tus manos.</item>
+        <item>%3$s y a lo que sigue. Paso firme, %1$s.</item>
+    </string-array>
+    <string-array name="momento_raspando">
+        <item>%3$s. Raspando, pero raspando también se pasa.</item>
+        <item>El %3$s no pregunta cómo llegaste. Corte %4$d, adentro.</item>
+        <item>Pasaste por un pelito. El próximo corte lo pasas sobrado.</item>
+    </string-array>
+    <string-array name="momento_no_paso">
+        <item>Este corte dolió, pero no decide la materia: con %5$s en lo que falta, pasas.</item>
+        <item>%3$s no te define, %1$s. Todavía cabe un %5$s y la sacas.</item>
+        <item>Un corte malo es un dato, no un destino. Vamos por ese %5$s.</item>
+        <item>Respira. %2$s todavía se puede: %5$s en lo que falta y listo.</item>
+    </string-array>
+    <string-array name="momento_la_sacaste">
+        <item>Este corte no salió, pero la materia sí. %2$s, adentro.</item>
+        <item>Perdiste la batalla y ganaste la guerra: %2$s aprobada.</item>
+    </string-array>
+    <string-array name="momento_ya_no_alcanza">
+        <item>%2$s se complicó. Lo que aprendiste no se pierde: el próximo semestre llegas con ventaja.</item>
+        <item>Esta no salió, %1$s. Las que vas pasando también cuentan: vamos por ellas.</item>
+        <item>Perder una materia no es perder el semestre. Lo que viene, lo sacas.</item>
+    </string-array>
+
+    <!-- Semestre: %1$s nombre · %2$s promedio · %3$d semanas · %4$d aprobadas · %5$d materias -->
+    <string-array name="momento_semestre_excelente">
+        <item>%3$d semanas, %5$d materias y un %2$s. Este semestre es tuyo.</item>
+        <item>%1$s, cerraste con %2$s. Date el gusto: te lo ganaste.</item>
+    </string-array>
+    <string-array name="momento_semestre_todo_adentro">
+        <item>%4$d de %5$d. No faltó ninguna. Descansa, que te lo ganaste.</item>
+        <item>Semestre cerrado y todo adentro. %3$d semanas que valieron la pena.</item>
+    </string-array>
+    <string-array name="momento_semestre_con_perdidas">
+        <item>Pasaste %4$d de %5$d. Lo que no salió también enseña: el próximo arranca contigo más fuerte.</item>
+        <item>%1$s, este semestre te probó y aquí sigues. Eso también es ganar.</item>
+    </string-array>
+
     <!-- ===== Notificaciones (RF-31 y RF-32) ===== -->
     <string name="aviso_canal_recordatorio">Recordatorio semanal</string>
     <string name="aviso_canal_riesgo">Materias en rojo</string>

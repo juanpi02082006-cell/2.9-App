@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.dosnueve.app.avisos.Avisos;
+import com.dosnueve.app.avisos.VigiaDeMomentos;
 import com.dosnueve.app.avisos.VigiaDeRiesgo;
 import com.dosnueve.app.data.modelo.Componente;
 import com.dosnueve.app.data.modelo.Corte;
@@ -16,6 +17,7 @@ import com.dosnueve.app.data.modelo.Materia;
 import com.dosnueve.app.data.modelo.Nota;
 import com.dosnueve.app.data.modelo.Semestre;
 import com.dosnueve.app.domain.CalculadoraNotas;
+import com.dosnueve.app.domain.Momento;
 import androidx.work.ExistingWorkPolicy;
 
 import com.google.android.gms.tasks.Task;
@@ -35,6 +37,7 @@ import com.google.firebase.firestore.WriteBatch;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -81,6 +84,9 @@ public final class Repositorio {
     private static Repositorio instancia;
 
     private final MutableLiveData<Integer> cambios = new MutableLiveData<>(0);
+    private final MutableLiveData<Integer> hayMomentos = new MutableLiveData<>(0);
+    /** Cortes y semestres cerrados que todavía no se han celebrado en pantalla. */
+    private final ArrayDeque<Momento> momentos = new ArrayDeque<>();
     /** De la aplicación, para los avisos (RF-31 y RF-32). */
     private final Context contexto;
 
@@ -224,6 +230,7 @@ public final class Repositorio {
         notas.clear();
         anteriores.clear();
         notasCargadas.clear();
+        momentos.clear();
         perfilCargado = false;
         recordatorioEncendido = null;
     }
@@ -926,11 +933,33 @@ public final class Repositorio {
         revisarRiesgo();
     }
 
-    /** RF-32: ¿alguna materia acaba de entrar en rojo? */
+    /**
+     * RF-32: ¿alguna materia acaba de entrar en rojo? Y de paso: ¿se cerró un corte o el
+     * semestre? Eso se celebra con un momento (ver {@link #tomarMomento()}).
+     */
     private void revisarRiesgo() {
-        if (uid != null && perfilCargado) {
-            VigiaDeRiesgo.revisar(contexto, uid, materias, notas, notasCargadas, avisarRiesgo);
+        if (uid == null || !perfilCargado) {
+            return;
         }
+        VigiaDeRiesgo.revisar(contexto, uid, materias, notas, notasCargadas, avisarRiesgo);
+        List<Momento> nuevos = VigiaDeMomentos.revisar(contexto, uid, periodoActual(),
+                semanasTotales(), materias, notas, notasCargadas);
+        if (!nuevos.isEmpty()) {
+            momentos.addAll(nuevos);
+            Integer cuantos = hayMomentos.getValue();
+            hayMomentos.setValue(cuantos == null ? 1 : cuantos + 1);
+        }
+    }
+
+    /** Cambia cuando hay algo que celebrar. La Activity lo observa. */
+    public LiveData<Integer> hayMomentos() {
+        return hayMomentos;
+    }
+
+    /** El siguiente momento por mostrar, o {@code null} si no hay. */
+    @Nullable
+    public Momento tomarMomento() {
+        return momentos.poll();
     }
 
     // ===== Escribir en Firestore =====

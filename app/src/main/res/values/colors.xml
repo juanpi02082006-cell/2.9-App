@@ -47,6 +47,8 @@
     <color name="aprobado_suave">#CFEFDB</color>
     <!-- Verde menta: relleno de "Te falta" (lo que todavía se puede lograr). Solo relleno -->
     <color name="verde_menta">#7FD8A8</color>
+    <!-- Solo para el sello y el confeti de los momentos de lujo (4.5 o más) -->
+    <color name="dorado">#D9A21B</color>
 
     <!-- En riesgo: va por debajo, pero todavía alcanza (RN-07) -->
     <color name="riesgo">#B3263A</color>

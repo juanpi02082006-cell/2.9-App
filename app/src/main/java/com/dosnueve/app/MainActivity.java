@@ -15,6 +15,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
@@ -23,7 +24,9 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.dosnueve.app.data.Cuenta;
 import com.dosnueve.app.data.Repositorio;
+import com.dosnueve.app.domain.Momento;
 import com.dosnueve.app.ui.acciones.AccionesBottomSheet;
+import com.dosnueve.app.ui.momento.MomentoDialog;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Arrays;
@@ -108,6 +111,39 @@ public class MainActivity extends AppCompatActivity {
                     .setPopUpTo(R.id.bienvenidaFragment, true)
                     .build());
             abrirDesdeAviso(getIntent());
+        }
+
+        // Se cerró un corte o el semestre: a celebrarlo
+        Repositorio.get().hayMomentos().observe(this, cuantos -> mostrarMomentoLuego());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Por si quedó alguno en fila mientras la app estaba atrás
+        mostrarMomentoLuego();
+    }
+
+    private final Runnable mostrarMomento = this::mostrarSiguienteMomento;
+
+    /**
+     * Un momento después: deja que se cierre la pantalla de la nota y salga el aviso de
+     * "Nota guardada" antes de la celebración.
+     */
+    public void mostrarMomentoLuego() {
+        barraNavegacion.removeCallbacks(mostrarMomento);
+        barraNavegacion.postDelayed(mostrarMomento, 700);
+    }
+
+    private void mostrarSiguienteMomento() {
+        FragmentManager fragmentos = getSupportFragmentManager();
+        if (isFinishing() || fragmentos.isStateSaved()
+                || fragmentos.findFragmentByTag(MomentoDialog.ETIQUETA) != null) {
+            return;
+        }
+        Momento momento = Repositorio.get().tomarMomento();
+        if (momento != null) {
+            MomentoDialog.de(momento).show(fragmentos, MomentoDialog.ETIQUETA);
         }
     }
 
