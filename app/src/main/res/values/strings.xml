@@ -319,6 +319,14 @@
     <string name="perfil_recordar_notas">Recordarme registrar notas</string>
     <string name="perfil_recordar_notas_detalle">Una vez a la semana</string>
     <string name="perfil_alerta_riesgo">Avisarme si una materia entra en rojo</string>
+    <string name="perfil_sin_permiso">Activa las notificaciones de 2.9 en Ajustes</string>
+
+    <!-- ===== Notificaciones (RF-31 y RF-32) ===== -->
+    <string name="aviso_canal_recordatorio">Recordatorio semanal</string>
+    <string name="aviso_canal_riesgo">Materias en rojo</string>
+    <string name="aviso_recordatorio_titulo">¿Ya registraste tus notas?</string>
+    <string name="aviso_riesgo_titulo">%1$s entró en rojo</string>
+    <string name="aviso_riesgo_detalle">Llevas %1$s, necesitas %2$s</string>
     <string name="perfil_cerrar_sesion">Cerrar sesión</string>
 
     <!-- ===== 13 Editar nota · 14 Borrar nota ===== -->

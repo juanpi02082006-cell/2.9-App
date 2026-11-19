@@ -1,5 +1,6 @@
 package com.dosnueve.app;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
+import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavOptions;
@@ -54,6 +56,14 @@ public class MainActivity extends AppCompatActivity {
             new int[]{R.id.pestanaPerfil, R.id.perfilFragment});
 
     private static final int DURACION_CON_ACCION = 6000;
+
+    /** Qué abrir al tocar una notificación (ver {@link com.dosnueve.app.avisos.Avisos}). */
+    public static final String EXTRA_ABRIR = "abrir";
+    public static final String ABRIR_REGISTRAR = "registrar";
+    public static final String ABRIR_MATERIA = "materia";
+    public static final String EXTRA_MATERIA = "materiaId";
+    /** Si los datos no llegan en este tiempo, se queda en el Inicio. */
+    private static final long ESPERA_MAXIMA = 5000;
 
     private NavController navegacion;
     private View barraNavegacion;
@@ -97,7 +107,45 @@ public class MainActivity extends AppCompatActivity {
             navegacion.navigate(R.id.inicioFragment, null, new NavOptions.Builder()
                     .setPopUpTo(R.id.bienvenidaFragment, true)
                     .build());
+            abrirDesdeAviso(getIntent());
         }
+    }
+
+    /**
+     * Se tocó una notificación: Registrar nota (recordatorio) o la materia que entró en
+     * rojo. La app arrancó de cero, así que se espera a que lleguen las materias de
+     * Firestore: si se navega antes, la pantalla no encuentra la materia y se cierra.
+     */
+    private void abrirDesdeAviso(Intent intento) {
+        String que = intento.getStringExtra(EXTRA_ABRIR);
+        if (que == null) {
+            return;
+        }
+        long materiaId = intento.getLongExtra(EXTRA_MATERIA, 0);
+        Repositorio datos = Repositorio.get();
+
+        Observer<Integer> cuandoLleguen = new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer cambio) {
+                boolean listos = ABRIR_MATERIA.equals(que)
+                        ? datos.materia(String.valueOf(materiaId)) != null
+                        : !datos.materias().isEmpty();
+                if (!listos) {
+                    return;
+                }
+                datos.cambios().removeObserver(this);
+                if (ABRIR_MATERIA.equals(que)) {
+                    Bundle argumentos = new Bundle();
+                    argumentos.putLong(EXTRA_MATERIA, materiaId);
+                    navegacion.navigate(R.id.detalleMateriaFragment, argumentos);
+                } else {
+                    navegacion.navigate(R.id.registrarNotaFragment);
+                }
+            }
+        };
+        datos.cambios().observe(this, cuandoLleguen);
+        // Sin materias (o sin Internet y sin caché) no se abre nada más tarde de sorpresa
+        barraNavegacion.postDelayed(() -> datos.cambios().removeObserver(cuandoLleguen), ESPERA_MAXIMA);
     }
 
     /**

@@ -1,5 +1,8 @@
 package com.dosnueve.app.ui.perfil;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,16 +10,21 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.dosnueve.app.R;
+import com.dosnueve.app.avisos.Avisos;
 import com.dosnueve.app.data.Cuenta;
 import com.dosnueve.app.data.Repositorio;
 import com.google.android.material.materialswitch.MaterialSwitch;
@@ -24,10 +32,31 @@ import com.google.android.material.materialswitch.MaterialSwitch;
 /**
  * 12 Perfil (doc 03, RF-05, RF-28 y RF-29). Exportar a PDF (RF-30) se quitó.
  *
- * <p>Los datos de la cuenta vienen de Google (RF-02). Cerrar sesión devuelve a la
- * pantalla 01 y borra el acceso de Firebase (fase 5).
+ * <p>Los datos de la cuenta vienen de Firebase. Cerrar sesión devuelve a la pantalla 01.
+ * Los interruptores de Avisos encienden las notificaciones (RF-31 y RF-32).
  */
 public class PerfilFragment extends Fragment {
+
+    private MaterialSwitch recordar;
+    private MaterialSwitch riesgo;
+    /** El interruptor que se encendió mientras el celular pregunta por el permiso. */
+    @Nullable
+    private CompoundButton esperandoPermiso;
+
+    /** Desde Android 13 las notificaciones piden permiso; si lo niegan, el interruptor se apaga. */
+    private final ActivityResultLauncher<String> pedirPermiso = registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(), concedido -> {
+                CompoundButton cual = esperandoPermiso;
+                esperandoPermiso = null;
+                if (cual == null || !isAdded()) {
+                    return;
+                }
+                if (concedido && Avisos.puedeNotificar(requireContext())) {
+                    guardarAvisos();
+                } else {
+                    sinPermiso(cual);
+                }
+            });
 
     @Nullable
     @Override
@@ -41,13 +70,27 @@ public class PerfilFragment extends Fragment {
         Repositorio datos = Repositorio.get();
         mostrarCuenta(vista, datos.nombre(), datos.correo(), datos.universidad());
 
-        // Los avisos todavía no se envían (fase 5), pero lo que se escoge queda guardado
-        MaterialSwitch recordar = vista.findViewById(R.id.interruptorRecordar);
-        MaterialSwitch riesgo = vista.findViewById(R.id.interruptorRiesgo);
+        // Recordatorio de los domingos (RF-31) y aviso de materia en rojo (RF-32)
+        recordar = vista.findViewById(R.id.interruptorRecordar);
+        riesgo = vista.findViewById(R.id.interruptorRiesgo);
         recordar.setChecked(datos.recordarNotas());
         riesgo.setChecked(datos.avisarRiesgo());
-        CompoundButton.OnCheckedChangeListener alCambiar = (boton, encendido) ->
-                datos.guardarAvisos(recordar.isChecked(), riesgo.isChecked());
+        CompoundButton.OnCheckedChangeListener alCambiar = (boton, encendido) -> {
+            if (encendido && !Avisos.puedeNotificar(requireContext())) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+                        && ContextCompat.checkSelfPermission(requireContext(),
+                        Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                    // Se guarda cuando conteste
+                    esperandoPermiso = boton;
+                    pedirPermiso.launch(Manifest.permission.POST_NOTIFICATIONS);
+                } else {
+                    // Las apagaron en Ajustes: desde aquí no se pueden prender
+                    sinPermiso(boton);
+                }
+                return;
+            }
+            guardarAvisos();
+        };
         recordar.setOnCheckedChangeListener(alCambiar);
         riesgo.setOnCheckedChangeListener(alCambiar);
 
@@ -64,6 +107,16 @@ public class PerfilFragment extends Fragment {
                 R.id.fechasFragment);
 
         vista.findViewById(R.id.botonCerrarSesion).setOnClickListener(v -> cerrarSesion());
+    }
+
+    private void guardarAvisos() {
+        Repositorio.get().guardarAvisos(recordar.isChecked(), riesgo.isChecked());
+    }
+
+    /** Sin permiso no hay aviso: el interruptor vuelve a apagarse (y eso se guarda). */
+    private void sinPermiso(CompoundButton cual) {
+        cual.setChecked(false);
+        Toast.makeText(requireContext(), R.string.perfil_sin_permiso, Toast.LENGTH_LONG).show();
     }
 
     private void mostrarCuenta(View vista, String nombre, String correo, String universidad) {

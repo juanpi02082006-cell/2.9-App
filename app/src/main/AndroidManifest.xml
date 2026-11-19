@@ -5,6 +5,8 @@
     <!-- Firebase, y saber si hay Internet para el aviso "Sin conexión" -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Recordatorio semanal y aviso de materia en rojo (RF-31 y RF-32) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".App"

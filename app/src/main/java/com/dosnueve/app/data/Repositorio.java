@@ -8,12 +8,16 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.dosnueve.app.avisos.Avisos;
+import com.dosnueve.app.avisos.VigiaDeRiesgo;
 import com.dosnueve.app.data.modelo.Componente;
 import com.dosnueve.app.data.modelo.Corte;
 import com.dosnueve.app.data.modelo.Materia;
 import com.dosnueve.app.data.modelo.Nota;
 import com.dosnueve.app.data.modelo.Semestre;
 import com.dosnueve.app.domain.CalculadoraNotas;
+import androidx.work.ExistingWorkPolicy;
+
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -77,6 +81,8 @@ public final class Repositorio {
     private static Repositorio instancia;
 
     private final MutableLiveData<Integer> cambios = new MutableLiveData<>(0);
+    /** De la aplicación, para los avisos (RF-31 y RF-32). */
+    private final Context contexto;
 
     /** De quién son los datos que hay en memoria; {@code null} si no hay sesión. */
     @Nullable
@@ -98,13 +104,20 @@ public final class Repositorio {
     private final Map<String, List<Nota>> notas = new HashMap<>();
     private final List<Semestre> anteriores = new ArrayList<>();
     private long ultimoId;
+    /** Materias cuyas notas ya llegaron: antes de eso no se sabe si están en rojo. */
+    private final Set<String> notasCargadas = new HashSet<>();
+    /** Sin el perfil no se sabe si el aviso de rojo está encendido. */
+    private boolean perfilCargado;
+    /** Cómo quedó programado el recordatorio en este celular; {@code null} = sin revisar. */
+    @Nullable
+    private Boolean recordatorioEncendido;
 
     /** Se llama una vez, al arrancar la app. Si ya había sesión, empieza a cargar. */
     public static void iniciar(Context contexto) {
         if (instancia != null) {
             return;
         }
-        instancia = new Repositorio();
+        instancia = new Repositorio(contexto.getApplicationContext());
         borrarArchivoViejo(contexto);
         FirebaseUser yo = FirebaseAuth.getInstance().getCurrentUser();
         if (yo != null && Cuenta.haySesion()) {
@@ -119,7 +132,8 @@ public final class Repositorio {
         return instancia;
     }
 
-    private Repositorio() {
+    private Repositorio(Context contexto) {
+        this.contexto = contexto;
         limpiar();
     }
 
@@ -179,6 +193,10 @@ public final class Repositorio {
         escuchas.clear();
         quitarTodas(escuchasDeNotas);
         quitarTodas(escuchasDeAnteriores);
+        if (uid != null) {
+            // El recordatorio es de la cuenta que sale
+            Avisos.apagarRecordatorio(contexto);
+        }
         uid = null;
         limpiar();
         avisar();
@@ -197,6 +215,9 @@ public final class Repositorio {
         materias.clear();
         notas.clear();
         anteriores.clear();
+        notasCargadas.clear();
+        perfilCargado = false;
+        recordatorioEncendido = null;
     }
 
     // ===== Cuenta =====
@@ -259,6 +280,20 @@ public final class Repositorio {
         cambio.put("recordarNotas", recordar);
         cambio.put("alertaRiesgo", riesgo);
         escribirPerfil(cambio);
+        programarRecordatorio(recordar);
+    }
+
+    /** Solo se toca WorkManager cuando cambia: el perfil llega muchas veces. */
+    private void programarRecordatorio(boolean encendido) {
+        if (uid == null || Boolean.valueOf(encendido).equals(recordatorioEncendido)) {
+            return;
+        }
+        recordatorioEncendido = encendido;
+        if (encendido) {
+            Avisos.encenderRecordatorio(contexto, ExistingWorkPolicy.KEEP);
+        } else {
+            Avisos.apagarRecordatorio(contexto);
+        }
     }
 
     // ===== Fechas del semestre (RF-27) =====
@@ -372,6 +407,7 @@ public final class Repositorio {
         materias.add(materia);
         materias.sort((a, b) -> POR_ID.compare(a.id, b.id));
         notas.put(materia.id, new ArrayList<>());
+        notasCargadas.add(materia.id);
 
         if (uid != null) {
             Map<String, Object> datos = materiaAMapa(materia);
@@ -422,6 +458,7 @@ public final class Repositorio {
             }
         }
         notas.remove(id);
+        notasCargadas.remove(id);
         ListenerRegistration escucha = escuchasDeNotas.remove(id);
         if (escucha != null) {
             escucha.remove();
@@ -513,6 +550,8 @@ public final class Repositorio {
             if (uid != null) {
                 guardarEnLaNube(refNota(materiaId, notaId).update("peso", peso), "el porcentaje");
             }
+            // No repinta, pero el peso sí puede meter la materia en rojo
+            revisarRiesgo();
         }
     }
 
@@ -656,7 +695,12 @@ public final class Repositorio {
                 formaDeCalificar = cortes;
             }
         }
+        perfilCargado = true;
+        // En un celular nuevo, o si lo cambió en otro, el recordatorio queda como diga la nube
+        programarRecordatorio(recordarNotas);
         avisarSiCambio(antes, firmaPerfil());
+        // Si las notas llegaron antes que el perfil, hasta ahora no se podían juzgar
+        revisarRiesgo();
     }
 
     private void alCambiarSemestreActual(DocumentSnapshot doc) {
@@ -702,6 +746,7 @@ public final class Repositorio {
             if (!vigentes.contains(una.getKey())) {
                 una.getValue().remove();
                 notas.remove(una.getKey());
+                notasCargadas.remove(una.getKey());
                 escucha.remove();
             }
         }
@@ -724,6 +769,10 @@ public final class Repositorio {
             }
             lista.sort((a, b) -> POR_ID.compare(a.id, b.id));
             notas.put(materiaId, lista);
+            if (notasCargadas.add(materiaId)) {
+                // Primera vez que llegan: ya se puede saber si está en rojo
+                revisarRiesgo();
+            }
             avisarSiCambio(antes, firmaNotas(lista));
         }));
     }
@@ -835,6 +884,14 @@ public final class Repositorio {
             cambios.setValue(siguiente);
         } else {
             cambios.postValue(siguiente);
+        }
+        revisarRiesgo();
+    }
+
+    /** RF-32: ¿alguna materia acaba de entrar en rojo? */
+    private void revisarRiesgo() {
+        if (uid != null && perfilCargado) {
+            VigiaDeRiesgo.revisar(contexto, uid, materias, notas, notasCargadas, avisarRiesgo);
         }
     }
 
