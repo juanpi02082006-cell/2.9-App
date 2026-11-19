@@ -389,6 +389,7 @@
     <string name="materia_lista">%1$s lista</string>
     <string name="aviso_nota_borrada">Nota borrada</string>
     <string name="simular_sin_materias">Agrega una materia para simular.</string>
+    <string name="simular_sin_materias_boton">Nueva materia</string>
     <string name="simular_parte_que_falta">Lo que falta de %1$s</string>
     <string name="simular_vale_corte">vale %1$s %%</string>
     <string name="simular_reiniciar">Reiniciar</string>

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.dosnueve.app.R;
 import com.dosnueve.app.data.Repositorio;
@@ -100,9 +101,11 @@ public class SimularFragment extends Fragment {
 
         List<Materia> materias = new ArrayList<>(Repositorio.get().materias());
         if (materias.isEmpty()) {
-            definitivaSimulada.setText(Formato.PENDIENTE);
-            veredicto.setText(R.string.simular_sin_materias);
-            veredicto.setBackground(null);
+            // No hay nada que simular: en vez del resultado, a crear la primera materia
+            vista.findViewById(R.id.tarjetaResultado).setVisibility(View.GONE);
+            vista.findViewById(R.id.estadoVacio).setVisibility(View.VISIBLE);
+            vista.findViewById(R.id.botonNuevaMateria).setOnClickListener(v ->
+                    NavHostFragment.findNavController(this).navigate(R.id.nuevaMateriaFragment));
             return;
         }
 

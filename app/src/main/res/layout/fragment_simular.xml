@@ -61,6 +61,7 @@
 
         <!-- ===== Resultado simulado ===== -->
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/tarjetaResultado"
             style="@style/Estilo.TarjetaDestacada"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -87,6 +88,7 @@
                         style="@style/Texto.Apoyo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:maxLines="1"
                         android:text="@string/simular_definitiva" />
 
                     <TextView
@@ -109,6 +111,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/fondo_nota_aprobada"
+                        android:maxWidth="140dp"
                         android:paddingStart="@dimen/espacio_m"
                         android:paddingTop="@dimen/espacio_s"
                         android:paddingEnd="@dimen/espacio_m"
@@ -131,6 +134,42 @@
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
+
+        <!-- ===== Sin materias no hay nada que simular (como 18 Inicio vacío) ===== -->
+        <LinearLayout
+            android:id="@+id/estadoVacio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espacio_l"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Estilo.Planilla"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/Texto.Principal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingStart="@dimen/espacio_xl"
+                    android:paddingTop="40dp"
+                    android:paddingEnd="@dimen/espacio_xl"
+                    android:paddingBottom="40dp"
+                    android:text="@string/simular_sin_materias" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/botonNuevaMateria"
+                style="@style/Estilo.Boton.Principal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espacio_l"
+                android:text="@string/simular_sin_materias_boton" />
+        </LinearLayout>
     </LinearLayout>
 
     <!-- ===== Una tarjeta por corte ===== -->
