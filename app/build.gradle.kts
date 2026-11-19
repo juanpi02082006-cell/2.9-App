@@ -22,6 +22,10 @@ android {
 
     buildTypes {
         release {
+            // Para repartir el APK en clase: misma llave que en desarrollo, así su SHA-1 ya
+            // está en Firebase y "Continuar con Google" funciona en cualquier celular.
+            // Para la Play Store habría que usar una llave propia y registrar su SHA-1.
+            signingConfig = signingConfigs.getByName("debug")
             optimization {
                 enable = false
             }
