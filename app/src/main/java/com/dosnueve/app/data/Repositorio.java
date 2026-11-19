@@ -94,6 +94,12 @@ public final class Repositorio {
     private String nombre;
     private String correo;
     private String universidad;
+    /** Foto de Google (si entró con Google o la conectó en Perfil). */
+    @Nullable
+    private String fotoUrl;
+    /** Lo escogido en Perfil: "foto", uno de los 8 avatares o "iniciales"; null = sin escoger. */
+    @Nullable
+    private String avatar;
     private boolean recordarNotas;
     private boolean avisarRiesgo;
     private LocalDate inicioSemestre;
@@ -206,6 +212,8 @@ public final class Repositorio {
         nombre = "";
         correo = "";
         universidad = "";
+        fotoUrl = null;
+        avatar = null;
         recordarNotas = false;
         avisarRiesgo = false;
         inicioSemestre = LocalDate.now().minusWeeks(6);
@@ -232,6 +240,34 @@ public final class Repositorio {
 
     public String universidad() {
         return universidad;
+    }
+
+    @Nullable
+    public String fotoUrl() {
+        return fotoUrl;
+    }
+
+    @Nullable
+    public String avatar() {
+        return avatar;
+    }
+
+    /** Perfil → Elige tu foto: "foto", uno de los 8 avatares o "iniciales". */
+    public void guardarAvatar(String cual) {
+        avatar = cual;
+        escribirPerfil(Collections.<String, Object>singletonMap("avatar", cual));
+        avisar();
+    }
+
+    /** Conectó su cuenta de Google en Perfil: desde ahora se ve su foto. */
+    public void guardarFotoDeGoogle(String url) {
+        fotoUrl = url;
+        avatar = "foto";
+        Map<String, Object> cambio = new HashMap<>();
+        cambio.put("fotoUrl", url);
+        cambio.put("avatar", avatar);
+        escribirPerfil(cambio);
+        avisar();
     }
 
     /**
@@ -684,6 +720,8 @@ public final class Repositorio {
         nombre = texto(doc.getString("nombre"));
         correo = texto(doc.getString("correo"));
         universidad = texto(doc.getString("universidad"));
+        fotoUrl = doc.getString("fotoUrl");
+        avatar = doc.getString("avatar");
         recordarNotas = Boolean.TRUE.equals(doc.getBoolean("recordarNotas"));
         avisarRiesgo = Boolean.TRUE.equals(doc.getBoolean("alertaRiesgo"));
         Object plantilla = doc.get("plantilla");
@@ -835,7 +873,7 @@ public final class Repositorio {
     // ===== Firmas: para saber si lo que llegó cambia algo =====
 
     private Object firmaPerfil() {
-        return Arrays.asList(nombre, correo, universidad, recordarNotas, avisarRiesgo,
+        return Arrays.asList(nombre, correo, universidad, fotoUrl, avatar, recordarNotas, avisarRiesgo,
                 plantillaAMapa(formaDeCalificar, notaParaPasar));
     }
 

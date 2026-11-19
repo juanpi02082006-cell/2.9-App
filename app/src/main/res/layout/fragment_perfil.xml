@@ -40,9 +40,15 @@
             android:orientation="horizontal"
             android:padding="@dimen/espacio_l">
 
+            <!-- Tocarlo abre "Elige tu foto": foto de Google, avatar o iniciales -->
             <FrameLayout
+                android:id="@+id/avatarPerfil"
                 android:layout_width="56dp"
-                android:layout_height="56dp">
+                android:layout_height="56dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:contentDescription="@string/perfil_cambiar_foto"
+                android:focusable="true">
 
                 <TextView
                     android:id="@+id/iniciales"
@@ -61,6 +67,16 @@
                     android:importantForAccessibility="no"
                     android:scaleType="centerCrop"
                     android:visibility="gone" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="bottom|end"
+                    android:background="@drawable/fondo_insignia"
+                    android:importantForAccessibility="no"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_lapiz"
+                    app:tint="@color/blanco" />
             </FrameLayout>
 
             <LinearLayout

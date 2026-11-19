@@ -68,7 +68,11 @@ public class PerfilFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View vista, @Nullable Bundle estado) {
         Repositorio datos = Repositorio.get();
-        mostrarCuenta(vista, datos.nombre(), datos.correo(), datos.universidad());
+        // Se repinta al escoger foto o avatar, y cuando el perfil llega de la nube
+        datos.cambios().observe(getViewLifecycleOwner(), cambio ->
+                mostrarCuenta(vista, datos.nombre(), datos.correo(), datos.universidad()));
+        vista.findViewById(R.id.avatarPerfil).setOnClickListener(v ->
+                new AvatarBottomSheet().show(getChildFragmentManager(), AvatarBottomSheet.ETIQUETA));
 
         // Recordatorio de los domingos (RF-31) y aviso de materia en rojo (RF-32)
         recordar = vista.findViewById(R.id.interruptorRecordar);
@@ -129,20 +133,7 @@ public class PerfilFragment extends Fragment {
         suCorreo.setText(correo);
         suCorreo.setVisibility(correo.isEmpty() ? View.GONE : View.VISIBLE);
         suUniversidad.setText(universidad.isEmpty() ? getString(R.string.perfil_sin_universidad) : universidad);
-        iniciales.setText(inicialesDe(nombre.isEmpty() ? correo : nombre));
-    }
-
-    /** Iniciales para el avatar mientras no carga la foto de Google. */
-    private String inicialesDe(String nombre) {
-        if (nombre == null || nombre.trim().isEmpty()) {
-            return "";
-        }
-        String[] partes = nombre.trim().split("\\s+");
-        StringBuilder iniciales = new StringBuilder();
-        for (int i = 0; i < Math.min(2, partes.length); i++) {
-            iniciales.append(Character.toUpperCase(partes[i].charAt(0)));
-        }
-        return iniciales.toString();
+        Avatar.pintar(vista.findViewById(R.id.foto), iniciales);
     }
 
     private void armarOpcion(View opcion, @DrawableRes int icono, @StringRes int titulo,

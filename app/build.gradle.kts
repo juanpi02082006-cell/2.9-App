@@ -64,6 +64,9 @@ dependencies {
     // Recordatorio semanal (RF-31)
     implementation(libs.work.runtime)
 
+    // Foto de Google en Perfil e Inicio (la guarda en caché para verla sin Internet)
+    implementation(libs.glide)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.ext.junit)

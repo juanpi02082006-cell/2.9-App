@@ -19,6 +19,7 @@ import com.dosnueve.app.data.Repositorio;
 import com.dosnueve.app.data.modelo.Materia;
 import com.dosnueve.app.data.modelo.Nota;
 import com.dosnueve.app.domain.CalculadoraNotas;
+import com.dosnueve.app.ui.perfil.Avatar;
 import com.dosnueve.app.util.Formato;
 
 import java.util.ArrayList;
@@ -65,6 +66,9 @@ public class InicioFragment extends Fragment {
     private void mostrar(View vista, List<FilaPlanilla> filas) {
         boolean hayMaterias = !filas.isEmpty();
         Repositorio datos = Repositorio.get();
+
+        // El mismo círculo de Perfil: foto de Google, avatar o iniciales
+        Avatar.pintar(vista.findViewById(R.id.avatarFoto), vista.findViewById(R.id.avatarIniciales));
 
         vista.findViewById(R.id.tarjetaPlanilla)
                 .setVisibility(hayMaterias ? View.VISIBLE : View.GONE);

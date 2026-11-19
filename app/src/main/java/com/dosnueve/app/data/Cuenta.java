@@ -172,13 +172,29 @@ public final class Cuenta {
      * vez se le crea el perfil con un usuario sacado del correo y va a ¿Dónde estudias?
      */
     public static Task<Destino> entrarConGoogle(Activity actividad) {
+        return cuentaDeGoogle(actividad)
+                .onSuccessTask(google -> auth().signInWithCredential(
+                        GoogleAuthProvider.getCredential(google.getIdToken(), null)))
+                .onSuccessTask(resultado -> {
+                    FirebaseUser yo = resultado.getUser();
+                    if (yo == null) {
+                        return Tasks.<Destino>forException(new IllegalStateException("Sin usuario"));
+                    }
+                    return cargarPerfil(yo).onSuccessTask(nuevo -> nuevo
+                            ? crearPerfilDeGoogle(yo)
+                            : Tasks.forResult(Destino.INICIO));
+                });
+    }
+
+    /** Abre el selector de cuentas de Google del celular y devuelve la escogida. */
+    private static Task<GoogleIdTokenCredential> cuentaDeGoogle(Activity actividad) {
         GetSignInWithGoogleOption opcion = new GetSignInWithGoogleOption.Builder(
                 actividad.getString(R.string.default_web_client_id)).build();
         GetCredentialRequest pedido = new GetCredentialRequest.Builder()
                 .addCredentialOption(opcion)
                 .build();
 
-        TaskCompletionSource<String> token = new TaskCompletionSource<>();
+        TaskCompletionSource<GoogleIdTokenCredential> cuenta = new TaskCompletionSource<>();
         CredentialManager.create(actividad).getCredentialAsync(actividad, pedido,
                 new CancellationSignal(), ContextCompat.getMainExecutor(actividad),
                 new CredentialManagerCallback<GetCredentialResponse, GetCredentialException>() {
@@ -189,34 +205,38 @@ public final class Cuenta {
                                 && GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
                                 .equals(credencial.getType())) {
                             try {
-                                token.setResult(GoogleIdTokenCredential
-                                        .createFrom(credencial.getData()).getIdToken());
+                                cuenta.setResult(GoogleIdTokenCredential.createFrom(credencial.getData()));
                             } catch (Exception error) {
-                                token.setException(error);
+                                cuenta.setException(error);
                             }
                         } else {
-                            token.setException(new IllegalStateException("Credencial inesperada"));
+                            cuenta.setException(new IllegalStateException("Credencial inesperada"));
                         }
                     }
 
                     @Override
                     public void onError(@NonNull GetCredentialException error) {
-                        token.setException(error);
+                        cuenta.setException(error);
                     }
                 });
+        return cuenta.getTask();
+    }
 
-        return token.getTask()
-                .onSuccessTask(idToken -> auth().signInWithCredential(
-                        GoogleAuthProvider.getCredential(idToken, null)))
-                .onSuccessTask(resultado -> {
-                    FirebaseUser yo = resultado.getUser();
-                    if (yo == null) {
-                        return Tasks.<Destino>forException(new IllegalStateException("Sin usuario"));
-                    }
-                    return cargarPerfil(yo).onSuccessTask(nuevo -> nuevo
-                            ? crearPerfilDeGoogle(yo)
-                            : Tasks.forResult(Destino.INICIO));
-                });
+    /**
+     * Perfil → "Foto de Google" en una cuenta de correo: escoge su cuenta de Google, se
+     * conecta a la de 2.9 (así también puede entrar con el botón de Google) y devuelve su
+     * foto, o {@code null} si esa cuenta no tiene. Si conectar falla (por ejemplo, porque
+     * esa cuenta de Google ya tiene su propia cuenta en 2.9), la foto igual sirve.
+     */
+    public static Task<String> conectarGoogle(Activity actividad) {
+        return cuentaDeGoogle(actividad).onSuccessTask(google -> {
+            Uri foto = google.getProfilePictureUri();
+            FirebaseUser yo = auth().getCurrentUser();
+            Task<AuthResult> conexion = yo == null
+                    ? Tasks.<AuthResult>forResult(null)
+                    : yo.linkWithCredential(GoogleAuthProvider.getCredential(google.getIdToken(), null));
+            return conexion.continueWith(listo -> foto == null ? null : foto.toString());
+        });
     }
 
     private static Task<Destino> crearPerfilDeGoogle(FirebaseUser yo) {
@@ -378,6 +398,7 @@ public final class Cuenta {
         perfil.put("correo", correo);
         perfil.put("proveedor", proveedor);
         perfil.put("fotoUrl", fotoUrl);
+        perfil.put("avatar", null);
         perfil.put("universidadId", null);
         perfil.put("recordarNotas", false);
         perfil.put("alertaRiesgo", false);

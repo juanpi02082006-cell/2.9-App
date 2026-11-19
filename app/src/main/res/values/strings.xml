@@ -320,6 +320,21 @@
     <string name="perfil_recordar_notas_detalle">Una vez a la semana</string>
     <string name="perfil_alerta_riesgo">Avisarme si una materia entra en rojo</string>
     <string name="perfil_sin_permiso">Activa las notificaciones de 2.9 en Ajustes</string>
+    <string name="perfil_cambiar_foto">Cambiar foto</string>
+
+    <!-- ===== Hoja: elegir foto o avatar ===== -->
+    <string name="avatar_titulo">Elige tu foto</string>
+    <string name="avatar_google">Foto de Google</string>
+    <string name="avatar_iniciales">Iniciales</string>
+    <string name="avatar_sin_foto">Esa cuenta de Google no tiene foto</string>
+    <string name="avatar_birrete">Birrete</string>
+    <string name="avatar_lapiz">Lápiz</string>
+    <string name="avatar_libro">Libro</string>
+    <string name="avatar_cafe">Café</string>
+    <string name="avatar_estrella">Estrella</string>
+    <string name="avatar_avion">Avión</string>
+    <string name="avatar_idea">Bombillo</string>
+    <string name="avatar_musica">Música</string>
 
     <!-- ===== Notificaciones (RF-31 y RF-32) ===== -->
     <string name="aviso_canal_recordatorio">Recordatorio semanal</string>
